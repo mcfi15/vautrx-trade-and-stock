@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="mb-5">
         <a href="{{ route('wallet.index') }}" class="text-decoration-none text-warning">
-            <i class="fas fa-arrow-left me-2"></i> Back to Wallet
+            <i class="fa fa-arrow-left me-2"></i> Back to Wallet
         </a>
         <h1 class="fw-bold text-white mt-3">Withdraw {{ $cryptocurrency->name ?? 'Cryptocurrency' }}</h1>
         <p class="text-secondary">Send {{ strtoupper($cryptocurrency->symbol ?? '') }} to an external wallet</p>
@@ -77,7 +77,7 @@
                     </div>
 
                     <button type="submit" class="btn w-100 text-dark fw-bold py-2" style="background-color:#ffbe40;">
-                        <i class="fas fa-paper-plane me-2"></i> Submit Withdrawal
+                        <i class="fa fa-paper-plane me-2"></i> Submit Withdrawal
                     </button>
                 </form>
             </div>
@@ -111,21 +111,21 @@
                 <h2 class="h5 fw-semibold text-warning mb-3">Withdrawal Info</h2>
                 <div class="small">
                     <div class="d-flex mb-3">
-                        <i class="fas fa-info-circle text-warning me-3"></i>
+                        <i class="fa fa-info-circle text-warning me-3"></i>
                         <div>
                             <strong>Processing Time</strong>
                             <p class="mb-0 text-secondary">Processed within 5–30 mins during business hours.</p>
                         </div>
                     </div>
                     <div class="d-flex mb-3">
-                        <i class="fas fa-shield-alt text-warning me-3"></i>
+                        <i class="fa fa-shield-alt text-warning me-3"></i>
                         <div>
                             <strong>Security</strong>
                             <p class="mb-0 text-secondary">Withdrawals require email verification and security checks.</p>
                         </div>
                     </div>
                     <div class="d-flex">
-                        <i class="fas fa-clock text-warning me-3"></i>
+                        <i class="fa fa-clock text-warning me-3"></i>
                         <div>
                             <strong>Network Confirmation</strong>
                             <p class="mb-0 text-secondary">Depends on blockchain congestion.</p>
@@ -162,7 +162,7 @@
         <div class="d-flex justify-content-between align-items-center border-bottom border-dark py-3">
             <div class="d-flex align-items-center">
                 <div class="bg-dark text-warning rounded-circle d-flex justify-content-center align-items-center" style="width:40px;height:40px;">
-                    <i class="fas fa-arrow-up"></i>
+                    <i class="fa fa-arrow-up"></i>
                 </div>
                 <div class="ms-3">
                     <strong>Withdrawal</strong>
@@ -185,7 +185,7 @@
         </div>
         @empty
         <div class="text-center py-4 text-secondary">
-            <i class="fas fa-arrow-up fa-2x mb-2"></i>
+            <i class="fa fa-arrow-up fa-2x mb-2"></i>
             <p>No withdrawals yet</p>
         </div>
         @endforelse

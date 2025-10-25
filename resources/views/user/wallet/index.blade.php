@@ -16,8 +16,8 @@
                             <h2><span id="total_balance_est">{{ number_format($totalValue ?? 0, 2) }}</span> <span> USDT </span></h2>
                         </div>
                         <div class="col-md-9 col-sm-6 text-right hide-mobile">
-                            <a href="/deposit/?coin=btc" class="btn-2"><i class="fa fa-download"></i> Deposit</a>
-                            <a href="/withdraw/?coin=btc" class="btn-1"><i class="fa fa-upload"></i> Withdraw</a>
+                            <a href="{{ url('wallet/deposit') }}" class="btn-2"><i class="fa fa-download"></i> Deposit</a>
+                            <a href="{{ url('wallet/withdraw') }}" class="btn-1"><i class="fa fa-upload"></i> Withdraw</a>
                             <a href="/gift/" class="btn-1"><i class="fa fa-gift"></i> Gift Cards</a>
 
                         </div>

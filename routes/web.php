@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
     
     // Trading
     Route::prefix('trading')->name('trading.')->group(function () {
+        Route::get('/', [TradingController::class, 'trade'])->name('trade');
         Route::get('/{pair}', [TradingController::class, 'show'])->name('show');
         Route::post('/order', [TradingController::class, 'placeOrder'])->name('order.place');
         Route::delete('/order/{order}', [TradingController::class, 'cancelOrder'])->name('order.cancel');

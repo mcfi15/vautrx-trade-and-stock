@@ -8,7 +8,7 @@
     <!-- Header -->
     <div class="mb-5">
         <a href="{{ route('wallet.index') }}" class="text-decoration-none text-warning fw-semibold mb-3 d-inline-flex align-items-center">
-            <i class="fas fa-arrow-left me-2"></i> Back to Wallet
+            <i class="fa fa-arrow-left me-2"></i> Back to Wallet
         </a>
         <h1 class="fw-bold display-6">Select Cryptocurrency for Deposit</h1>
         <p class="text-white">Choose which cryptocurrency you'd like to deposit to your wallet.</p>
@@ -17,15 +17,38 @@
     <!-- Quick Action Buttons -->
     <div class="mb-4 d-flex flex-wrap gap-3">
         <a href="{{ route('wallet.deposit') }}" class="btn btn-warning text-dark fw-semibold">
-            <i class="fas fa-plus-circle me-2"></i> Deposit
+            <i class="fa fa-plus-circle me-2"></i> Deposit
         </a>
         <a href="{{ route('wallet.withdraw') }}" class="btn btn-outline-light">
-            <i class="fas fa-minus-circle me-2"></i> Withdraw
+            <i class="fa fa-minus-circle me-2"></i> Withdraw
         </a>
         <a href="{{ route('wallet.transactions') }}" class="btn btn-outline-light">
-            <i class="fas fa-history me-2"></i> Transaction History
+            <i class="fa fa-history me-2"></i> Transaction History
         </a>
     </div>
+
+    <!-- Search & Filter -->
+        <div class="bg-transparent border-secondary p-4">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent text-light border-secondary">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        <input type="text" id="search" class="form-control bg-transparent text-light border-secondary"
+                               placeholder="Search cryptocurrencies..." onkeyup="filterCryptocurrencies()">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="statusFilter" class="form-control bg-transparent text-light border-secondary"
+                            onchange="filterCryptocurrencies()">
+                        <option value="">All Status</option>
+                        <option value="active">Active Only</option>
+                        <option value="inactive">Inactive Only</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
     <!-- Cryptocurrencies Grid -->
     <div class="card bg-dark border-0 shadow-lg rounded-4 mb-4">
@@ -68,7 +91,7 @@
 
                         <hr class="border-secondary my-3">
                         <button class="btn btn-outline-warning btn-sm w-100 fw-semibold">
-                            <i class="fas fa-arrow-down me-2"></i> Deposit {{ strtoupper($crypto->symbol) }}
+                            <i class="fa fa-arrow-down me-2"></i> Deposit {{ strtoupper($crypto->symbol) }}
                         </button>
                     </div>
                 </div>
@@ -76,32 +99,11 @@
             @endforeach
         </div>
 
-        <!-- Search & Filter -->
-        <div class="card-footer bg-transparent border-secondary p-4">
-            <div class="row g-3">
-                <div class="col-md-8">
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent text-light border-secondary">
-                            <i class="fa fa-search"></i>
-                        </span>
-                        <input type="text" id="search" class="form-control bg-transparent text-light border-secondary"
-                               placeholder="Search cryptocurrencies..." onkeyup="filterCryptocurrencies()">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <select id="statusFilter" class="form-select bg-transparent text-light border-secondary"
-                            onchange="filterCryptocurrencies()">
-                        <option value="">All Status</option>
-                        <option value="active">Active Only</option>
-                        <option value="inactive">Inactive Only</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+        
 
         @else
         <div class="text-center py-5">
-            <i class="fas fa-coins text-white fs-1 mb-3"></i>
+            <i class="fa fa-coins text-white fs-1 mb-3"></i>
             <h5>No Cryptocurrencies Available</h5>
             <p class="text-muted">Contact support to enable cryptocurrency deposits.</p>
             <a href="{{ route('dashboard') }}" class="btn btn-warning text-dark fw-semibold">
@@ -114,7 +116,7 @@
     <!-- Help Section -->
     <div class="card bg-dark border-warning mt-5 rounded-4">
         <div class="card-body d-flex align-items-start">
-            <i class="fas fa-info-circle text-warning fs-4 me-3 mt-1"></i>
+            <i class="fa fa-info-circle text-warning fs-4 me-3 mt-1"></i>
             <div>
                 <h5 class="text-warning fw-bold mb-3">How to Deposit</h5>
                 <ul class="text-white small ps-3 mb-0">

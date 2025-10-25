@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="mb-8">
         <a href="{{ route('wallet.index') }}" class="text-indigo-600 hover:text-indigo-800 mb-4 inline-flex items-center">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Wallet
+            <i class="fa fa-arrow-left mr-2"></i> Back to Wallet
         </a>
         <h1 class="text-3xl font-bold text-gray-900">Transaction History</h1>
         <p class="mt-2 text-gray-600">View all your wallet transactions</p>
@@ -53,7 +53,7 @@
             
             <div class="flex items-end">
                 <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <i class="fas fa-filter mr-2"></i>Apply Filters
+                    <i class="fa fa-filter mr-2"></i>Apply Filters
                 </button>
             </div>
         </form>
@@ -89,7 +89,7 @@
                                        ($transaction->type === 'withdrawal' ? 'bg-red-100 text-red-600' : 
                                         ($transaction->type === 'trade' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600')) }} 
                                     rounded-full flex items-center justify-center mr-3">
-                                    <i class="fas fa-{{ 
+                                    <i class="fa fa-{{ 
                                         $transaction->type === 'deposit' ? 'arrow-down' : 
                                         ($transaction->type === 'withdrawal' ? 'arrow-up' : 
                                          ($transaction->type === 'trade' ? 'exchange-alt' : 'transfer'))
@@ -139,7 +139,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <button onclick="viewTransaction({{ $transaction->id }})" 
                                     class="text-indigo-600 hover:text-indigo-900">
-                                <i class="fas fa-eye"></i> View
+                                <i class="fa fa-eye"></i> View
                             </button>
                         </td>
                     </tr>
@@ -154,16 +154,16 @@
         </div>
         @else
         <div class="text-center py-12">
-            <i class="fas fa-history text-6xl text-gray-300 mb-4"></i>
+            <i class="fa fa-history text-6xl text-gray-300 mb-4"></i>
             <h3 class="text-lg font-medium text-gray-900 mb-2">No Transactions Found</h3>
             <p class="text-gray-500 mb-6">
-                @if(request()->any())
+                @if(request()->hasAny(['type', 'status', 'search', 'date_from', 'date_to']))
                     No transactions match your current filters.
                 @else
                     You haven't made any transactions yet.
                 @endif
             </p>
-            @if(request()->any())
+            @if(request()->hasAny(['type', 'status', 'search', 'date_from', 'date_to']))
             <a href="{{ route('wallet.transactions') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">
                 Clear Filters
             </a>
@@ -178,7 +178,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-arrow-down text-green-600 text-xl"></i>
+                    <i class="fa fa-arrow-down text-green-600 text-xl"></i>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-500">Total Deposits</p>
@@ -192,7 +192,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-arrow-up text-red-600 text-xl"></i>
+                    <i class="fa fa-arrow-up text-red-600 text-xl"></i>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-500">Total Withdrawals</p>
@@ -206,7 +206,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                    <i class="fa fa-clock text-yellow-600 text-xl"></i>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-500">Pending</p>
@@ -220,7 +220,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-exchange-alt text-blue-600 text-xl"></i>
+                    <i class="fa fa-exchange-alt text-blue-600 text-xl"></i>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-500">Total Volume</p>
@@ -259,7 +259,7 @@ function viewTransaction(transactionId) {
     // For now, showing a placeholder
     document.getElementById('transactionDetails').innerHTML = `
         <div class="text-center">
-            <i class="fas fa-spinner fa-spin text-2xl text-gray-400 mb-4"></i>
+            <i class="fa fa-spinner fa-spin text-2xl text-gray-400 mb-4"></i>
             <p class="text-gray-600">Loading transaction details...</p>
         </div>
     `;

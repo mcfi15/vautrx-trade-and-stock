@@ -203,6 +203,6 @@ class WalletController extends Controller
             ->latest()
             ->paginate(20);
         
-        return view('wallet.transactions', compact('transactions'));
+        return view('user.wallet.transactions', compact('transactions'));
     }
 }

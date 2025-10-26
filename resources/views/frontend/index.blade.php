@@ -1022,7 +1022,7 @@
 													${{ number_format($pair->baseCurrency->market_cap, 0) }}
 												</td>
 												<td class="text-right">
-													<a href="{{ route('trading.show', $pair->id) }}" class="btn-2 yellow-bg ">
+													<a href="{{ url('trading/spot', $pair->id) }}" class="btn-2 yellow-bg ">
 														Trade
 													</a>
 												</td>

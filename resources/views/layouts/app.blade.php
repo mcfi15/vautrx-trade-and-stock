@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Vautrx | Vautrx | Secure &amp; Fast Cryptocurrency Exchange for Bitcoin, Ethereum &amp; Altcoins')</title>
     
     <meta charset="utf-8">

@@ -297,7 +297,7 @@
         </head>
 
         <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="index.html"><img alt="Dectrx" src="Upload/public/65d5f5101e8de.png" /></a>
+            <a class="navbar-brand" href="{{ url('/') }}"><img alt="Dectrx" src="Upload/public/65d5f5101e8de.png" /></a>
             <!-- navbar-toggler  -->
             <!-- aria-controls="headerNavMenu"
                 aria-expanded="false"
@@ -315,21 +315,21 @@
                             class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Trade </a>
                         <div class="dropdown-menu">
                             <div class="dropdown-body">
-                                <a class="dropdown-item" href="Trade/tradepro.html">
+                                <a class="dropdown-item" href="{{ url('trading/pro') }}">
                                     <div class="nav-icon">
                                         <i class="icon-size exchange-three"></i>
                                     </div>
 
                                     <div class="content text-white">Spot Professional <p class="featured">Hot</p> <span
                                             class="subtext">Tools for Pro</span> </div>
-                                </a><a class="dropdown-item" href="Trade.html">
+                                </a><a class="dropdown-item" href="{{ url('trading/spot') }}">
                                     <div class="nav-icon">
                                         <i class="icon-size send-to-back"></i>
                                     </div>
 
                                     <div class="content text-white">Spot Classic <span class="subtext">Trade on our
                                             award-winning platform</span> </div>
-                                </a><a class="dropdown-item" href="Easy.html">
+                                </a><a class="dropdown-item" href="{{ url('easy-convert') }}">
                                     <div class="nav-icon">
                                         <i class="icon-size exchange"></i>
                                     </div>
@@ -604,7 +604,7 @@
                         data-toggle="dropdown" href="#" role="button">Wallet</a>
                     <div class="dropdown-menu wallet_mob_dropdown">
                         <div class="dropdown-body">
-                            <a class="dropdown-item" href="/account/">
+                            <a class="dropdown-item" href="{{ url('wallet') }}">
                                 <div class="icon">
                                     <i class="fa fa-history"></i>
                                 </div>
@@ -613,14 +613,14 @@
                                 </div>
                             </a>
 
-                            <a class="dropdown-item" href="/deposit/">
+                            <a class="dropdown-item" href="{{ url('wallet/deposit') }}">
                                 <div class="icon">
                                     <i class="fa fa-download"></i>
                                 </div>
                                 <div class="content">
                                     Deposit </div>
                             </a>
-                            <a class="dropdown-item" href="/withdraw/">
+                            <a class="dropdown-item" href="{{ url('wallet/withdraw') }}">
                                 <div class="icon">
                                     <i class="fa fa-upload"></i>
                                 </div>
@@ -658,7 +658,7 @@
             </div>
             <div class="nav__item overview">
                 <i class="fa fa-home" aria-hidden="true"></i>
-                <a href="index.html">Home</a>
+                <a href="{{ url('/') }}">Home</a>
             </div>
             <div class="nav__item">
                 <!--label class="nav__label lbl_dropdown">Trade</label-->
@@ -666,7 +666,7 @@
                     href="#" role="button">Trade</a>
                 <div class="dropdown-menu">
                     <div class="dropdown-body">
-                        <a class="dropdown-item" href="Trade/tradepro.html">
+                        <a class="dropdown-item" href="{{ url('trading/pro') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>
@@ -677,7 +677,7 @@
               <i class="fa fa-" aria-hidden="true"></i>
                               <a href="../Trade/tradepro">
                             Spot Professional</a>
-            </div--> <a class="dropdown-item" href="Trade.html">
+            </div--> <a class="dropdown-item" href="{{ url('trading/spot') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>
@@ -687,7 +687,7 @@
                         <!--div class="nav__item">
               <i class="fa fa-" aria-hidden="true"></i>
                                               <a href="/Trade">              Spot Classic</a>
-            </div--> <a class="dropdown-item" href="Easy.html">
+            </div--> <a class="dropdown-item" href="{{ url('easy-convert') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>

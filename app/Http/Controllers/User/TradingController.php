@@ -13,10 +13,22 @@ class TradingController extends Controller
 {
     private $tradingEngine;
 
-    public function __construct(TradingEngineService $tradingEngine)
-    {
-        $this->middleware('auth');
-        $this->tradingEngine = $tradingEngine;
+    // public function __construct(TradingEngineService $tradingEngine)
+    // {
+    //     $this->middleware('auth');
+    //     $this->tradingEngine = $tradingEngine;
+    // }
+
+    public function pro(){
+        return view('trading.tradepro');
+    }
+
+    public function spot(){
+        return view('trading.spot');
+    }
+
+    public function easy(){
+        return view('easy.index');
     }
 
     public function show($pairId)

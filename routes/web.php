@@ -46,6 +46,16 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     
 });
 
+Route::controller(TradingController::class)->group(function () {
+    Route::get('/trading/pro', [TradingController::class, 'pro'])->name('pro');
+
+    Route::get('/trading/spot', [TradingController::class, 'spot'])->name('spot');
+
+    Route::get('/easy-convert', [TradingController::class, 'easy'])->name('easy-convert');
+    
+    
+});
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -58,6 +68,17 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 });
 
+    // Trading
+    // Route::prefix('trading')->name('trading.')->group(function () {
+        
+    //     Route::get('/{pair}', [TradingController::class, 'show'])->name('show');
+        
+    //     Route::post('/order', [TradingController::class, 'placeOrder'])->name('order.place');
+    //     Route::delete('/order/{order}', [TradingController::class, 'cancelOrder'])->name('order.cancel');
+    //     Route::get('/history/orders', [TradingController::class, 'orderHistory'])->name('orders');
+    //     Route::get('/history/trades', [TradingController::class, 'tradeHistory'])->name('trades');
+    // });
+
 // Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -66,15 +87,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [WalletController::class, 'index'])->name('dashboard');
     // Route::get('/markets', [DashboardController::class, 'markets'])->name('markets');
     
-    // Trading
-    Route::prefix('trading')->name('trading.')->group(function () {
-        Route::get('/', [TradingController::class, 'trade'])->name('trade');
-        Route::get('/{pair}', [TradingController::class, 'show'])->name('show');
-        Route::post('/order', [TradingController::class, 'placeOrder'])->name('order.place');
-        Route::delete('/order/{order}', [TradingController::class, 'cancelOrder'])->name('order.cancel');
-        Route::get('/history/orders', [TradingController::class, 'orderHistory'])->name('orders');
-        Route::get('/history/trades', [TradingController::class, 'tradeHistory'])->name('trades');
-    });
+    
     
     // Wallet
     Route::prefix('wallet')->name('wallet.')->group(function () {

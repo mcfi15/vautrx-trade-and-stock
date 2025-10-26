@@ -15,7 +15,7 @@
                 <div class="banner-email">
                     <div class="index_quick-reg-wrapper__AGLkO">
                         <div class="col-md-8 col-sm-12">
-                            <a href="https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&amp;redirect_uri=https%3A%2F%2Fdectrx.com%2FLogin%2FgoogleRedirect&amp;response_type=code&amp;client_id=664350194853-gg9mlqga6nvm5q616v6ji52vf33fatjs.apps.googleusercontent.com&amp;access_type=online"
+                            <a href="{{ route('auth.google') }}"
                                 class="btn white-bg btn-block btn-lg common-text" data-onsuccess="onSignIn">
 
                                 <span><img src='Public/template/epsilon/img/redesign/google-icon.svg' /> Signin with

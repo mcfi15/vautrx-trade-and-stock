@@ -297,7 +297,10 @@
         </head>
 
         <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="{{ url('/') }}"><img alt="Dectrx" src="Upload/public/65d5f5101e8de.png" /></a>
+            {{-- <a class="navbar-brand" href="{{ url('/') }}"><img alt="Dectrx" src="Upload/public/65d5f5101e8de.png" /></a> --}}
+            @if(\App\Models\Setting::get('site_logo'))
+                <a class="navbar-brand" href="{{ url('/') }}"><img alt="{{ \App\Models\Setting::get('site_name', 'Website Name') }}" src="{{ asset(\App\Models\Setting::get('site_logo')) }}" /></a>
+            @endif
             <!-- navbar-toggler  -->
             <!-- aria-controls="headerNavMenu"
                 aria-expanded="false"
@@ -454,13 +457,13 @@
                         <div id="walletPage" class="" style="position: absolute;z-index:99;display:none;">
                             <div class="dropdown-body">
                                 <a class="dropdown-item logout_a" href="{{ url('wallet') }}"> <img
-                                        src="{{ asset('/static/icons/Wallet--Streamline-Plump.svg') }}"
+                                        src="{{ asset('uploads/icons/Wallet--Streamline-Plump.svg') }}"
                                         style="width:2.5ex; margin-right:2ex;" /> Spot wallet</a>
                                 <a class="dropdown-item logout_a" href="{{ url('wallet/deposit') }}"> <img
-                                        src="/static/icons/Credit-Card-2--Streamline-Sharp-Neon.svg.svg"
+                                        src="uploads/icons/Credit-Card-2--Streamline-Sharp-Neon.svg.svg"
                                         style="width:2.5ex; margin-right:2ex;" /> Deposit</a>
                                 <a class="dropdown-item logout_a" href="{{ url('wallet/withdraw') }}"> <img
-                                        src="/static/icons/Money-Atm--Streamline-Kameleon.svg.svg"
+                                        src="uploads/icons/Money-Atm--Streamline-Kameleon.svg.svg"
                                         style="width:2.5ex; margin-right:2ex;" /> Withdraw</a>
                             </div>
                         </div>

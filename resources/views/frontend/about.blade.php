@@ -13,23 +13,23 @@
 					<div class="banner-inner-boxes">
 						<div class="banner-top-section">
 							<div class="index_titleBox__5j_B3">
-								<div class="about-headings">Dectrx</div>
+								<div class="about-headings">{{ \App\Models\Setting::get('site_name', 'Website Name') }}</div>
 								<p>The Gold Standard in Cryptocurrency Trading
 							</div>
 						</div>
 					</div>
 					<div class="banner-mid-section">
 						<div class="index_desBOX__4OhqS">
-							<p>Dectrx Exchange was established in 2018 and registered in Seychelles. Its
+							<p>{{ \App\Models\Setting::get('site_name', 'Website Name') }} Exchange was established in 2018 and registered in Seychelles. Its
 								operating headquarters are located in Dubai. It has operation centers in
 								Singapore, Europe and other countries and regions, and its business
 								covers the world.
 							</p>
-							<p style="margin:30px 0">The platform owns the global top-level domain www.Dectrx.com,
+							<p style="margin:30px 0">The platform owns the global top-level domain www.{{ \App\Models\Setting::get('site_name', 'Website Name') }}.com,
 								and currently has more than 6 million registered users, more than 500,000
 								monthly active users, and more than 40 million users in the ecosystem.</p>
 							<div class="index_flexCenter__ZDRhT">
-								<p>Dectrx.COM is a comprehensive trading platform that supports 800+ high-quality
+								<p>{{ \App\Models\Setting::get('site_name', 'Website Name') }}.COM is a comprehensive trading platform that supports 800+ high-quality
 									tokens and 1000+ trading pairs. It has a rich variety of tradings such as
 									spot trading, futures trading, margin trading, OTC trading and
 									buying cryptos with credit cards. We provide users with the safest, most
@@ -49,7 +49,7 @@
 						</div>
 						<div class="banner-bottom-list">
 							<div class="index_top__XL9xj">40,000,000+</div>
-							<div class="index_bottom__e0gEN">Dectrx Ecosystem Users</div>
+							<div class="index_bottom__e0gEN">{{ \App\Models\Setting::get('site_name', 'Website Name') }} Ecosystem Users</div>
 						</div>
 						<div class="banner-bottom-list">
 							<div class="index_top__XL9xj">7/24</div>
@@ -69,7 +69,7 @@
 						<div><span style="color: #ffbe40"> Global coverage </span> business scope</div>
 					</div>
 					<div class="index_desBOX__qYef9">
-						<div>Headquartered in Dubai, Dectrx set up operation centers in Singapore, Europe and other
+						<div>Headquartered in Dubai, {{ \App\Models\Setting::get('site_name', 'Website Name') }} set up operation centers in Singapore, Europe and other
 							countries and regions</div>
 						<div>with global coverage of business.</div>
 					</div>
@@ -83,7 +83,7 @@
 						<div><span style="color: #ffbe40"> Global coverage </span> business scope</div>
 					</div>
 					<div class="index_desBOX__qYef9">
-						<div>Headquartered in Dubai, Dectrx set up operation centers in Singapore, Europe and other
+						<div>Headquartered in Dubai, {{ \App\Models\Setting::get('site_name', 'Website Name') }} set up operation centers in Singapore, Europe and other
 							countries and regions</div>
 						<div>with global coverage of business.</div>
 					</div>

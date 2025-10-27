@@ -26,6 +26,8 @@ class SettingsController extends Controller
         $request->validate([
             'site_name' => 'required|string|max:255',
             'site_description' => 'nullable|string|max:500',
+            'site_address' => 'nullable|string',
+            'site_phone' => 'nullable|string',
             'contact_email' => 'nullable|email|max:255',
             'site_logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:2048',
             'site_favicon' => 'nullable|image|mimes:png,ico,jpg,jpeg|max:1024',
@@ -36,6 +38,8 @@ class SettingsController extends Controller
             // Update text settings
             Setting::set('site_name', $request->site_name);
             Setting::set('site_description', $request->site_description ?? '');
+            Setting::set('site_address', $request->site_address ?? '');
+            Setting::set('site_phone', $request->site_phone ?? '');
             Setting::set('contact_email', $request->contact_email ?? '');
             Setting::set('maintenance_mode', $request->has('maintenance_mode') ? '1' : '0', 'boolean');
 

@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from dectrx.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Sep 2025 13:07:46 GMT -->
-<!-- Added by HTTrack -->
-<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
-
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -14,14 +10,14 @@
     
     <meta charset="utf-8">
     <meta name="Keywords"
-        content="Dectrx | Dectrx, Dectrx.com, cryptocurrency exchange, crypto trading, buy Bitcoin, sell Ethereum, altcoin exchange, secure crypto platform, low-fee crypto trading, Bitcoin exchange, Ethereum trading, blockchain trading, digital asset exchange, crypto market, DeFi trading, instant crypto swaps, crypto wallet integration">
+        content="{{ \App\Models\Setting::get('site_name', 'Website Name') }} | {{ \App\Models\Setting::get('site_name', 'Website Name') }}, {{ \App\Models\Setting::get('site_name', 'Website Name') }}.com, cryptocurrency exchange, crypto trading, buy Bitcoin, sell Ethereum, altcoin exchange, secure crypto platform, low-fee crypto trading, Bitcoin exchange, Ethereum trading, blockchain trading, digital asset exchange, crypto market, DeFi trading, instant crypto swaps, crypto wallet integration">
     <meta name="Description"
-        content="Dectrx | Trade securely and efficiently on Dectrx, the leading cryptocurrency exchange platform. Buy, sell, and swap Bitcoin, Ethereum, and altcoins with low fees, advanced security, and real-time market data.">
+        content="{{ \App\Models\Setting::get('site_name', 'Website Name') }} | Trade securely and efficiently on {{ \App\Models\Setting::get('site_name', 'Website Name') }}, the leading cryptocurrency exchange platform. Buy, sell, and swap Bitcoin, Ethereum, and altcoins with low fees, advanced security, and real-time market data.">
     <meta name="author" content="static">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="copyright" content="Dectrx">
+    <meta name="copyright" content="{{ \App\Models\Setting::get('site_name', 'Website Name') }}">
     <link rel="shortcut icon" href="favicon.ico" />
-    <link href="Public/template/epsilon/img/favicon.png" rel="icon" type="image/x-icon">
+    <link href="{{ asset(\App\Models\Setting::get('site_favicon')) }}" rel="icon" type="image/x-icon">
 
 
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/style.css') }}">
@@ -1447,7 +1443,7 @@
     function easytrade() {
         var coin = $("select#easycoin").find("option:selected").attr("data-value");
         var amount = $("input#easyamount").val();
-        var url = '/Easy/index';
+        var url = '{{ url('easy-convert') }}';
         if (!coin) {
             layer.tips('Please select coin!', "#easycoin", { tips: 3 });
             return false;
@@ -1468,8 +1464,11 @@
     <div class="cex-ui-footer-content">
         <div class="cex-ui-footer-content-menu cex-ui-footer-content-menu--grid">
             <div class="subscription-form-wrapper">
-                <img src="Upload/public/65d5f518818ac.png" alt="Dectrx" class="img-fluid m-b-15" width="152px">
-                <div>Trade securely and efficiently on Dectrx, the leading cryptocurrency exchange platform. Buy, sell,
+                @if(\App\Models\Setting::get('site_logo'))
+                    <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" alt="Logo" >
+                @endif
+                {{-- <img src="Upload/public/65d5f518818ac.png" alt="{{ \App\Models\Setting::get('site_name', 'Website Name') }}" class="img-fluid m-b-15" width="152px"> --}}
+                <div>Trade securely and efficiently on {{ \App\Models\Setting::get('site_name', 'Website Name') }}, the leading cryptocurrency exchange platform. Buy, sell,
                     and swap Bitcoin, Ethereum, and altcoins with low fees, advanced security, and real-time market
                     data.</div>
             </div>
@@ -1581,7 +1580,7 @@
             <!--                        </a>-->
 
             <!-- YouTube -->
-            <!--                        <a href="https://www.youtube.com/@dectrx"-->
+            <!--                        <a href="https://www.youtube.com/@{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
             <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
             <!--                            target="_blank">-->
             <!--                            <svg viewBox="0 0 24 24" class="cex-ui-icon">-->
@@ -1592,7 +1591,7 @@
             <!--                        </a>-->
 
             <!-- Facebook -->
-            <!--                        <a href="https://www.facebook.com/dectrx"-->
+            <!--                        <a href="https://www.facebook.com/{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
             <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
             <!--                            target="_blank">-->
             <!--                            <svg viewBox="0 0 24 24" class="cex-ui-icon">-->
@@ -1624,7 +1623,7 @@
             <!--                            </svg>-->
             <!--                        </a>-->
 
-            <!--                        <a href="https://medium.com/@dectrx"-->
+            <!--                        <a href="https://medium.com/@{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
             <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
             <!--                            target="_blank">-->
             <!--                            <svg viewBox="0 0 1043.63 592.71" class="cex-ui-icon">-->
@@ -1634,7 +1633,7 @@
             <!--                            </svg>-->
             <!--                        </a>-->
 
-            <!--                        <a href="https://www.linkedin.com/company/dectrx"-->
+            <!--                        <a href="https://www.linkedin.com/company/{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
             <!--   class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
             <!--   target="_blank">-->
             <!--   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34" class="cex-ui-icon">-->

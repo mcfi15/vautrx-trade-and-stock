@@ -10,15 +10,18 @@
             <div class="banner-left-section">
                 <div class="index_banner-title__Ueyv2" data-wow-delay="0.2s">
                     <h1 class="Main-heading">Empowering the Future of Crypto Trading</h1>
-                    <p>Seamlessly Buy, Sell, Trade, and Hold Cryptocurrencies on dectrx.com</p>
+                    <p>Seamlessly Buy, Sell, Trade, and Hold Cryptocurrencies on {{ \App\Models\Setting::get('site_name', 'Website Name') }}.com</p>
                 </div>
+
+                
                 <div class="banner-email">
                     <div class="index_quick-reg-wrapper__AGLkO">
+                        @guest
                         <div class="col-md-8 col-sm-12">
                             <a href="{{ route('auth.google') }}"
                                 class="btn white-bg btn-block btn-lg common-text" data-onsuccess="onSignIn">
 
-                                <span><img src='Public/template/epsilon/img/redesign/google-icon.svg' /> Signin with
+                                <span><img src='{{ asset('Public/template/epsilon/img/redesign/google-icon.svg') }}' /> Signin with
                                     Google</span></a>
                             <div class="hr-box">
                                 <div class="hr-line"></div>
@@ -26,15 +29,18 @@
                                 <div class="hr-line"></div>
                             </div>
 
-                            <a href="Login/register-2.html" class="btn yellow-bg btn-block btn-lg">Sign up using
+                            <a href="{{ url('register') }}" class="btn yellow-bg btn-block btn-lg">Sign up using
                                 Email</a>
 
                         </div>
+                        @endguest
                     </div>
                 </div>
             </div>
-            <img src="Public/template/epsilon/img/new/buy-and-sell-banner.png" class="index_banner-image Light__mode">
-            <img src="Public/template/epsilon/img/new/buy-and-sell-banner.png" class="index_banner-image Dark__mode">
+            
+
+            <img src="{{ asset('Public/template/epsilon/img/new/buy-and-sell-banner.png') }}" class="index_banner-image Light__mode">
+            <img src="{{ asset('Public/template/epsilon/img/new/buy-and-sell-banner.png') }}" class="index_banner-image Dark__mode">
         </div>
     </div>
 </section>
@@ -1237,7 +1243,7 @@
                         <div class="ics__icon__list">
                             <div class="ics__icon__item">
                                 <div class="ics__icon__item__icon">
-                                    <img width="640" height="640" src="includes/uploads/2021/11/icon-funds-stored.svg"
+                                    <img width="640" height="640" src="{{ asset('includes/uploads/2021/11/icon-funds-stored.svg') }}"
                                         class="attachment-large size-large" alt="" loading="lazy">
                                 </div>
                                 <h4 class="ics__icon__item__heading">98% of Funds stored in Multi-sig Cold Wallets </h4>
@@ -1245,7 +1251,7 @@
                             <div class="ics__icon__item">
                                 <div class="ics__icon__item__icon">
                                     <img width="640" height="640"
-                                        src="includes/uploads/2021/11/icon-multi-stage-security-protocol.svg"
+                                        src="{{ asset('includes/uploads/2021/11/icon-multi-stage-security-protocol.svg') }}"
                                         class="attachment-large size-large" alt="" loading="lazy">
                                 </div>
                                 <h4 class="ics__icon__item__heading">Multi-stage Security Protocol</h4>
@@ -1253,7 +1259,7 @@
                             <div class="ics__icon__item">
                                 <div class="ics__icon__item__icon">
                                     <img width="640" height="640"
-                                        src="includes/uploads/2021/11/icon-100-insurance-protection.svg"
+                                        src="{{ asset('includes/uploads/2021/11/icon-100-insurance-protection.svg') }}"
                                         class="attachment-large size-large" alt="" loading="lazy">
                                 </div>
                                 <h4 class="ics__icon__item__heading">Insurance Protection</h4>
@@ -1273,9 +1279,9 @@
                         Keep your Crypto Secure </h2>
                     <figure class="wp-block-image size-full wow animate__fadeInUp crypto-img"
                         style="visibility: visible; animation-name: fadeInUp;"><img loading="lazy" width="404"
-                            height="391" src="includes/uploads/2021/11/Keep-your-Crypto-Secure-03.png" alt=""
+                            height="391" src="{{ asset('includes/uploads/2021/11/Keep-your-Crypto-Secure-03.png') }}" alt=""
                             class="wp-image-1485"
-                            srcset="/includes/uploads/2021/11/Keep-your-Crypto-Secure-03.png 404w, /includes/uploads/2021/11/Keep-your-Crypto-Secure-03-300x290.png 300w"
+                            srcset="{{ asset('includes/uploads/2021/11/Keep-your-Crypto-Secure-03.png 404w') }}, {{ asset('includes/uploads/2021/11/Keep-your-Crypto-Secure-03-300x290.png') }} 300w"
                             sizes="(max-width: 404px) 100vw, 404px"></figure>
                 </div>
             </div>
@@ -1299,9 +1305,13 @@
                                     d="M13.3536 4.60355C13.5488 4.40829 13.5488 4.09171 13.3536 3.89645L10.1716 0.714465C9.97631 0.519203 9.65973 0.519203 9.46447 0.714465C9.2692 0.909727 9.2692 1.22631 9.46447 1.42157L12.2929 4.25L9.46447 7.07843C9.2692 7.27369 9.2692 7.59027 9.46447 7.78553C9.65973 7.9808 9.97631 7.9808 10.1716 7.78553L13.3536 4.60355ZM4.37114e-08 4.75L13 4.75L13 3.75L-4.37114e-08 3.75L4.37114e-08 4.75Z"
                                     fill="#FFBE40"></path>
                             </svg>
-
-                            <a href="login/register.html">Register</a>
-                        </div><img src="Public/template/epsilon/img/redesign/homepage/spot_dark-image-3.png">
+                            @auth
+                            <a href="{{ url('dashboard') }}">Dashboard</a>
+                            @else
+                            <a href="{{ url('register') }}">Register</a>
+                            @endauth
+                            
+                        </div><img src="{{ asset('Public/template/epsilon/img/redesign/homepage/spot_dark-image-3.png') }}">
                     </div>
                 </div>
                 <div class="explore-box">
@@ -1316,8 +1326,8 @@
                                     d="M13.3536 4.60355C13.5488 4.40829 13.5488 4.09171 13.3536 3.89645L10.1716 0.714465C9.97631 0.519203 9.65973 0.519203 9.46447 0.714465C9.2692 0.909727 9.2692 1.22631 9.46447 1.42157L12.2929 4.25L9.46447 7.07843C9.2692 7.27369 9.2692 7.59027 9.46447 7.78553C9.65973 7.9808 9.97631 7.9808 10.1716 7.78553L13.3536 4.60355ZM4.37114e-08 4.75L13 4.75L13 3.75L-4.37114e-08 3.75L4.37114e-08 4.75Z"
                                     fill="#FFBE40"></path>
                             </svg>
-                            <a href="easy-2.html">Deposit</a>
-                        </div><img src="Public/template/epsilon/img/redesign/homepage/spot_dark-image-2.png">
+                            <a href="{{ url('easy-convert') }}">Deposit</a>
+                        </div><img src="{{ asset('Public/template/epsilon/img/redesign/homepage/spot_dark-image-2.png') }}">
                     </div>
                 </div>
                 <div class="explore-box">
@@ -1332,8 +1342,8 @@
                                     d="M13.3536 4.60355C13.5488 4.40829 13.5488 4.09171 13.3536 3.89645L10.1716 0.714465C9.97631 0.519203 9.65973 0.519203 9.46447 0.714465C9.2692 0.909727 9.2692 1.22631 9.46447 1.42157L12.2929 4.25L9.46447 7.07843C9.2692 7.27369 9.2692 7.59027 9.46447 7.78553C9.65973 7.9808 9.97631 7.9808 10.1716 7.78553L13.3536 4.60355ZM4.37114e-08 4.75L13 4.75L13 3.75L-4.37114e-08 3.75L4.37114e-08 4.75Z"
                                     fill="#FFBE40"></path>
                             </svg>
-                            <a href="invest-2.html">Trade</a>
-                        </div><img src="Public/template/epsilon/img/redesign/homepage/spot_dark-image-1.png">
+                            <a href="{{ url('trading/spot') }}">Trade</a>
+                        </div><img src="{{ asset('Public/template/epsilon/img/redesign/homepage/spot_dark-image-1.png') }}">
                     </div>
                 </div>
             </div>
@@ -1355,9 +1365,9 @@
                             <div class="ch__copy__tag ch__copy__tag--desktop">The Z BLOG</div>
                             <div class="ch__img ch__img--">
                                 <img width="378" height="207"
-                                    src="includes/uploads/2022/01/stay-updated-on-latest_02.png"
+                                    src="{{ asset('includes/uploads/2022/01/stay-updated-on-latest_02.png') }}"
                                     class="attachment-large size-large" alt="" loading="lazy"
-                                    srcset="/includes/uploads/2022/01/stay-updated-on-latest_02.png 378w, /includes/uploads/2022/01/stay-updated-on-latest_02-300x164.png 300w"
+                                    srcset="{{ asset('includes/uploads/2022/01/stay-updated-on-latest_02.png') }} 378w, {{ asset('includes/uploads/2022/01/stay-updated-on-latest_02-300x164.png') }} 300w"
                                     sizes="(max-width: 378px) 100vw, 378px">
                             </div>
                             <div class="ch__copy">
@@ -1372,7 +1382,7 @@
                         style="visibility: visible; animation-name: fadeInUp;">
                         <div class="ch__row light-lavender">
                             <div class="ch__img ch__img--bottom">
-                                <img width="180" height="200" src="includes/uploads/2021/09/card1.png"
+                                <img width="180" height="200" src="{{ asset('includes/uploads/2021/09/card1.png') }}"
                                     class="attachment-large size-large" alt="" loading="lazy">
                             </div>
                             <div class="ch__copy">
@@ -1385,7 +1395,7 @@
                         style="visibility: visible; animation-name: fadeInUp;">
                         <div class="ch__row pink">
                             <div class="ch__img ch__img--middle">
-                                <img width="180" height="200" src="includes/uploads/2021/09/card2.png"
+                                <img width="180" height="200" src="{{ asset('includes/uploads/2021/09/card2.png') }}"
                                     class="attachment-large size-large" alt="" loading="lazy">
                             </div>
                             <div class="ch__copy">
@@ -1472,28 +1482,7 @@
     }
 </style>
 
-<!--<section class="apps">-->
-<!--	<div class="container">-->
-<!--		<div class="row">-->
-<!--			<div class="col-lg-5 col-md-12 order-lg-2 align-items-self">-->
-<!--				<div class="appss-content">-->
-<!--					<h2 class="apps-title">Coming Soon: Dectrx App for the best trading experience!</h2>-->
-<!--					<ul class="apps-property">-->
-<!--						<li>Experience the ultimate coin buying and selling platform.</li>-->
-<!--						<li>Quick and effortless sign-up process.</li>-->
-<!--						<li>Trade anytime, anywhere, 24/7</li>-->
-<!--						<li>Tablet and mobile multi-device support</li>-->
-<!--					</ul>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="col-lg-7 col-md-12 order-lg-1 align-items-end">-->
-<!--				<div class="appss-img">-->
-<!--					<img class="img-fluid" src="/Public/template/epsilon/img/app.png" alt="Dectrx Apps">-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-<!--</section>-->
+
 
 <section class="css-bc8mf0">
     <div class="MuiContainer-root MuiContainer-maxWidthLg css-ioxqx">
@@ -1506,23 +1495,30 @@
         </div>
         <div class="css-10iytbc">
             <div class="css-gybc1s"><img alt="member-world-map-icon" loading="lazy" width="632" height="406"
-                    class="css-6i4ykg" src="Public/template/epsilon/img/new/member-world-map.2484dbb7.svg"
+                    class="css-6i4ykg" src="{{ asset('Public/template/epsilon/img/new/member-world-map.2484dbb7.svg') }}"
                     style="color: transparent;"><img alt="member-world-map-hover-icon" loading="lazy" width="632"
                     height="406" decoding="async" data-nimg="1" class="member-world-map-hover-icon css-z227pk"
-                    src="Public/template/epsilon/img/new/member-world-map-hover.36771a4b.svg"
+                    src="{{ asset('Public/template/epsilon/img/new/member-world-map-hover.36771a4b.svg') }}"
                     style="color: transparent;"></div>
             <div class="css-17bew9p">
                 <div class="css-12mvi98"><img alt="member-rating-icon" loading="lazy" width="163" height="32"
                         decoding="async" data-nimg="1" class="css-15fm97m"
-                        src="Public/template/epsilon/img/new/member-rating.48a998f9.svg" style="color: transparent;">
+                        src="{{ asset('Public/template/epsilon/img/new/member-rating.48a998f9.svg') }}" style="color: transparent;">
                     <p class="MuiTypography-root MuiTypography-h4 css-13zz80p">The trading fees are competitive, and
                         the platform offers a wide range of cryptocurrencies, allowing me to diversify my portfolio
                         effortlessly. I also appreciate the advanced security measures they have in place, giving me
                         peace of mind when trading or holding assets.</p>
                     <p class="MuiTypography-root MuiTypography-h4 css-1v9uqpt">— Mark </p>
+                    @auth
                     <a class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge homepage-member-button css-hoxete"
-                        tabindex="0" href="login/login.html">Join Dectrx<span
+                        tabindex="0" href="{{ url('dashboard') }}">Dashboard<span
                             class="MuiTouchRipple-root css-w0pj6f"></span></a>
+                    @else
+                    <a class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge homepage-member-button css-hoxete"
+                        tabindex="0" href="{{ url('login') }}">Join {{ \App\Models\Setting::get('site_name', 'Website Name') }}<span
+                            class="MuiTouchRipple-root css-w0pj6f"></span></a>
+                    @endauth
+                    
                 </div>
             </div>
         </div>
@@ -1534,18 +1530,18 @@
     <div class="wrap">
 
         <div class="h1">
-            Advantages of Using Dectrx to Buy and Sell Crypto
+            Advantages of Using {{ \App\Models\Setting::get('site_name', 'Website Name') }} to Buy and Sell Crypto
         </div>
         <p>
-            Dectrx is an easy-to-use platform that offers a simplified and superior
+            {{ \App\Models\Setting::get('site_name', 'Website Name') }} is an easy-to-use platform that offers a simplified and superior
             crypto trading experience that is unmatched by comparable platforms. As the
-            saying goes, time is money. Dectrx provides users fast bank withdrawals
+            saying goes, time is money. {{ \App\Models\Setting::get('site_name', 'Website Name') }} provides users fast bank withdrawals
             without passing on the costs to the end-user. American users have the added
             advantage of using ACH for instant deposits so they can buy cryptocurrency
             faster.
         </p>
         <div class="h1">
-            If You’re New to Bitcoin Exchange - Dectrx is Here to Help!
+            If You’re New to Bitcoin Exchange - {{ \App\Models\Setting::get('site_name', 'Website Name') }} is Here to Help!
         </div>
         <p>
             The process of using a Bitcoin Exchange Platform for the first time can be
@@ -1557,7 +1553,7 @@
             trading and other transactions, and in order to have smooth transactions, Crypto
             Exchange provides a 24/7 support center staffed with experienced customer
             service teams. If it’s the first time a user is looking to buy Bitcoin or sell
-            Crypto, Dectrx’s learning center has abundant information on crypto
+            Crypto, {{ \App\Models\Setting::get('site_name', 'Website Name') }}’s learning center has abundant information on crypto
             trades.
         </p>
         <div class="h1">
@@ -1565,7 +1561,7 @@
         </div>
         <p>
             Bitcoin is just one of the many unique digital currencies that can revolutionize
-            the world of payments. Dectrx’s API leverages several easy-to-use
+            the world of payments. {{ \App\Models\Setting::get('site_name', 'Website Name') }}’s API leverages several easy-to-use
             features that bring the most functionality to the crypto trading platform. Users
             can also buy crypto pairs, including USD to Ethereum, XRP, and Litecoin, all
             under one roof.
@@ -1574,9 +1570,9 @@
             Trade Crypto Everywhere and Anywhere!
         </div>
         <p>
-            Dectrx allows users to take advantage of low fees from anywhere in the
+            {{ \App\Models\Setting::get('site_name', 'Website Name') }} allows users to take advantage of low fees from anywhere in the
             world. It is not uncommon for platforms to restrict availability based on
-            region. Fortunately, Dectrx offers extensive services to users
+            region. Fortunately, {{ \App\Models\Setting::get('site_name', 'Website Name') }} offers extensive services to users
             regardless of their point of transaction. With an optimized web and mobile
             interface, users can pay anyone in the world with just their cryptocurrency
             address.
@@ -1588,7 +1584,7 @@
 <section class="blog">
     <div class="container">
 
-        <h2 class="section-title Main_headings text-center">Dectrx Blog</h2>
+        <h2 class="section-title Main_headings text-center">{{ \App\Models\Setting::get('site_name', 'Website Name') }} Blog</h2>
 
         <div class="blog-single-item arrow-black">
             <div>
@@ -1596,7 +1592,7 @@
                     <a href="Article/detail/id/27.html" class="card">
                         <figure>
 
-                            <img class="img-fluid" src="Upload/article/6787e4782c20a.jpg"
+                            <img class="img-fluid" src="{{ asset('Upload/article/6787e4782c20a.jpg') }}"
                                 alt="Exploring NFTs: Beyond Digital Art and into the Future">
                         </figure>
                         <div class="card-body">
@@ -1617,7 +1613,7 @@
                     <a href="Article/detail/id/26.html" class="card">
                         <figure>
 
-                            <img class="img-fluid" src="Upload/article/6787e33cb17aa.jpg"
+                            <img class="img-fluid" src="{{ asset('Upload/article/6787e33cb17aa.jpg') }}"
                                 alt="Decentralized Finance (DeFi): Revolutionizing the Financial Landscape">
                         </figure>
                         <div class="card-body">
@@ -1639,7 +1635,7 @@
                     <a href="Article/detail/id/25.html" class="card">
                         <figure>
 
-                            <img class="img-fluid" src="Upload/article/6787e179ee977.jpg" alt="Understanding Web3">
+                            <img class="img-fluid" src="{{ asset('Upload/article/6787e179ee977.jpg') }}" alt="Understanding Web3">
                         </figure>
                         <div class="card-body">
                             <!--div class="blog-categorie"><span>Bitcoin</span><span>News</span></div-->
@@ -1659,7 +1655,7 @@
                     <a href="Article/detail/id/24.html" class="card">
                         <figure>
 
-                            <img class="img-fluid" src="Upload/article/6787dfe23969d.jpg"
+                            <img class="img-fluid" src="{{ asset('Upload/article/6787dfe23969d.jpg') }}"
                                 alt="The Rise of Decentralized Exchanges (DEX): A New Era in Cryptocurrency Trading">
                         </figure>
                         <div class="card-body">
@@ -1698,12 +1694,21 @@
                             <div class="cta">
                                 <div class="container container--medium">
                                     <div class="cta__row">
+                                        @auth
+                                        <h3 class="cta__heading">
+                                            Go To Dashboard to Continue Trading<strong>Us</strong> </h3>
+                                        <div class="cta__btn">
+                                            <a class="btn btn--fill" target="_blank" href="{{ url('dashboard') }}">Dashboard</a>
+                                        </div>
+                                        @else
                                         <h3 class="cta__heading">
                                             Register now to begin trading with <strong>Us</strong> </h3>
                                         <div class="cta__btn">
-                                            <a class="btn btn--fill" target="_blank" href="login/register.html">Signup
+                                            <a class="btn btn--fill" target="_blank" href="{{ url('register') }}">Signup
                                                 Now</a>
                                         </div>
+                                        @endauth
+                                        
                                     </div>
                                 </div>
                             </div>

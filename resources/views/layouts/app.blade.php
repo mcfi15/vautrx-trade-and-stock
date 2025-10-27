@@ -1464,9 +1464,9 @@
     <div class="cex-ui-footer-content">
         <div class="cex-ui-footer-content-menu cex-ui-footer-content-menu--grid">
             <div class="subscription-form-wrapper">
-                @if(\App\Models\Setting::get('site_logo'))
-                    <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" alt="Logo" >
-                @endif
+               
+                <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" alt="Logo" >
+                
                 {{-- <img src="Upload/public/65d5f518818ac.png" alt="{{ \App\Models\Setting::get('site_name', 'Website Name') }}" class="img-fluid m-b-15" width="152px"> --}}
                 <div>Trade securely and efficiently on {{ \App\Models\Setting::get('site_name', 'Website Name') }}, the leading cryptocurrency exchange platform. Buy, sell,
                     and swap Bitcoin, Ethereum, and altcoins with low fees, advanced security, and real-time market

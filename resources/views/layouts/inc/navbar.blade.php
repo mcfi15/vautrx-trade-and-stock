@@ -298,9 +298,9 @@
 
         <nav class="navbar navbar-expand-lg">
             {{-- <a class="navbar-brand" href="{{ url('/') }}"><img alt="Dectrx" src="Upload/public/65d5f5101e8de.png" /></a> --}}
-            @if(\App\Models\Setting::get('site_logo'))
-                <a class="navbar-brand" href="{{ url('/') }}"><img alt="{{ \App\Models\Setting::get('site_name', 'Website Name') }}" src="{{ asset(\App\Models\Setting::get('site_logo')) }}" /></a>
-            @endif
+            
+            <a class="navbar-brand" href="{{ url('/') }}"><img alt="{{ \App\Models\Setting::get('site_name', 'Website Name') }}" src="{{ asset(\App\Models\Setting::get('site_logo')) }}" /></a>
+            
             <!-- navbar-toggler  -->
             <!-- aria-controls="headerNavMenu"
                 aria-expanded="false"

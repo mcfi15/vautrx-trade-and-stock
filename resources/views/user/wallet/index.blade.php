@@ -109,17 +109,17 @@
                                 <tr>
                                     <td class="col-3">
                                         <div class="pair-name">
-                                            {{-- <div class="d-block d-sm-none">
+                                            <div class="d-block d-sm-none">
                                                 <div class="icon"
-                                                    style="background-image: url('/Upload/coin/651a8af250cf6.png')"
-                                                    onerror="this.onerror=null; this.src='/Upload/coin/default.png'">
+                                                    style="background-image: url('{{ $wallet->cryptocurrency->logo_url }}')"
+                                                    onerror="this.onerror=null; this.src='{{ asset('Upload/coin/default.png') }}'">
                                                 </div>
-                                                <small>BTC</small>
-                                            </div> --}}
+                                                <small>{{ strtoupper($wallet->cryptocurrency->symbol ?? 'N/A') }}</small>
+                                            </div>
                                             <div class="hide-mobile flex-box">
                                                 <div class="icon"
                                                     style="background-image: url('{{ $wallet->cryptocurrency->logo_url }}')"
-                                                    onerror="this.onerror=null; this.src='/Upload/coin/default.png'">
+                                                    onerror="this.onerror=null; this.src='{{ asset('Upload/coin/default.png') }}'">
                                                 </div>
                                                 <small>{{ strtoupper($wallet->cryptocurrency->symbol ?? 'N/A') }} [ {{ $wallet->cryptocurrency->name ?? 'Unknown' }} ]</small>
                                             </div>

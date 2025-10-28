@@ -71,6 +71,9 @@
                             <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                                 <i class="fas fa-home mr-2"></i>User Dashboard
                             </a>
+                            <a href="{{ url('admin/login-history') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                                <i class="fas fa-chart-line mr-2"></i>Login Activities
+                            </a>
                             <form action="{{ route('admin.logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-100">

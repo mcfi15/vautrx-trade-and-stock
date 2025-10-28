@@ -1,11 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\WalletController;
 use App\Http\Controllers\User\TradingController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\PasswordResetController;
 
 
 /*
@@ -66,6 +68,21 @@ Route::middleware('guest')->group(function () {
     // Google OAuth Routes
     Route::get('/auth/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
     Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+    // Password Reset Routes
+    Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
+});
+
+// Email Verification Routes (accessible to both authenticated and unauthenticated users)
+Route::get('/email/verify/{token}', [EmailVerificationController::class, 'verify'])->name('email.verify');
+
+// Email Verification Routes (requires authentication)
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify-notice', [EmailVerificationController::class, 'showVerificationNotice'])->name('verification.notice');
+    Route::post('/email/verify/resend', [EmailVerificationController::class, 'resend'])->name('verification.resend');
 });
 
     // Trading
@@ -80,7 +97,7 @@ Route::middleware('guest')->group(function () {
     // });
 
 // Authenticated routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
     // Dashboard
@@ -98,7 +115,25 @@ Route::middleware('auth')->group(function () {
         Route::get('/withdraw/{cryptoId}', [WalletController::class, 'showWithdraw'])->name('withdraw.specific'); // Specific crypto withdraw
         Route::post('/withdraw', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');
         Route::get('/transactions', [WalletController::class, 'transactions'])->name('transactions');
+
+        // Manual Deposit Management
+        Route::get('/deposits', [WalletController::class, 'deposits'])->name('deposits');
+        Route::get('/deposits/manual', function() {
+            $cryptocurrencies = \App\Models\Cryptocurrency::active()->get();
+            return view('wallet.manual-deposit', compact('cryptocurrencies'));
+        })->name('deposits.manual');
+        Route::post('/deposits/manual', [WalletController::class, 'processManualDeposit'])->name('deposits.manual');
+        Route::get('/deposits/{deposit}', [WalletController::class, 'showDeposit'])->name('deposit');
+        Route::post('/deposits/{deposit}/payment-proof', [WalletController::class, 'uploadPaymentProof'])->name('deposit.payment-proof');
+        
+        // Login History
+        Route::get('/login-history', function() {
+            $loginHistories = Auth::user()->loginHistories()->paginate(20);
+            return view('wallet.login-history', compact('loginHistories'));
+        })->name('login-history');
     });
+
+    
 });
 
 // API Routes for real-time data
@@ -131,3 +166,12 @@ Route::prefix('api')->middleware('auth')->group(function () {
         ]);
     });
 });
+
+
+
+
+
+
+
+
+

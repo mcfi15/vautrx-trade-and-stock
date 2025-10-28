@@ -15,7 +15,7 @@
 
   <!-- Action Buttons -->
   <div class="d-flex flex-wrap gap-3 mb-4">
-    <a href="{{ route('wallet.deposit') }}" class="btn btn-outline-light">
+    <a href="{{ url('wallet/deposit') }}" class="btn btn-outline-light">
       <i class="fa fa-plus-circle me-2"></i> Deposit
     </a>
     <a href="{{ route('wallet.withdraw') }}" class="btn btn-warning text-dark fw-semibold">
@@ -125,7 +125,7 @@
       <i class="fa fa-wallet text-muted fs-1 mb-3"></i>
       <h5 class="fw-semibold text-light mb-2">No Funds Available for Withdrawal</h5>
       <p class="text-muted mb-4">You need to deposit cryptocurrency before making withdrawals</p>
-      <a href="{{ route('wallet.deposit') }}" class="btn btn-warning text-dark me-2">
+      <a href="{{ url('wallet/deposit') }}" class="btn btn-warning text-dark me-2">
         <i class="fa fa-plus-circle me-2"></i> Deposit Funds
       </a>
       <a href="{{ route('wallet.index') }}" class="btn btn-outline-light">

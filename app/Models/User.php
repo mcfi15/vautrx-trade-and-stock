@@ -25,6 +25,10 @@ class User extends Authenticatable
         'two_factor_secret',
         'last_login_at',
         'last_login_ip',
+        'email_verified_at',
+        'email_verification_token',
+        'email_verification_token_expires_at',
+        'email_verified_for_login_at',
     ];
 
     protected $hidden = [
@@ -35,6 +39,8 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'email_verified_for_login_at' => 'datetime',
+        'email_verification_token_expires_at' => 'datetime',
         'last_login_at' => 'datetime',
         'is_admin' => 'boolean',
         'is_active' => 'boolean',
@@ -75,6 +81,11 @@ class User extends Authenticatable
     public function withdrawals()
     {
         return $this->hasMany(Withdrawal::class);
+    }
+
+    public function loginHistories()
+    {
+        return $this->hasMany(LoginHistory::class)->latest();
     }
 
     public function getWallet($cryptocurrencyId)

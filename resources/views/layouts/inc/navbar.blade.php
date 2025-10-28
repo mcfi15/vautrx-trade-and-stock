@@ -460,10 +460,10 @@
                                         src="{{ asset('uploads/icons/Wallet--Streamline-Plump.svg') }}"
                                         style="width:2.5ex; margin-right:2ex;" /> Spot wallet</a>
                                 <a class="dropdown-item logout_a" href="{{ url('wallet/deposit') }}"> <img
-                                        src="uploads/icons/Credit-Card-2--Streamline-Sharp-Neon.svg.svg"
+                                        src="{{ asset('uploads/icons/Credit-Card-2--Streamline-Sharp-Neon.svg.svg') }}"
                                         style="width:2.5ex; margin-right:2ex;" /> Deposit</a>
                                 <a class="dropdown-item logout_a" href="{{ url('wallet/withdraw') }}"> <img
-                                        src="uploads/icons/Money-Atm--Streamline-Kameleon.svg.svg"
+                                        src="{{ asset('uploads/icons/Money-Atm--Streamline-Kameleon.svg.svg') }}"
                                         style="width:2.5ex; margin-right:2ex;" /> Withdraw</a>
                             </div>
                         </div>

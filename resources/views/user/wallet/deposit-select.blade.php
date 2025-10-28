@@ -16,7 +16,7 @@
 
     <!-- Quick Action Buttons -->
     <div class="mb-4 d-flex flex-wrap gap-3">
-        <a href="{{ route('wallet.deposit') }}" class="btn btn-warning text-dark fw-semibold">
+        <a href="{{ url('wallet/deposit') }}" class="btn btn-warning text-dark fw-semibold">
             <i class="fa fa-plus-circle me-2"></i> Deposit
         </a>
         <a href="{{ route('wallet.withdraw') }}" class="btn btn-outline-light">

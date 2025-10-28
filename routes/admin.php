@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TradingPairController;
 use App\Http\Controllers\Admin\OAuthSettingsController;
+use App\Http\Controllers\Admin\LoginHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,4 +84,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('settings/oauth', [OAuthSettingsController::class, 'index'])->name('settings.oauth');
     Route::put('settings/oauth', [OAuthSettingsController::class, 'update'])->name('settings.oauth.update');
     Route::post('settings/oauth/test', [OAuthSettingsController::class, 'testConnection'])->name('settings.oauth.test');
+
+    // Login History Management
+    Route::get('login-history', [LoginHistoryController::class, 'index'])->name('login-history.index');
+    Route::get('login-history/{id}', [LoginHistoryController::class, 'show'])->name('login-history.show');
 });

@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TradingPairController;
 use App\Http\Controllers\Admin\OAuthSettingsController;
+use App\Http\Controllers\Admin\DepositController;
+use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Admin\LoginHistoryController;
 
 /*
@@ -27,7 +29,7 @@ use App\Http\Controllers\Admin\LoginHistoryController;
 Route::prefix('admin')->name('admin.')->middleware(['guest:admin'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-});
+}); 
 
 // Admin Protected Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(function () {
@@ -76,6 +78,37 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::post('transactions/{transaction}/reject', [TransactionController::class, 'reject'])
         ->name('transactions.reject');
     
+    // Deposit Management
+    Route::get('deposits', [DepositController::class, 'index'])->name('deposits.index');
+    Route::get('deposits/create', [DepositController::class, 'create'])->name('deposits.create');
+    Route::post('deposits', [DepositController::class, 'store'])->name('deposits.store');
+    Route::get('deposits/{deposit}', [DepositController::class, 'show'])->name('deposits.show');
+    Route::get('deposits/{deposit}/edit', [DepositController::class, 'edit'])->name('deposits.edit');
+    Route::put('deposits/{deposit}', [DepositController::class, 'update'])->name('deposits.update');
+    Route::delete('deposits/{deposit}', [DepositController::class, 'destroy'])->name('deposits.destroy');
+    Route::post('deposits/{deposit}/confirm', [DepositController::class, 'confirm'])->name('deposits.confirm');
+    Route::get('deposits/user/{user}', [DepositController::class, 'getUserDeposits'])->name('deposits.user');
+    
+    // Payment Proof Management
+    Route::get('deposits/{deposit}/payment-proof', [DepositController::class, 'viewPaymentProof'])->name('deposits.payment-proof');
+    Route::get('deposits/{deposit}/payment-proof/download', [DepositController::class, 'downloadPaymentProof'])->name('deposits.payment-proof.download');
+    Route::delete('deposits/{deposit}/payment-proof', [DepositController::class, 'deletePaymentProof'])->name('deposits.payment-proof.delete');
+    Route::post('deposits/{deposit}/approve', [DepositController::class, 'approve'])->name('deposits.approve');
+    Route::post('deposits/{deposit}/reject', [DepositController::class, 'reject'])->name('deposits.reject');
+    
+    // Withdrawal Management
+    Route::get('withdrawals', [WithdrawalController::class, 'index'])->name('withdrawals.index');
+    Route::get('withdrawals/create', [WithdrawalController::class, 'create'])->name('withdrawals.create');
+    Route::post('withdrawals', [WithdrawalController::class, 'store'])->name('withdrawals.store');
+    Route::get('withdrawals/{withdrawal}', [WithdrawalController::class, 'show'])->name('withdrawals.show');
+    Route::get('withdrawals/{withdrawal}/edit', [WithdrawalController::class, 'edit'])->name('withdrawals.edit');
+    Route::put('withdrawals/{withdrawal}', [WithdrawalController::class, 'update'])->name('withdrawals.update');
+    Route::delete('withdrawals/{withdrawal}', [WithdrawalController::class, 'destroy'])->name('withdrawals.destroy');
+    Route::post('withdrawals/{withdrawal}/approve', [WithdrawalController::class, 'approve'])->name('withdrawals.approve');
+    Route::post('withdrawals/{withdrawal}/complete', [WithdrawalController::class, 'complete'])->name('withdrawals.complete');
+    Route::post('withdrawals/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->name('withdrawals.reject');
+    Route::get('withdrawals/user/{user}', [WithdrawalController::class, 'getUserWithdrawals'])->name('withdrawals.user');
+    
     // Settings
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
@@ -84,7 +117,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('settings/oauth', [OAuthSettingsController::class, 'index'])->name('settings.oauth');
     Route::put('settings/oauth', [OAuthSettingsController::class, 'update'])->name('settings.oauth.update');
     Route::post('settings/oauth/test', [OAuthSettingsController::class, 'testConnection'])->name('settings.oauth.test');
-
+    
     // Login History Management
     Route::get('login-history', [LoginHistoryController::class, 'index'])->name('login-history.index');
     Route::get('login-history/{id}', [LoginHistoryController::class, 'show'])->name('login-history.show');

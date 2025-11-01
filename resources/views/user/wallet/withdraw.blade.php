@@ -3,7 +3,7 @@
 @section('title', 'Withdraw ' . ($cryptocurrency->name ?? 'Cryptocurrency'))
 
 @section('content')
-<div class="container py-5 bg-dark text-light rounded-3 shadow-lg">
+<div class="container py-5 bg-transparent text-light rounded-3 shadow-lg">
     <!-- Header -->
     <div class="mb-5">
         <a href="{{ route('wallet.index') }}" class="text-decoration-none text-warning">
@@ -13,10 +13,30 @@
         <p class="text-secondary">Send {{ strtoupper($cryptocurrency->symbol ?? '') }} to an external wallet</p>
     </div>
 
+    @if(session('error'))
+            <div class="alert alert-danger alert-dismissible p-3 fade show" role="alert">
+                <i class="fa fa-exclamation-triangle-fill mr-2"></i>
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible p-3 fade show" role="alert">
+                <i class="fa fa-check-circle-fill mr-2"></i>
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
     <div class="row g-4">
         <!-- Withdrawal Form -->
         <div class="col-lg-6">
-            <div class="bg-secondary p-4 rounded-3 shadow-sm">
+            <div class="bg-transparent p-4 rounded-3 shadow-sm">
                 <h2 class="h5 fw-semibold mb-3 text-warning">Withdrawal Details</h2>
 
                 <form action="{{ route('wallet.withdraw.process') }}" method="POST">
@@ -86,7 +106,7 @@
         <!-- Right Section -->
         <div class="col-lg-6">
             <!-- Balance Card -->
-            <div class="bg-secondary p-4 rounded-3 shadow-sm mb-4">
+            <div class="bg-dark p-4 rounded-3 shadow-sm mb-4">
                 <h2 class="h5 fw-semibold text-warning mb-3">Current Balance</h2>
                 <div class="text-center">
                     <div class="display-6 fw-bold text-white">
@@ -107,7 +127,7 @@
             </div>
 
             <!-- Info Sections -->
-            <div class="bg-secondary p-4 rounded-3 shadow-sm mb-4">
+            <div class="bg-dark p-4 rounded-3 shadow-sm mb-4">
                 <h2 class="h5 fw-semibold text-warning mb-3">Withdrawal Info</h2>
                 <div class="small">
                     <div class="d-flex mb-3">
@@ -135,7 +155,7 @@
             </div>
 
             <!-- Network Info -->
-            <div class="bg-secondary p-4 rounded-3 shadow-sm">
+            <div class="bg-transparent p-4 rounded-3 shadow-sm">
                 <h2 class="h5 fw-semibold text-warning mb-3">Network Information</h2>
                 <div class="small">
                     <div class="d-flex justify-content-between">
@@ -156,7 +176,7 @@
     </div>
 
     <!-- Recent Withdrawals -->
-    <div class="bg-secondary rounded-3 shadow-sm p-4 mt-5">
+    <div class="bg-transparent rounded-3 shadow-sm p-4 mt-5">
         <h2 class="h5 fw-semibold text-warning mb-3">Recent Withdrawals</h2>
         @forelse($withdrawals as $withdrawal)
         <div class="d-flex justify-content-between align-items-center border-bottom border-dark py-3">

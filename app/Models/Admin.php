@@ -62,6 +62,11 @@ class Admin extends Authenticatable
         return $this->role === 'super_admin';
     }
 
+    public function deposit()
+    {
+        return $this->hasMany(Deposit::class, 'reviewed_by');
+    }
+
     /**
      * Check if admin has specific permission.
      */

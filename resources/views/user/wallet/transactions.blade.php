@@ -3,278 +3,255 @@
 @section('title', 'Transaction History')
 
 @section('content')
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<style>
+/* Make the table use fixed layout so the widths below are respected */
+.table-fixed-layout {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* Prevent wrapping and show ellipsis so long content won't widen columns */
+.table-fixed-layout th,
+.table-fixed-layout td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Optional: stronger visual header weight */
+.table-fixed-layout thead th {
+  font-weight: 600;
+}
+
+/* Explicit column widths — adjust percentages to taste so they add to ~100% */
+.table-fixed-layout thead th:nth-child(1) { width: 10%; } /* Type */
+.table-fixed-layout thead th:nth-child(2) { width: 18%; } /* Cryptocurrency */
+.table-fixed-layout thead th:nth-child(3) { width: 18%; } /* Amount */
+.table-fixed-layout thead th:nth-child(4) { width: 10%; } /* Fee */
+.table-fixed-layout thead th:nth-child(5) { width: 10%; } /* Status */
+.table-fixed-layout thead th:nth-child(6) { width: 16%; } /* Date */
+.table-fixed-layout thead th:nth-child(7) { width: 18%; } /* Actions */
+
+/* If you keep .table-responsive wrapper, ensure it doesn't force different sizing */
+.table-responsive > .table-fixed-layout {
+  margin-bottom: 0;
+}
+</style>
+
+<div class="container">
+
     <!-- Header -->
-    <div class="mb-8">
-        <a href="{{ route('wallet.index') }}" class="text-indigo-600 hover:text-indigo-800 mb-4 inline-flex items-center">
-            <i class="fa fa-arrow-left mr-2"></i> Back to Wallet
-        </a>
-        <h1 class="text-3xl font-bold text-gray-900">Transaction History</h1>
-        <p class="mt-2 text-gray-600">View all your wallet transactions</p>
+    <div class="mb-4">
+        <h1 class="h3 font-weight-bold text-dark">Transaction History</h1>
+        <p class="text-muted">View all your wallet transactions</p>
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Transaction Type</label>
-                <select name="type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="">All Types</option>
-                    <option value="deposit" {{ request('type') === 'deposit' ? 'selected' : '' }}>Deposit</option>
-                    <option value="withdrawal" {{ request('type') === 'withdrawal' ? 'selected' : '' }}>Withdrawal</option>
-                    <option value="trade" {{ request('type') === 'trade' ? 'selected' : '' }}>Trade</option>
-                    <option value="transfer" {{ request('type') === 'transfer' ? 'selected' : '' }}>Transfer</option>
-                </select>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Cryptocurrency</label>
-                <select name="crypto" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="">All Cryptocurrencies</option>
-                    @foreach($cryptocurrencies ?? [] as $crypto)
-                    <option value="{{ $crypto->id }}" {{ request('crypto') == $crypto->id ? 'selected' : '' }}>
-                        {{ $crypto->name }} ({{ strtoupper($crypto->symbol) }})
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="">All Status</option>
-                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
-                    <option value="failed" {{ request('status') === 'failed' ? 'selected' : '' }}>Failed</option>
-                    <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                </select>
-            </div>
-            
-            <div class="flex items-end">
-                <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <i class="fa fa-filter mr-2"></i>Apply Filters
-                </button>
-            </div>
-        </form>
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Filters</h5>
+
+            <form method="GET" class="row">
+
+                <div class="form-group col-md-3">
+                    <label>Transaction Type</label>
+                    <select name="type" class="form-control">
+                        <option value="">All Types</option>
+                        <option value="deposit" {{ request('type') === 'deposit' ? 'selected' : '' }}>Deposit</option>
+                        <option value="withdrawal" {{ request('type') === 'withdrawal' ? 'selected' : '' }}>Withdrawal</option>
+                        <option value="trade" {{ request('type') === 'trade' ? 'selected' : '' }}>Trade</option>
+                        <option value="transfer" {{ request('type') === 'transfer' ? 'selected' : '' }}>Transfer</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Cryptocurrency</label>
+                    <select name="crypto" class="form-control">
+                        <option value="">All Cryptocurrencies</option>
+                        @foreach($cryptocurrencies ?? [] as $crypto)
+                            <option value="{{ $crypto->id }}" {{ request('crypto') == $crypto->id ? 'selected' : '' }}>
+                                {{ $crypto->name }} ({{ strtoupper($crypto->symbol) }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Status</label>
+                    <select name="status" class="form-control">
+                        <option value="">All Status</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="failed" {{ request('status') === 'failed' ? 'selected' : '' }}>Failed</option>
+                        <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3 d-flex align-items-end">
+                    <button class="btn btn-primary w-100">
+                        <i class="fa fa-filter mr-2"></i> Apply Filters
+                    </button>
+                </div>
+
+            </form>
+        </div>
     </div>
 
     <!-- Transactions Table -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">Transactions</h2>
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="m-0">Transactions</h5>
         </div>
-        
-        @if($transactions->count() > 0)
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cryptocurrency</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+
+        @if($transactions->count())
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 ">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Type</th>
+                            <th>Cryptocurrency</th>
+                            <th>Amount</th>
+                            <th>Fee</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
                     @foreach($transactions as $transaction)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 
-                                    {{ $transaction->type === 'deposit' ? 'bg-green-100 text-green-600' : 
-                                       ($transaction->type === 'withdrawal' ? 'bg-red-100 text-red-600' : 
-                                        ($transaction->type === 'trade' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600')) }} 
-                                    rounded-full flex items-center justify-center mr-3">
-                                    <i class="fa fa-{{ 
-                                        $transaction->type === 'deposit' ? 'arrow-down' : 
-                                        ($transaction->type === 'withdrawal' ? 'arrow-up' : 
-                                         ($transaction->type === 'trade' ? 'exchange-alt' : 'transfer'))
-                                    }}"></i>
-                                </div>
-                                <span class="text-sm font-medium text-gray-900 capitalize">{{ $transaction->type }}</span>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
-                                    {{ strtoupper(substr($transaction->cryptocurrency->symbol ?? 'N/A', 0, 2)) }}
-                                </div>
-                                <div>
-                                    <div class="text-sm font-medium text-gray-900">
-                                        {{ $transaction->cryptocurrency->symbol ?? 'N/A' }}
-                                    </div>
-                                    <div class="text-sm text-gray-500">
-                                        {{ $transaction->cryptocurrency->name ?? 'Unknown' }}
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium {{ $transaction->type === 'deposit' ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $transaction->type === 'deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 8) }}
-                            </div>
-                            <div class="text-sm text-gray-500">
-                                ≈ ${{ number_format($transaction->amount * ($transaction->cryptocurrency->current_price ?? 0), 2) }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ number_format($transaction->fee ?? 0, 8) }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                {{ $transaction->status === 'completed' ? 'bg-green-100 text-green-800' : 
-                                   ($transaction->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                    ($transaction->status === 'failed' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800')) }}">
-                                {{ ucfirst($transaction->status) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div>{{ $transaction->created_at->format('M j, Y') }}</div>
-                            <div>{{ $transaction->created_at->format('g:i A') }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <button onclick="viewTransaction({{ $transaction->id }})" 
-                                    class="text-indigo-600 hover:text-indigo-900">
-                                <i class="fa fa-eye"></i> View
-                            </button>
-                        </td>
-                    </tr>
+                        <tr >
+                            <td style="padding-left: 10px;">
+                                <span class="badge badge-pill
+                                    @if($transaction->type=='deposit') badge-success
+                                    @elseif($transaction->type=='withdrawal') badge-danger
+                                    @elseif($transaction->type=='trade') badge-info
+                                    @else badge-secondary @endif">
+                                    {{ ucfirst($transaction->type) }}
+                                </span>
+                            </td>
+
+                            <td style="padding-left: 10px;">
+                                <strong>{{ $transaction->cryptocurrency->symbol ?? 'N/A' }}</strong><br>
+                                <small class="text-muted">{{ $transaction->cryptocurrency->name ?? 'Unknown' }}</small>
+                            </td>
+
+                            <td style="padding-left: 10px;">
+                                <span class="{{ $transaction->type=='deposit' ? 'text-success' : 'text-danger' }} font-weight-bold">
+                                    {{ $transaction->type=='deposit' ? '+' : '-' }}{{ number_format($transaction->amount, 8) }}
+                                </span><br>
+                                <small class="text-muted">
+                                    ${{ number_format($transaction->amount * ($transaction->cryptocurrency->current_price ?? 0), 2) }}
+                                </small>
+                            </td>
+
+                            <td style="padding-left: 10px;">{{ number_format($transaction->fee ?? 0, 8) }}</td>
+
+                            <td style="padding-left: 10px;">
+                                <span class="badge
+                                    @if($transaction->status=='completed') badge-success
+                                    @elseif($transaction->status=='pending') badge-warning
+                                    @elseif($transaction->status=='failed') badge-danger
+                                    @else badge-secondary @endif">
+                                    {{ ucfirst($transaction->status) }}
+                                </span>
+                            </td>
+
+                            <td style="padding-left: 10px;">
+                                <small>{{ $transaction->created_at->format('M j, Y') }}</small><br>
+                                <small class="text-muted">{{ $transaction->created_at->format('g:i A') }}</small>
+                            </td>
+
+                            <td style="padding-left: 10px;">
+                                <button class="btn btn-sm btn-outline-primary" onclick="viewTransaction({{ $transaction->id }})">
+                                    <i class="fa fa-eye"></i> View
+                                </button>
+                            </td>
+                        </tr>
                     @endforeach
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Pagination -->
-        <div class="px-6 py-4 border-t border-gray-200">
-            {{ $transactions->appends(request()->query())->links() }}
-        </div>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="card-footer">
+                {{ $transactions->appends(request()->query())->links() }}
+            </div>
+
         @else
-        <div class="text-center py-12">
-            <i class="fa fa-history text-6xl text-gray-300 mb-4"></i>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No Transactions Found</h3>
-            <p class="text-gray-500 mb-6">
-                @if(request()->hasAny(['type', 'status', 'search', 'date_from', 'date_to']))
-                    No transactions match your current filters.
-                @else
-                    You haven't made any transactions yet.
+            <div class="text-center p-5">
+                <i class="fa fa-history text-secondary" style="font-size:50px"></i>
+                <h5 class="mt-3">No Transactions Found</h5>
+                <p class="text-muted">
+                    @if(request()->hasAny(['type','status','search','date_from','date_to']))
+                        No transactions match your filters.
+                    @else
+                        You haven't made any transactions yet.
+                    @endif
+                </p>
+
+                @if(request()->hasAny(['type','status','search','date_from','date_to']))
+                    <a href="{{ route('wallet.transactions') }}" class="text-primary font-weight-bold">Clear Filters</a>
                 @endif
-            </p>
-            @if(request()->hasAny(['type', 'status', 'search', 'date_from', 'date_to']))
-            <a href="{{ route('wallet.transactions') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">
-                Clear Filters
-            </a>
-            @endif
-        </div>
+            </div>
         @endif
     </div>
 
-    <!-- Summary Stats -->
-    @if($transactions->count() > 0)
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <i class="fa fa-arrow-down text-green-600 text-xl"></i>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Total Deposits</p>
-                    <p class="text-2xl font-bold text-gray-900">
-                        {{ $transactions->where('type', 'deposit')->where('status', 'completed')->count() }}
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <i class="fa fa-arrow-up text-red-600 text-xl"></i>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Total Withdrawals</p>
-                    <p class="text-2xl font-bold text-gray-900">
-                        {{ $transactions->where('type', 'withdrawal')->where('status', 'completed')->count() }}
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                    <i class="fa fa-clock text-yellow-600 text-xl"></i>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Pending</p>
-                    <p class="text-2xl font-bold text-gray-900">
-                        {{ $transactions->where('status', 'pending')->count() }}
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <i class="fa fa-exchange-alt text-blue-600 text-xl"></i>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Total Volume</p>
-                    <p class="text-2xl font-bold text-gray-900">
-                        ${{ number_format($transactions->where('status', 'completed')->sum(function($t) {
-                            return $t->amount * ($t->cryptocurrency->current_price ?? 0);
-                        }), 2) }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
 </div>
 
 <!-- Transaction Detail Modal -->
-<div id="transactionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden" style="z-index: 1000;">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Transaction Details</h3>
-            <div id="transactionDetails">
-                <!-- Transaction details will be loaded here -->
-            </div>
-            <div class="mt-6">
-                <button onclick="closeModal()" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-                    Close
+<div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-labelledby="transactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionModalLabel">Transaction Details</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
+            <div class="modal-body" id="transactionDetails"></div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+
         </div>
     </div>
 </div>
 
 <script>
 function viewTransaction(transactionId) {
-    // This would typically fetch transaction details via AJAX
-    // For now, showing a placeholder
     document.getElementById('transactionDetails').innerHTML = `
-        <div class="text-center">
-            <i class="fa fa-spinner fa-spin text-2xl text-gray-400 mb-4"></i>
-            <p class="text-gray-600">Loading transaction details...</p>
+        <div class="text-center py-4">
+            <i class="fa fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+            <p class="text-muted">Loading transaction details...</p>
         </div>
     `;
-    document.getElementById('transactionModal').classList.remove('hidden');
-}
 
-function closeModal() {
-    document.getElementById('transactionModal').classList.add('hidden');
-}
+    $('#transactionModal').modal('show');
 
-// Close modal when clicking outside
-document.getElementById('transactionModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeModal();
-    }
-});
+    fetch(`/wallet/transaction/${transactionId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('transactionDetails').innerHTML = `
+                <ul class="list-group text-left">
+                    <li class="list-group-item"><strong>Type:</strong> ${data.type}</li>
+                    <li class="list-group-item"><strong>Amount:</strong> ${data.amount}</li>
+                    <li class="list-group-item"><strong>Fee:</strong> ${data.fee}</li>
+                    <li class="list-group-item"><strong>Status:</strong> ${data.status}</li>
+                    <li class="list-group-item"><strong>Crypto:</strong> ${data.crypto} (${data.crypto_name})</li>
+                    <li class="list-group-item"><strong>Date:</strong> ${data.date}</li>
+                    ${data.tx_hash ? `<li class="list-group-item"><strong>Tx Hash:</strong> ${data.tx_hash}</li>` : ''}
+                </ul>
+            `;
+        })
+        .catch(() => {
+            document.getElementById('transactionDetails').innerHTML =
+                `<div class="alert alert-danger">Failed to load transaction details.</div>`;
+        });
+}
 </script>
 @endsection

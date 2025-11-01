@@ -50,8 +50,8 @@
     </div>
 
   <!-- Holdings Section -->
-    <div class="card bg-dark border-0 shadow-lg rounded-4 mb-4">
-        <div class="card-header bg-secondary border-0 text-light">
+    <div class="card bg-transparent border-0 shadow-lg rounded-4 mb-4">
+        <div class="card-header bg-dark border-0 text-light">
         <h5 class="mb-1 fw-semibold">Your Cryptocurrency Holdings</h5>
         <p class="text-unmute small mb-0">Select a cryptocurrency to withdraw funds to an external wallet</p>
     </div>

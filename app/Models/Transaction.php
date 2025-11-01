@@ -20,7 +20,7 @@ class Transaction extends Model
         'balance_after',
         'from_address',
         'to_address',
-        'tx_hash',
+        'transaction_hash',
         'status',
         'description',
     ];
@@ -37,8 +37,8 @@ class Transaction extends Model
         parent::boot();
 
         static::creating(function ($transaction) {
-            if (empty($transaction->tx_hash)) {
-                $transaction->tx_hash = 'TXN-' . strtoupper(Str::random(16));
+            if (empty($transaction->transaction_hash)) {
+                $transaction->transaction_hash = 'TXN-' . strtoupper(Str::random(16));
             }
         });
     }

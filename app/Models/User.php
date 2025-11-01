@@ -29,6 +29,7 @@ class User extends Authenticatable
         'email_verification_token',
         'email_verification_token_expires_at',
         'email_verified_for_login_at',
+        'email_notifications',
     ];
 
     protected $hidden = [
@@ -46,6 +47,7 @@ class User extends Authenticatable
         'is_active' => 'boolean',
         'kyc_verified' => 'boolean',
         'two_factor_enabled' => 'boolean',
+        'email_notifications' => 'boolean',
     ];
 
     public function wallets()
@@ -95,17 +97,51 @@ class User extends Authenticatable
 
     public function getOrCreateWallet($cryptocurrencyId)
     {
-        $wallet = $this->getWallet($cryptocurrencyId);
-        
-        if (!$wallet) {
-            $wallet = $this->wallets()->create([
+        try {
+            // Validate input
+            if (!$cryptocurrencyId) {
+                throw new \InvalidArgumentException('Cryptocurrency ID is required');
+            }
+            
+            // Check if user exists and is valid
+            if (!$this->exists) {
+                throw new \Exception('User does not exist');
+            }
+            
+            $wallet = $this->getWallet($cryptocurrencyId);
+            
+            if (!$wallet) {
+                // Verify cryptocurrency exists
+                $cryptocurrency = \App\Models\Cryptocurrency::find($cryptocurrencyId);
+                if (!$cryptocurrency) {
+                    throw new \Exception('Cryptocurrency not found: ' . $cryptocurrencyId);
+                }
+                
+                $wallet = $this->wallets()->create([
+                    'cryptocurrency_id' => $cryptocurrencyId,
+                    'balance' => 0,
+                    'locked_balance' => 0,
+                ]);
+            }
+            
+            return $wallet;
+            
+        } catch (\Exception $e) {
+            // Log the error but don't break the trading interface
+            \Log::warning('Wallet creation/retrieval failed: ' . $e->getMessage(), [
+                'user_id' => $this->id,
+                'cryptocurrency_id' => $cryptocurrencyId,
+                'user_email' => $this->email
+            ]);
+            
+            // Return a dummy wallet with zero balance to prevent interface breakage
+            return new \App\Models\Wallet([
+                'user_id' => $this->id,
                 'cryptocurrency_id' => $cryptocurrencyId,
                 'balance' => 0,
                 'locked_balance' => 0,
             ]);
         }
-        
-        return $wallet;
     }
 
     public function getTotalPortfolioValue()

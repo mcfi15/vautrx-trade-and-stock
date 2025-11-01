@@ -56,6 +56,12 @@
                     <a href="{{ route('admin.orders.index') }}" class="hover:bg-indigo-700 px-2 lg:px-3 py-2 rounded-md text-sm transition-all">
                         <i class="fas fa-list mr-1"></i><span class="hidden lg:inline">Orders</span>
                     </a>
+                    <a href="{{ route('admin.deposits.index') }}" class="hover:bg-indigo-700 px-2 lg:px-3 py-2 rounded-md text-sm transition-all">
+                        <i class="fas fa-arrow-down mr-1"></i><span class="hidden lg:inline">Deposits</span>
+                    </a>
+                    <a href="{{ route('admin.withdrawals.index') }}" class="hover:bg-indigo-700 px-2 lg:px-3 py-2 rounded-md text-sm transition-all">
+                        <i class="fas fa-arrow-up mr-1"></i><span class="hidden lg:inline">Withdrawals</span>
+                    </a>
                     <a href="{{ route('admin.settings.index') }}" class="hover:bg-indigo-700 px-2 lg:px-3 py-2 rounded-md text-sm transition-all">
                         <i class="fas fa-cog mr-1"></i><span class="hidden lg:inline">Settings</span>
                     </a>
@@ -107,6 +113,12 @@
                 </a>
                 <a href="{{ route('admin.orders.index') }}" class="block hover:bg-indigo-800 px-3 py-2 rounded-md">
                     <i class="fas fa-list mr-2"></i>Orders
+                </a>
+                <a href="{{ route('admin.deposits.index') }}" class="block hover:bg-indigo-800 px-3 py-2 rounded-md">
+                    <i class="fas fa-arrow-down mr-2"></i>Deposits
+                </a>
+                <a href="{{ route('admin.withdrawals.index') }}" class="block hover:bg-indigo-800 px-3 py-2 rounded-md">
+                    <i class="fas fa-arrow-up mr-2"></i>Withdrawals
                 </a>
                 <a href="{{ route('admin.settings.index') }}" class="block hover:bg-indigo-800 px-3 py-2 rounded-md">
                     <i class="fas fa-cog mr-2"></i>Settings
@@ -187,6 +199,7 @@
             </p>
         </div>
     </footer>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <script>
         // Toggle mobile menu

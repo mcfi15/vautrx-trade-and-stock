@@ -58,6 +58,19 @@ Route::controller(TradingController::class)->group(function () {
     
 });
 
+Route::get('/trading/{pairId}', [TradingController::class, 'show'])->name('show');
+// Trading
+    // Route::controller('trading')->name('trading.')->group(function () {
+        
+    //     Route::get('/{pairId}', [TradingController::class, 'show'])->name('show');
+        
+    //     Route::post('/order', [TradingController::class, 'placeOrder'])->name('order.place');
+    //     Route::delete('/order/{order}', [TradingController::class, 'cancelOrder'])->name('order.cancel');
+    //     Route::get('/history/orders', [TradingController::class, 'orderHistory'])->name('orders');
+    //     Route::get('/history/trades', [TradingController::class, 'tradeHistory'])->name('trades');
+    // });
+
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -85,17 +98,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verify/resend', [EmailVerificationController::class, 'resend'])->name('verification.resend');
 });
 
-    // Trading
-    // Route::prefix('trading')->name('trading.')->group(function () {
-        
-    //     Route::get('/{pair}', [TradingController::class, 'show'])->name('show');
-        
-    //     Route::post('/order', [TradingController::class, 'placeOrder'])->name('order.place');
-    //     Route::delete('/order/{order}', [TradingController::class, 'cancelOrder'])->name('order.cancel');
-    //     Route::get('/history/orders', [TradingController::class, 'orderHistory'])->name('orders');
-    //     Route::get('/history/trades', [TradingController::class, 'tradeHistory'])->name('trades');
-    // });
-
+    
 // Authenticated routes
 Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -111,10 +114,13 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::get('/', [WalletController::class, 'index'])->name('index');
         Route::get('/deposit', [WalletController::class, 'showDeposit'])->name('deposit'); // General deposit page
         Route::get('/deposit/{cryptoId}', [WalletController::class, 'showDeposit'])->name('deposit.specific'); // Specific crypto deposit
+        Route::post('/deposit/submit/{cryptoId}', [WalletController::class, 'submitDeposit'])->name('wallet.deposit.submit');
         Route::get('/withdraw', [WalletController::class, 'showWithdraw'])->name('withdraw'); // General withdraw page
         Route::get('/withdraw/{cryptoId}', [WalletController::class, 'showWithdraw'])->name('withdraw.specific'); // Specific crypto withdraw
         Route::post('/withdraw', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');
         Route::get('/transactions', [WalletController::class, 'transactions'])->name('transactions');
+        Route::get('/transaction/{id}', [WalletController::class, 'transactionDetail'])->name('wallet.transaction.detail');
+
 
         // Manual Deposit Management
         Route::get('/deposits', [WalletController::class, 'deposits'])->name('deposits');

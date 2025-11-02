@@ -206,23 +206,29 @@
 let priceUpdateInterval;
 
 function updatePrices() {
-    fetch('/api/v1/crypto/prices')
+    fetch('/api/v1/admin/crypto')
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 data.data.forEach(crypto => {
                     updateCryptoRow(crypto);
                 });
+            } else {
+                console.error('Failed to fetch prices:', data.message);
+                showToast('Failed to fetch price updates: ' + (data.message || 'Unknown error'), 'error');
             }
         })
-        .catch(error => console.error('Error fetching prices:', error));
+        .catch(error => {
+            console.error('Error fetching prices:', error);
+            showToast('Error fetching price updates. Check console for details.', 'error');
+        });
 }
 
 function updateCryptoRow(crypto) {
-    // Update price
+    // Update price - prefer cached price if available
     const priceCell = document.querySelector(`.crypto-price[data-crypto-id="${crypto.id}"]`);
     if (priceCell) {
-        const newPrice = '$' + parseFloat(crypto.current_price).toFixed(8);
+        const newPrice = '$' + parseFloat(crypto.cached_price || crypto.current_price || 0).toFixed(8);
         if (priceCell.textContent.trim() !== newPrice) {
             priceCell.textContent = newPrice;
             priceCell.classList.add('updating');
@@ -233,20 +239,42 @@ function updateCryptoRow(crypto) {
     // Update change
     const changeCell = document.querySelector(`.crypto-change[data-crypto-id="${crypto.id}"]`);
     if (changeCell) {
-        const change = parseFloat(crypto.price_change_24h);
+        const change = parseFloat(crypto.price_change_24h || 0);
         const icon = change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
         const colorClass = change >= 0 ? 'text-success' : 'text-danger';
         changeCell.innerHTML = `<span class="${colorClass}"><i class="fas ${icon}"></i> ${change.toFixed(2)}%</span>`;
     }
+
+    // Update price updated time
+    const priceUpdatedCell = document.querySelector(`#crypto-row-${crypto.id} td:nth-child(9) small`);
+    if (priceUpdatedCell && crypto.price_updated_at) {
+        const updatedAt = new Date(crypto.price_updated_at);
+        const timeAgo = getTimeAgo(updatedAt);
+        priceUpdatedCell.textContent = timeAgo;
+    }
+}
+
+// Helper function to format time ago
+function getTimeAgo(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
 }
 
 function updateServiceStatus() {
-    fetch('/api/v1/crypto/status')
+    fetch('/api/v1/admin/crypto/status')
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 const status = data.data;
-                document.getElementById('live-connections').textContent = status.live_connections;
+                document.getElementById('live-connections').textContent = status.live_connections || 0;
                 
                 const statusBadge = document.getElementById('service-status');
                 if (status.service_running) {
@@ -255,12 +283,18 @@ function updateServiceStatus() {
                     statusBadge.innerHTML = '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> Offline</span>';
                 }
                 
-                document.getElementById('realtime-count').textContent = status.tracked_cryptocurrencies;
+                document.getElementById('realtime-count').textContent = status.tracked_cryptocurrencies || 0;
+                document.getElementById('total-cryptos').textContent = status.total_cryptocurrencies || 0;
+            } else {
+                console.error('Failed to fetch status:', data.message);
+                document.getElementById('service-status').innerHTML = '<span class="badge badge-warning">Error</span>';
+                showToast('Failed to fetch service status: ' + (data.message || 'Unknown error'), 'error');
             }
         })
         .catch(error => {
             console.error('Error fetching status:', error);
             document.getElementById('service-status').innerHTML = '<span class="badge badge-warning">Error</span>';
+            showToast('Error fetching service status. Check console for details.', 'error');
         });
 }
 
@@ -394,7 +428,8 @@ function syncPrices(event) {
     
     showToast('Syncing prices from CoinGecko... Please wait.', 'info');
     
-    fetch('{{ route("admin.cryptocurrencies.sync-prices") }}', {
+    // Use the new batch update endpoint
+    fetch('/api/v1/admin/crypto/batch-update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -405,10 +440,18 @@ function syncPrices(event) {
     .then(data => {
         if (data.success) {
             showToast(data.message, 'success');
-            // Reload page after 1.5 seconds to show updated prices
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+            // Update prices in real-time without page reload
+            updatePrices();
+            updateServiceStatus();
+            
+            // Also sync through admin route for consistency
+            return fetch('{{ route("admin.cryptocurrencies.sync-prices") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
         } else {
             showToast(data.message || 'Failed to sync prices', 'error');
             syncButton.disabled = false;
@@ -420,6 +463,13 @@ function syncPrices(event) {
         showToast('Error syncing prices. Check console for details.', 'error');
         syncButton.disabled = false;
         syncButton.innerHTML = originalText;
+    })
+    .finally(() => {
+        // Reset button after a delay
+        setTimeout(() => {
+            syncButton.disabled = false;
+            syncButton.innerHTML = originalText;
+        }, 2000);
     });
 }
 

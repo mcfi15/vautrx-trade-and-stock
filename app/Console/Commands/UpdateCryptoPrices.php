@@ -46,6 +46,9 @@ class UpdateCryptoPrices extends Command
             }
         }
 
+        // Mark that price update service has run
+        \Illuminate\Support\Facades\Cache::put('last_price_update', now(), 3600);
+
         $this->info("Updated {$updated} cryptocurrencies successfully!");
     }
 }

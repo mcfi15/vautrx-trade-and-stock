@@ -736,52 +736,18 @@
                   </th>
                 </tr>
               </thead>
-              <tbody class="white-bg" id="STAR-DATA">
-                <tr>
-                  <td>
-                    <span class="coin"><i class="icon ion-md-star add-to-favorite"></i> ETH/BTC</span>
-                  </td>
-                  <td>
-                    <span class="val">0.00020255</span>
-                  </td>
-                  <td class="red">
-                    <span class="degree">-2.58%</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="coin"><i class="icon ion-md-star add-to-favorite"></i> KCS/BTC</span>
-                  </td>
-                  <td>
-                    <span class="val">0.00013192</span>
-                  </td>
-                  <td class="green">
-                    <span class="degree">+5.6%</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="coin"><i class="icon ion-md-star add-to-favorite"></i> ETH/BTC</span>
-                  </td>
-                  <td>
-                    <span class="val">0.00020255</span>
-                  </td>
-                  <td class="red">
-                    <span class="degree">-2.58%</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="coin"><i class="icon ion-md-star add-to-favorite"></i> KCS/BTC</span>
-                  </td>
-                  <td>
-                    <span class="val">0.00013192</span>
-                  </td>
-                  <td class="green">
-                    <span class="degree">+5.6%</span>
-                  </td>
-                </tr>
-              </tbody>
+              <tbody id="STAR-DATA">
+                  @foreach($marketsUSDT->merge($marketsBTC)->merge($marketsETH)->merge($marketsEUR) as $m)
+                  @if($favorites->contains($m->id))
+                  <tr onclick="window.location='{{ url('trading', $m->id) }}'" style="cursor:pointer;">
+                    <td><i class="icon ion-md-star"></i> {{ $m->symbol }}</td>
+                    <td>{{ number_format($m->last_price, 8) }}</td>
+                    <td class="{{ $m->change < 0 ? 'red' : 'green' }}">{{ $m->change }}%</td>
+                  </tr>
+                  @endif
+                  @endforeach
+                </tbody>
+
             </table>
           </div>
           <div class="tab-pane" id="usdt" role="tabpanel">
@@ -793,7 +759,16 @@
                   <th scope="col">Change</th>
                 </tr>
               </thead>
-              <tbody id="coinleftmenu-usdt"></tbody>
+              <tbody id="coinleftmenu-usdt">
+                @foreach($marketsUSDT as $m)
+                <tr onclick="window.location='{{ url('trading', $m->id) }}'" style="cursor:pointer;">
+                  <td>{{ $m->symbol }}</td>
+                  <td>{{ number_format($m->last_price, 8) }}</td>
+                  <td class="{{ $m->change < 0 ? 'red' : 'green' }}">{{ $m->change }}%</td>
+                </tr>
+                @endforeach
+                </tbody>
+
             </table>
           </div>
           <div class="tab-pane" id="btc" role="tabpanel">
@@ -805,7 +780,16 @@
                   <th scope="col">Change</th>
                 </tr>
               </thead>
-              <tbody id="coinleftmenu-btc"></tbody>
+              <tbody id="coinleftmenu-btc">
+              @foreach($marketsBTC as $m)
+              <tr onclick="window.location='{{ url('trading', $m->id) }}'" style="cursor:pointer;">
+                <td>{{ $m->symbol }}</td>
+                <td>{{ number_format($m->last_price, 8) }}</td>
+                <td class="{{ $m->change < 0 ? 'red' : 'green' }}">{{ $m->change }}%</td>
+              </tr>
+              @endforeach
+              </tbody>
+
             </table>
           </div>
           <div class="tab-pane" id="eth" role="tabpanel">
@@ -817,7 +801,16 @@
                   <th scope="col">Change</th>
                 </tr>
               </thead>
-              <tbody id="coinleftmenu-eth"></tbody>
+              <tbody id="coinleftmenu-eth">
+              @foreach($marketsETH as $m)
+              <tr onclick="window.location='{{ url('trading', $m->id) }}'" style="cursor:pointer;">
+                <td>{{ $m->symbol }}</td>
+                <td>{{ number_format($m->last_price, 8) }}</td>
+                <td class="{{ $m->change < 0 ? 'red' : 'green' }}">{{ $m->change }}%</td>
+              </tr>
+              @endforeach
+              </tbody>
+
             </table>
           </div>
           <div class="tab-pane" id="eur" role="tabpanel">
@@ -829,64 +822,25 @@
                   <th scope="col">Change</th>
                 </tr>
               </thead>
-              <tbody id="coinleftmenu-eur"></tbody>
+              <tbody id="coinleftmenu-eur">
+              @foreach($marketsEUR as $m)
+              <tr onclick="window.location='{{ url('trading', $m->id) }}'" style="cursor:pointer;">
+                <td>{{ $m->symbol }}</td>
+                <td>{{ number_format($m->last_price, 8) }}</td>
+                <td class="{{ $m->change < 0 ? 'red' : 'green' }}">{{ $m->change }}%</td>
+              </tr>
+              @endforeach
+              </tbody>
+
             </table>
           </div>
         </div>
       </div>
 
     </div>
-    <div class="col-md-12 chart_s3">
-      <div class=" h-40 ">
-        <style>
-          .noWrapWrapper-1WIwNaDF {
-            display: none !important;
-          }
-        </style>
-        <div class="main-chart mb15">
-          <!-- TradingView Widget Start -->
-          <div class="tradingview-widget-container">
-            <div id="tradingview_e8053" class="charttcontnr"></div>
-            <script src="{{ asset('Public/s3.tradingview.com/tv.js') }}"></script>
-            <script>
-              $(document).ready(function () {
-                if (window.innerWidth <= 768) {
-                  $('.charttcontnr').attr('id', 'tradingview_e8053_sm');
-                } else {
-                  $('.charttcontnr').attr('id', 'tradingview_e8053');
-                }
 
-                var chartParams = {
-                  "width": "100%",
-                  "height": 370,
-                  "symbol": "BINANCE:BTCUSDT",
-                  "interval": "D",
-                  "timezone": "Etc/UTC",
-                  "theme": 'dark',
-                  "style": "1",
-                  "locale": "en",
-                  "toolbar_bg": "#f1f3f6",
-                  "enable_publishing": false,
-                  "withdateranges": true,
-                  "hide_side_toolbar": false,
-                  "allow_symbol_change": false,
-                  "show_popup_button": true,
-                  "popup_width": "1000",
-                  "popup_height": "650",
-                  "hide_legend": true,
-                  "container_id": $('.charttcontnr').attr('id')
+    @include('trading.chart')
 
-                }
-                new TradingView.widget(chartParams);
-              });
-            </script>
-          </div>
-          <!-- TradingView Widget End -->
-
-        </div>
-
-      </div>
-    </div>
     <div class="col-md-12 buysell_s4">
       <div class="market-trade">
         <div class="d-flex justify-content-between align-items-center">

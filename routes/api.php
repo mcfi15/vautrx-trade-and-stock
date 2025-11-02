@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CryptoPriceController;
+use App\Http\Controllers\Api\AdminCryptoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,16 @@ Route::prefix('v1')->group(function () {
     Route::get('/crypto/prices', [CryptoPriceController::class, 'index']);
     Route::get('/crypto/prices/{id}', [CryptoPriceController::class, 'show']);
     Route::get('/crypto/status', [CryptoPriceController::class, 'status']);
+    
+});
+
+// Admin API Routes
+Route::prefix('v1/admin')->middleware(['auth:admin'])->group(function () {
+    
+    // Cryptocurrency Management
+    Route::get('/crypto', [AdminCryptoController::class, 'index']);
+    Route::post('/crypto/update/{id}', [AdminCryptoController::class, 'updatePrice']);
+    Route::post('/crypto/batch-update', [AdminCryptoController::class, 'batchUpdate']);
+    Route::get('/crypto/status', [AdminCryptoController::class, 'status']);
     
 });

@@ -13,7 +13,7 @@ class CoinGeckoService
 
     public function __construct()
     {
-        $this->baseUrl = config('services.coingecko.api_url', 'https://api.coingecko.com/api/v3');
+        $this->baseUrl = config('services.coingecko.base_url', 'https://api.coingecko.com/api/v3');
         $this->apiKey = config('services.coingecko.api_key');
     }
 

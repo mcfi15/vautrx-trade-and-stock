@@ -31,18 +31,45 @@ class TradingController extends Controller
         return view('easy.index');
     }
 
-    public function show($pairId)
-    {
+  public function show($pairId)
+{
+    try {
+
+        // Load trading pair with currencies
         $tradingPair = TradingPair::with(['baseCurrency', 'quoteCurrency'])
             ->findOrFail($pairId);
-        
+
+        // Load all active trading pairs for dropdown
+        $tradingPairs = TradingPair::with(['baseCurrency', 'quoteCurrency'])
+            ->where('is_active', true)
+            ->orderBy('symbol')
+            ->get();
+
+        // Get the current user (can be null)
         $user = Auth::user();
-        
-        // Get user wallets for this pair
-        $baseWallet = $user->getOrCreateWallet($tradingPair->base_currency_id);
-        $quoteWallet = $user->getOrCreateWallet($tradingPair->quote_currency_id);
-        
-        // Get order book
+
+        // Null-safe helper to get wallets
+        $baseWallet  = $this->getWallet($user, $tradingPair->base_currency_id);
+        $quoteWallet = $this->getWallet($user, $tradingPair->quote_currency_id);
+
+        // Null-safe user orders
+        $userOrders = collect();
+        if ($user) {
+            try {
+                $userOrders = $user->orders()
+                    ->where('trading_pair_id', $pairId)
+                    ->whereIn('status', ['pending', 'partial'])
+                    ->latest()
+                    ->get();
+            } catch (\Exception $e) {
+                \Log::error("Orders fetch failed: ".$e->getMessage(), [
+                    'user_id' => $user->id,
+                    'pair_id' => $pairId
+                ]);
+            }
+        }
+
+        // Public order book
         $buyOrders = Order::where('trading_pair_id', $pairId)
             ->where('side', 'buy')
             ->where('type', 'limit')
@@ -50,7 +77,7 @@ class TradingController extends Controller
             ->orderBy('price', 'desc')
             ->take(20)
             ->get();
-        
+
         $sellOrders = Order::where('trading_pair_id', $pairId)
             ->where('side', 'sell')
             ->where('type', 'limit')
@@ -58,31 +85,80 @@ class TradingController extends Controller
             ->orderBy('price', 'asc')
             ->take(20)
             ->get();
-        
-        // Get recent trades
+
+        // Recent trades
         $recentTrades = $tradingPair->trades()
             ->with(['buyer', 'seller'])
             ->latest()
             ->take(50)
             ->get();
-        
-        // Get user's active orders for this pair
-        $userOrders = $user->orders()
-            ->where('trading_pair_id', $pairId)
-            ->whereIn('status', ['pending', 'partial'])
-            ->latest()
+
+        /*
+        |--------------------------------------------------------------------------
+        | ✅ MARKET SIDEBAR (DATA FROM DATABASE)
+        |--------------------------------------------------------------------------
+        */
+        $markets = TradingPair::with('quoteCurrency')
+            ->where('is_active', 1)
+            ->orderBy('symbol')
             ->get();
-        
-        return view('trading.show', compact(
+
+        // Group by quote currency
+        $marketsUSDT = $markets->filter(fn($m) => $m->quoteCurrency->symbol === 'USDT');
+        $marketsBTC  = $markets->filter(fn($m) => $m->quoteCurrency->symbol === 'BTC');
+        $marketsETH  = $markets->filter(fn($m) => $m->quoteCurrency->symbol === 'ETH');
+        $marketsEUR  = $markets->filter(fn($m) => $m->quoteCurrency->symbol === 'EUR');
+
+        // Favorites if user has favorites table relation
+        $favorites = collect();
+        if (Auth::check() && method_exists(Auth::user(), 'favorites')) {
+            $favorites = Auth::user()->favorites()->pluck('trading_pair_id');
+        }
+
+        // Return view with all data
+        return view('trading.spot', compact(
             'tradingPair',
+            'tradingPairs',
             'baseWallet',
             'quoteWallet',
             'buyOrders',
             'sellOrders',
             'recentTrades',
-            'userOrders'
+            'userOrders',
+            'marketsUSDT',
+            'marketsBTC',
+            'marketsETH',
+            'marketsEUR',
+            'favorites'
         ));
+
+    } catch (\Exception $e) {
+
+        \Log::error('Trading page error: '.$e->getMessage(), [
+            'pair_id' => $pairId,
+            'user_id' => Auth::id(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return redirect('trading/spot')
+            ->with('error', 'Trading pair not found or temporarily unavailable.');
     }
+}
+
+protected function getWallet($user, $currencyId)
+{
+    if ($user && method_exists($user, 'getOrCreateWallet')) {
+        try {
+            return $user->getOrCreateWallet($currencyId);
+        } catch (\Exception $e) {
+            \Log::warning("Wallet creation failed: ".$e->getMessage(), [
+                'user_id' => $user->id ?? null,
+                'currency_id' => $currencyId
+            ]);
+        }
+    }
+    return null;
+}
 
     public function placeOrder(Request $request)
     {

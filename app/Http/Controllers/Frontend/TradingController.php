@@ -100,7 +100,7 @@ public function show($pairId)
             'trace' => $e->getTraceAsString()
         ]);
 
-        return redirect()->route('trading.index')
+        return redirect()->route('trading.spot')
             ->with('error', 'Trading pair not found or temporarily unavailable.');
     }
 }

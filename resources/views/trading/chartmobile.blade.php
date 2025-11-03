@@ -1,4 +1,5 @@
- <div class=" h-40 ">
+<div class="col-md-12 chart_s3">
+      <div class=" h-40 ">
         <style>
           .noWrapWrapper-1WIwNaDF {
             display: none !important;
@@ -47,3 +48,4 @@
         </div>
 
       </div>
+    </div>

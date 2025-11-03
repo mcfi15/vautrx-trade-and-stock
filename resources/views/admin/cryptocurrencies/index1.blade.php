@@ -3,226 +3,184 @@
 @section('title', 'Cryptocurrencies Management')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Cryptocurrencies Management</h1>
-        <div>
-            <a href="{{ route('admin.cryptocurrencies.create') }}" class="btn btn-primary btn-sm">
+<div class="px-6 py-4">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-coins text-indigo-500"></i>
+            Cryptocurrencies Management
+        </h1>
+        <div class="flex flex-wrap gap-2 mt-3 sm:mt-0">
+            <a href="{{ route('admin.cryptocurrencies.create') }}" 
+               class="inline-flex items-center gap-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-3 py-2 rounded-lg shadow">
                 <i class="fas fa-plus"></i> Add Cryptocurrency
             </a>
-            <button onclick="syncPrices(event)" class="btn btn-success btn-sm" id="sync-prices-button">
+            <button onclick="syncPrices(event)" id="sync-prices-button"
+                class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-3 py-2 rounded-lg shadow">
                 <i class="fas fa-dollar-sign"></i> Sync Prices
             </button>
-            <button onclick="syncCryptos(event)" class="btn btn-info btn-sm" id="sync-button">
+            <button onclick="syncCryptos(event)" id="sync-button"
+                class="inline-flex items-center gap-1 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium px-3 py-2 rounded-lg shadow">
                 <i class="fas fa-sync-alt"></i> Sync from Binance
             </button>
         </div>
     </div>
 
+    <!-- Alerts -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle"></i> {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert">
-                <span>&times;</span>
-            </button>
+        <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 flex items-start gap-2">
+            <i class="fas fa-check-circle mt-1"></i>
+            <span>{{ session('success') }}</span>
         </div>
     @endif
 
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
-            <button type="button" class="close" data-dismiss="alert">
-                <span>&times;</span>
-            </button>
+        <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 flex items-start gap-2">
+            <i class="fas fa-exclamation-circle mt-1"></i>
+            <span>{{ session('error') }}</span>
         </div>
     @endif
 
-    <!-- WebSocket Status Card -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Cryptocurrencies</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-cryptos">{{ $cryptocurrencies->total() }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-coins fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white border-l-4 border-indigo-500 rounded-lg shadow p-5">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-xs uppercase text-indigo-600 font-bold">Total Cryptocurrencies</h3>
+                    <p class="text-2xl font-bold text-gray-800">{{ $cryptocurrencies->total() }}</p>
                 </div>
+                <i class="fas fa-coins text-gray-400 text-3xl"></i>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Real-time Tracking</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="realtime-count">{{ $cryptocurrencies->where('enable_realtime', true)->count() }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-broadcast-tower fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="bg-white border-l-4 border-green-500 rounded-lg shadow p-5">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-xs uppercase text-green-600 font-bold">Real-time Tracking</h3>
+                    <p class="text-2xl font-bold text-gray-800">{{ $cryptocurrencies->where('enable_realtime', true)->count() }}</p>
                 </div>
+                <i class="fas fa-broadcast-tower text-gray-400 text-3xl"></i>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Live Connections</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="live-connections">-</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-plug fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="bg-white border-l-4 border-sky-500 rounded-lg shadow p-5">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-xs uppercase text-sky-600 font-bold">Live Connections</h3>
+                    <p class="text-2xl font-bold text-gray-800" id="live-connections">-</p>
                 </div>
+                <i class="fas fa-plug text-gray-400 text-3xl"></i>
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Service Status</div>
-                            <div class="h5 mb-0 font-weight-bold" id="service-status">
-                                <span class="badge badge-secondary">Checking...</span>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-server fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="bg-white border-l-4 border-yellow-500 rounded-lg shadow p-5">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-xs uppercase text-yellow-600 font-bold">Service Status</h3>
+                    <p class="text-2xl font-bold" id="service-status">
+                        <span class="px-2 py-1 rounded-full bg-gray-200 text-gray-700 text-sm">Checking...</span>
+                    </p>
                 </div>
+                <i class="fas fa-server text-gray-400 text-3xl"></i>
             </div>
         </div>
     </div>
 
-    <!-- Cryptocurrencies Table -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Cryptocurrency List</h6>
+    <!-- Table -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="border-b border-gray-200 px-4 py-3">
+            <h6 class="text-lg font-semibold text-gray-800">Cryptocurrency List</h6>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="cryptoTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Name</th>
-                            <th>Current Price</th>
-                            <th>24h Change</th>
-                            <th>24h Volume</th>
-                            <th>Real-time</th>
-                            <th>Active</th>
-                            <th>Tradable</th>
-                            <th>Last Updated</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($cryptocurrencies as $crypto)
-                        <tr id="crypto-row-{{ $crypto->id }}">
-                            <td>
-                                <strong>{{ $crypto->symbol }}</strong>
-                                @if($crypto->logo_url)
-                                    <img src="{{ $crypto->logo_url }}" alt="{{ $crypto->symbol }}" width="20" class="ml-2">
-                                @endif
-                            </td>
-                            <td>{{ $crypto->name }}</td>
-                            <td class="crypto-price" data-crypto-id="{{ $crypto->id }}">
-                                ${{ number_format($crypto->current_price, 8) }}
-                            </td>
-                            <td class="crypto-change" data-crypto-id="{{ $crypto->id }}">
-                                @if($crypto->price_change_24h >= 0)
-                                    <span class="text-success">
-                                        <i class="fas fa-arrow-up"></i> {{ number_format($crypto->price_change_24h, 2) }}%
-                                    </span>
-                                @else
-                                    <span class="text-danger">
-                                        <i class="fas fa-arrow-down"></i> {{ number_format($crypto->price_change_24h, 2) }}%
-                                    </span>
-                                @endif
-                            </td>
-                            <td>${{ number_format($crypto->volume_24h, 0) }}</td>
-                            <td>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" 
-                                           class="custom-control-input realtime-toggle" 
-                                           id="realtime-{{ $crypto->id }}" 
-                                           data-crypto-id="{{ $crypto->id }}"
-                                           {{ $crypto->enable_realtime ? 'checked' : '' }}>
-                                    <label class="custom-control-label" for="realtime-{{ $crypto->id }}"></label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" 
-                                           class="custom-control-input status-toggle" 
-                                           id="status-{{ $crypto->id }}" 
-                                           data-crypto-id="{{ $crypto->id }}"
-                                           {{ $crypto->is_active ? 'checked' : '' }}>
-                                    <label class="custom-control-label" for="status-{{ $crypto->id }}">
-                                        <span class="badge badge-{{ $crypto->is_active ? 'success' : 'secondary' }} ml-2">
-                                            {{ $crypto->is_active ? 'Active' : 'Inactive' }}
-                                        </span>
-                                    </label>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge badge-{{ $crypto->is_tradable ? 'success' : 'secondary' }}">
-                                    {{ $crypto->is_tradable ? 'Yes' : 'No' }}
-                                </span>
-                            </td>
-                            <td>
-                                <small>{{ $crypto->price_updated_at ? $crypto->price_updated_at->diffForHumans() : 'Never' }}</small>
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.cryptocurrencies.edit', $crypto->id) }}" 
-                                   class="btn btn-sm btn-primary" 
-                                   title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('admin.cryptocurrencies.destroy', $crypto->id) }}" 
-                                      method="POST" 
-                                      class="d-inline" 
-                                      onsubmit="return confirm('Are you sure you want to delete {{ $crypto->symbol }}?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="10" class="text-center text-muted">
-                                <div class="py-4">
-                                    <i class="fas fa-coins fa-3x mb-3"></i>
-                                    <p>No cryptocurrencies found. Click "Sync from Binance" to import.</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="mt-3">
-                {{ $cryptocurrencies->links() }}
-            </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Symbol</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Name</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Current Price</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">24h Change</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">24h Volume</th>
+                        <th class="px-4 py-2 text-center text-sm font-medium text-gray-600">Real-time</th>
+                        <th class="px-4 py-2 text-center text-sm font-medium text-gray-600">Active</th>
+                        <th class="px-4 py-2 text-center text-sm font-medium text-gray-600">Tradable</th>
+                        <th class="px-4 py-2 text-center text-sm font-medium text-gray-600">Last Updated</th>
+                        <th class="px-4 py-2 text-center text-sm font-medium text-gray-600">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @forelse($cryptocurrencies as $crypto)
+                    <tr id="crypto-row-{{ $crypto->id }}" class="hover:bg-gray-50">
+                        <td class="px-4 py-3 font-semibold text-gray-800 flex items-center gap-2">
+                            {{ $crypto->symbol }}
+                            @if($crypto->logo_url)
+                                <img src="{{ $crypto->logo_url }}" alt="{{ $crypto->symbol }}" class="w-5 h-5 rounded-full">
+                            @endif
+                        </td>
+                        <td class="px-4 py-3">{{ $crypto->name }}</td>
+                        <td class="px-4 py-3 crypto-price" data-crypto-id="{{ $crypto->id }}">
+                            ${{ number_format($crypto->current_price, 8) }}
+                        </td>
+                        <td class="px-4 py-3 crypto-change" data-crypto-id="{{ $crypto->id }}">
+                            @if($crypto->price_change_24h >= 0)
+                                <span class="text-green-600"><i class="fas fa-arrow-up"></i> {{ number_format($crypto->price_change_24h, 2) }}%</span>
+                            @else
+                                <span class="text-red-600"><i class="fas fa-arrow-down"></i> {{ number_format($crypto->price_change_24h, 2) }}%</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3">${{ number_format($crypto->volume_24h, 0) }}</td>
+                        <td class="px-4 py-3 text-center">
+                            <input type="checkbox" class="peer hidden realtime-toggle" id="realtime-{{ $crypto->id }}" data-crypto-id="{{ $crypto->id }}" {{ $crypto->enable_realtime ? 'checked' : '' }}>
+                            <label for="realtime-{{ $crypto->id }}" class="cursor-pointer w-10 h-5 flex items-center bg-gray-300 rounded-full peer-checked:bg-emerald-500 relative after:content-[''] after:absolute after:left-0.5 after:top-0.5 after:bg-white after:h-4 after:w-4 after:rounded-full after:transition-transform peer-checked:after:translate-x-5"></label>
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <input type="checkbox" class="peer hidden status-toggle" id="status-{{ $crypto->id }}" data-crypto-id="{{ $crypto->id }}" {{ $crypto->is_active ? 'checked' : '' }}>
+                            <label for="status-{{ $crypto->id }}" class="cursor-pointer w-10 h-5 flex items-center bg-gray-300 rounded-full peer-checked:bg-indigo-500 relative after:content-[''] after:absolute after:left-0.5 after:top-0.5 after:bg-white after:h-4 after:w-4 after:rounded-full after:transition-transform peer-checked:after:translate-x-5"></label>
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <span class="px-2 py-1 rounded-full text-xs font-medium {{ $crypto->is_tradable ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
+                                {{ $crypto->is_tradable ? 'Yes' : 'No' }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500 text-center">
+                            {{ $crypto->price_updated_at ? $crypto->price_updated_at->diffForHumans() : 'Never' }}
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            <a href="{{ route('admin.cryptocurrencies.show', $crypto->id) }}" 
+                               class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white rounded-md p-2 text-xs">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ route('admin.cryptocurrencies.edit', $crypto->id) }}" 
+                               class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white rounded-md p-2 text-xs">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ route('admin.cryptocurrencies.destroy', $crypto->id) }}" method="POST" class="inline"
+                                onsubmit="return confirm('Are you sure you want to delete {{ $crypto->symbol }}?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-md p-2 text-xs ml-1">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="10" class="text-center text-gray-500 py-6">
+                            <i class="fas fa-coins text-4xl mb-2"></i>
+                            <p>No cryptocurrencies found. Click “Sync from Binance” to import.</p>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="p-4 border-t border-gray-100">
+            {{ $cryptocurrencies->links() }}
         </div>
     </div>
 </div>
+
 
 <style>
 .crypto-price.updating {
@@ -239,8 +197,8 @@
     border-color: #28a745;
 }
 </style>
-
 @endsection
+
 
 @section('scripts')
 <script>
@@ -248,34 +206,20 @@
 let priceUpdateInterval;
 
 function updatePrices() {
-    console.log('🔄 Fetching cryptocurrency prices...');
-    
     fetch('/api/v1/admin/crypto')
-        .then(response => {
-            console.log('📡 Response status:', response.status);
-            console.log('📡 Response headers:', response.headers);
-            return response;
-        })
         .then(response => response.json())
         .then(data => {
-            console.log('✅ API Response received:', data);
             if (data.success) {
-                console.log('📊 Processing', data.data.length, 'cryptocurrencies');
                 data.data.forEach(crypto => {
                     updateCryptoRow(crypto);
                 });
             } else {
-                console.error('❌ API returned success=false:', data.message);
-                showToast('Failed to fetch prices: ' + (data.message || 'Unknown error'), 'error');
+                console.error('Failed to fetch prices:', data.message);
+                showToast('Failed to fetch price updates: ' + (data.message || 'Unknown error'), 'error');
             }
         })
         .catch(error => {
-            console.error('💥 Network/JS Error:', error);
-            console.error('💥 Error details:', {
-                message: error.message,
-                name: error.name,
-                stack: error.stack
-            });
+            console.error('Error fetching prices:', error);
             showToast('Error fetching price updates. Check console for details.', 'error');
         });
 }
@@ -325,16 +269,9 @@ function getTimeAgo(date) {
 }
 
 function updateServiceStatus() {
-    console.log('🔄 Fetching service status...');
-    
     fetch('/api/v1/admin/crypto/status')
-        .then(response => {
-            console.log('📡 Status response status:', response.status);
-            return response;
-        })
         .then(response => response.json())
         .then(data => {
-            console.log('✅ Status API Response:', data);
             if (data.success) {
                 const status = data.data;
                 document.getElementById('live-connections').textContent = status.live_connections || 0;
@@ -348,15 +285,14 @@ function updateServiceStatus() {
                 
                 document.getElementById('realtime-count').textContent = status.tracked_cryptocurrencies || 0;
                 document.getElementById('total-cryptos').textContent = status.total_cryptocurrencies || 0;
-                console.log('📊 Status updated:', status);
             } else {
-                console.error('❌ Status API returned success=false:', data.message);
+                console.error('Failed to fetch status:', data.message);
                 document.getElementById('service-status').innerHTML = '<span class="badge badge-warning">Error</span>';
                 showToast('Failed to fetch service status: ' + (data.message || 'Unknown error'), 'error');
             }
         })
         .catch(error => {
-            console.error('💥 Status fetch error:', error);
+            console.error('Error fetching status:', error);
             document.getElementById('service-status').innerHTML = '<span class="badge badge-warning">Error</span>';
             showToast('Error fetching service status. Check console for details.', 'error');
         });

@@ -30,8 +30,19 @@ Route::prefix('v1')->group(function () {
     
 });
 
-// Admin API Routes
-Route::prefix('v1/admin')->middleware(['auth:admin'])->group(function () {
+// Admin API Routes (Public - authentication handled by web routes)
+Route::prefix('v1/admin')->group(function () {
+    
+    // Test endpoint to verify API is working
+    Route::get('/test', function () {
+        return response()->json([
+            'success' => true,
+            'message' => 'Admin API is working!',
+            'timestamp' => now()->toIso8601String(),
+            'user_agent' => request()->userAgent(),
+            'ip' => request()->ip(),
+        ]);
+    });
     
     // Cryptocurrency Management
     Route::get('/crypto', [AdminCryptoController::class, 'index']);

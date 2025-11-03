@@ -1385,7 +1385,7 @@
     <script type="text/javascript" src="{{ asset('Public/assets/js/core/libraries/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('Public/static/js/jquery.cookies.2.2.0.js') }}"></script>
     <script type="text/javascript" src="{{ asset('Public/static/js/layer.js') }}"></script>
-    <script src="../cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js') }}"
+    <script src="{{ asset('Public/cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js') }}"
         type="text/javascript"></script>
 
     <script>

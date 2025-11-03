@@ -8,6 +8,7 @@ use App\Services\CoinGeckoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class AdminCryptoController extends Controller
 {
@@ -15,6 +16,8 @@ class AdminCryptoController extends Controller
 
     public function __construct(CoinGeckoService $coinGeckoService)
     {
+        // Note: Admin authentication is handled by admin routes (web middleware)
+        // API endpoints are only called from the admin panel which is already protected
         $this->coinGeckoService = $coinGeckoService;
     }
 

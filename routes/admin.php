@@ -40,19 +40,43 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     // Admin Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/', [AdminDashboardController::class, 'index']);
+
+    // Cryptocurrency Management
+        Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index'])
+            ->name('cryptocurrencies.index');
+
+        // Fetch live prices
+        Route::get('/cryptocurrencies/prices', [CryptocurrencyController::class, 'fetchPrices'])
+            ->name('cryptocurrencies.prices');
+
+        // Service status (real-time connections, API health)
+        Route::get('/cryptocurrencies/status', [CryptocurrencyController::class, 'serviceStatus'])
+            ->name('cryptocurrencies.status');
+
+        Route::get('/cryptocurrencies/sync-prices', [CryptocurrencyController::class, 'syncPrices'])
+    ->name('cryptocurrencies.sync-prices');
+
+
+
+        // Sync batch (CoinGecko or Binance)
+        Route::post('/cryptocurrencies/sync', [CryptocurrencyController::class, 'syncPrices'])
+            ->name('cryptocurrencies.sync-prices');
+
+        Route::post('/cryptocurrencies/sync-from-binance', [CryptocurrencyController::class, 'syncFromBinance'])
+        ->name('cryptocurrencies.sync-from-binance');
     
     // Cryptocurrency Management
-    Route::resource('cryptocurrencies', CryptocurrencyController::class);
-    Route::post('cryptocurrencies/{cryptocurrency}/toggle-status', [CryptocurrencyController::class, 'toggleStatus'])
-        ->name('cryptocurrencies.toggle-status');
-    Route::post('cryptocurrencies/{cryptocurrency}/toggle-realtime', [CryptocurrencyController::class, 'toggleRealtime'])
-        ->name('cryptocurrencies.toggle-realtime');
-    Route::post('cryptocurrencies/sync-from-binance', [CryptocurrencyController::class, 'syncFromBinance'])
-        ->name('cryptocurrencies.sync-from-binance');
-    Route::post('cryptocurrencies/sync-prices', [CryptocurrencyController::class, 'syncPrices'])
-        ->name('cryptocurrencies.sync-prices');
-    Route::post('cryptocurrencies/update-prices', [CryptocurrencyController::class, 'updatePrices'])
-        ->name('cryptocurrencies.update-prices');
+    // Route::resource('cryptocurrencies', CryptocurrencyController::class);
+    // Route::post('cryptocurrencies/{cryptocurrency}/toggle-status', [CryptocurrencyController::class, 'toggleStatus'])
+    //     ->name('cryptocurrencies.toggle-status');
+    // Route::post('cryptocurrencies/{cryptocurrency}/toggle-realtime', [CryptocurrencyController::class, 'toggleRealtime'])
+    //     ->name('cryptocurrencies.toggle-realtime');
+    // Route::post('cryptocurrencies/sync-from-binance', [CryptocurrencyController::class, 'syncFromBinance'])
+    //     ->name('cryptocurrencies.sync-from-binance');
+    // Route::post('cryptocurrencies/sync-prices', [CryptocurrencyController::class, 'syncPrices'])
+    //     ->name('cryptocurrencies.sync-prices');
+    // Route::post('cryptocurrencies/update-prices', [CryptocurrencyController::class, 'updatePrices'])
+    //     ->name('cryptocurrencies.update-prices');
     
     // Trading Pair Management
     Route::resource('trading-pairs', TradingPairController::class);

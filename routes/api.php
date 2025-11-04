@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CryptoPriceController;
+use App\Http\Controllers\Admin\CryptoApiController;
 use App\Http\Controllers\Api\AdminCryptoController;
+use App\Http\Controllers\Api\CryptoPriceController;
+use App\Http\Controllers\Admin\CryptocurrencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,34 +22,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Public API Routes
-Route::prefix('v1')->group(function () {
-    
-    // Cryptocurrency Prices (Real-time)
-    Route::get('/crypto/prices', [CryptoPriceController::class, 'index']);
-    Route::get('/crypto/prices/{id}', [CryptoPriceController::class, 'show']);
-    Route::get('/crypto/status', [CryptoPriceController::class, 'status']);
-    
-});
+// Webhook to receive live price update (called by your Node WS script)
+Route::post('/v1/admin/cryptos/webhook-price', [CryptocurrencyController::class, 'webhookUpdatePrice'])
+    ->middleware('throttle:60,1'); // optional throttle
 
-// Admin API Routes (Public - authentication handled by web routes)
-Route::prefix('v1/admin')->group(function () {
+// Route::prefix('v1/admin/crypto')->middleware('auth:sanctum')->group(function () {
+//     Route::get('/', [CryptoApiController::class, 'list']);
+//     Route::post('/batch-update', [CryptoApiController::class, 'batchUpdate']);
+//     Route::get('/status', [CryptoApiController::class, 'status']);
+// });
+
+// Route::prefix('v1/admin/crypto')->group(function () {
     
-    // Test endpoint to verify API is working
-    Route::get('/test', function () {
-        return response()->json([
-            'success' => true,
-            'message' => 'Admin API is working!',
-            'timestamp' => now()->toIso8601String(),
-            'user_agent' => request()->userAgent(),
-            'ip' => request()->ip(),
-        ]);
-    });
-    
-    // Cryptocurrency Management
-    Route::get('/crypto', [AdminCryptoController::class, 'index']);
-    Route::post('/crypto/update/{id}', [AdminCryptoController::class, 'updatePrice']);
-    Route::post('/crypto/batch-update', [AdminCryptoController::class, 'batchUpdate']);
-    Route::get('/crypto/status', [AdminCryptoController::class, 'status']);
-    
-});
+//     Route::get('/', [CryptocurrencyController::class, 'apiList']); // GET prices
+//     Route::get('/status', [CryptocurrencyController::class, 'apiStatus']); // GET status
+
+//     Route::post('/batch-update', [CryptocurrencyController::class, 'batchUpdatePrices']); // POST update
+// });

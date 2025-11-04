@@ -3,223 +3,203 @@
 @section('title', 'Cryptocurrencies Management')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Cryptocurrencies Management</h1>
-        <div>
-            <a href="{{ route('admin.cryptocurrencies.create') }}" class="btn btn-primary btn-sm">
-                <i class="fas fa-plus"></i> Add Cryptocurrency
+<div class="w-full px-4 mx-auto">
+
+    {{-- Header --}}
+    <div class="flex flex-wrap justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold text-gray-800">Cryptocurrencies Management</h1>
+
+        <div class="space-x-2">
+            <a href=""
+               class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm flex items-center space-x-1 inline-flex">
+                <i class="fas fa-plus"></i><span>Add Cryptocurrency</span>
             </a>
-            <button onclick="syncPrices(event)" class="btn btn-success btn-sm" id="sync-prices-button">
-                <i class="fas fa-dollar-sign"></i> Sync Prices
+
+            <button onclick="syncPrices(event)"
+                    id="sync-prices-button"
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm flex items-center space-x-1 inline-flex">
+                <i class="fas fa-dollar-sign"></i><span>Sync Prices</span>
             </button>
-            <button onclick="syncCryptos(event)" class="btn btn-info btn-sm" id="sync-button">
-                <i class="fas fa-sync-alt"></i> Sync from Binance
+
+            <button onclick="syncCryptos(event)"
+                    id="sync-button"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-sm flex items-center space-x-1 inline-flex">
+                <i class="fas fa-sync-alt"></i><span>Sync from Binance</span>
             </button>
         </div>
     </div>
 
+    {{-- Success --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle"></i> {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert">
-                <span>&times;</span>
-            </button>
-        </div>
+    <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-check-circle"></i> {{ session('success') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-green-800">&times;</button>
+    </div>
     @endif
 
+    {{-- Error --}}
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
-            <button type="button" class="close" data-dismiss="alert">
-                <span>&times;</span>
-            </button>
-        </div>
+    <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-red-800">&times;</button>
+    </div>
     @endif
 
-    <!-- WebSocket Status Card -->
-    <div class="row mb-4">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Cryptocurrencies</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-cryptos">{{ $cryptocurrencies->total() }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-coins fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+    {{-- Stats Cards --}}
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-white border rounded shadow p-4 flex items-center justify-between">
+            <div>
+                <span class="text-xs uppercase text-blue-600 font-semibold">Total Cryptocurrencies</span>
+                <div class="text-xl font-bold text-gray-800" id="total-cryptos">{{ $cryptocurrencies->total() }}</div>
             </div>
+            <i class="fas fa-coins text-gray-300 text-3xl"></i>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Real-time Tracking</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="realtime-count">{{ $cryptocurrencies->where('enable_realtime', true)->count() }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-broadcast-tower fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+        <div class="bg-white border rounded shadow p-4 flex items-center justify-between">
+            <div>
+                <span class="text-xs uppercase text-green-600 font-semibold">Realtime Tracking</span>
+                <div class="text-xl font-bold text-gray-800" id="realtime-count">{{ $cryptocurrencies->where('enable_realtime', true)->count() }}</div>
             </div>
+            <i class="fas fa-broadcast-tower text-gray-300 text-3xl"></i>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Live Connections</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="live-connections">-</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-plug fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
+        <div class="bg-white border rounded shadow p-4 flex items-center justify-between">
+            <div>
+                <span class="text-xs uppercase text-cyan-600 font-semibold">Live Connections</span>
+                <div class="text-xl font-bold text-gray-800" id="live-connections">-</div>
             </div>
+            <i class="fas fa-plug text-gray-300 text-3xl"></i>
         </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Service Status</div>
-                            <div class="h5 mb-0 font-weight-bold" id="service-status">
-                                <span class="badge badge-secondary">Checking...</span>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-server fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="bg-white border rounded shadow p-4 flex items-center justify-between">
+            <div>
+                <span class="text-xs uppercase text-yellow-600 font-semibold">Service Status</span>
+                <div class="text-xl font-bold" id="service-status">
+                    <span class="text-gray-600 bg-gray-200 px-2 py-1 rounded text-xs">Checking...</span>
                 </div>
             </div>
+            <i class="fas fa-server text-gray-300 text-3xl"></i>
         </div>
+
     </div>
 
-    <!-- Cryptocurrencies Table -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Cryptocurrency List</h6>
+    {{-- Table --}}
+    <div class="bg-white border rounded shadow">
+        <div class="border-b px-4 py-3 font-semibold text-gray-700">Cryptocurrency List</div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-600">
+                    <tr>
+                        <th class="p-2 text-left">Symbol</th>
+                        <th class="p-2 text-left">Name</th>
+                        <th class="p-2 text-left">Price</th>
+                        <th class="p-2 text-left">24h Change</th>
+                        <th class="p-2 text-left">Volume</th>
+                        <th class="p-2 text-left">Realtime</th>
+                        <th class="p-2 text-left">Active</th>
+                        <th class="p-2 text-left">Tradable</th>
+                        <th class="p-2 text-left">Updated</th>
+                        <th class="p-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y">
+
+                @forelse($cryptocurrencies as $crypto)
+                <tr id="crypto-row-{{ $crypto->id }}" class="hover:bg-gray-50">
+                    <td data-symbol="{{ $crypto->binance_symbol }}">
+                        $<span class="live-price">{{ number_format($crypto->current_price, 2) }}</span>
+                    </td>
+
+                    <td class="p-2 font-semibold flex items-center gap-2">
+                        {{ $crypto->symbol }}
+                        @if($crypto->logo_url)
+                            <img src="{{ $crypto->logo_url }}" class="h-5 w-5 rounded" alt="">
+                        @endif
+                    </td>
+
+                    <td class="p-2">{{ $crypto->name }}</td>
+
+                    <td class="p-2 crypto-price"
+                        data-crypto-id="{{ $crypto->id }}">
+                        ${{ number_format($crypto->current_price, 8) }}
+                    </td>
+
+                    <td class="p-2 crypto-change"
+                        data-crypto-id="{{ $crypto->id }}">
+                        @if($crypto->price_change_24h >= 0)
+                        <span class="text-green-600 flex items-center gap-1">
+                            <i class="fas fa-arrow-up"></i> {{ number_format($crypto->price_change_24h, 2) }}%
+                        </span>
+                        @else
+                        <span class="text-red-600 flex items-center gap-1">
+                            <i class="fas fa-arrow-down"></i> {{ number_format($crypto->price_change_24h, 2) }}%
+                        </span>
+                        @endif
+                    </td>
+
+                    <td class="p-2">${{ number_format($crypto->volume_24h, 0) }}</td>
+
+                    {{-- realtime toggle --}}
+                    <td class="p-2">
+                        <input type="checkbox"
+                            class="realtime-toggle h-4 w-4 text-green-500"
+                            data-crypto-id="{{ $crypto->id }}"
+                            {{ $crypto->enable_realtime ? 'checked' : '' }}>
+                    </td>
+
+                    {{-- active toggle --}}
+                    <td class="p-2">
+                        <input type="checkbox"
+                            class="status-toggle h-4 w-4 text-blue-600"
+                            data-crypto-id="{{ $crypto->id }}"
+                            {{ $crypto->is_active ? 'checked' : '' }}>
+                    </td>
+
+                    <td class="p-2">
+                        <span class="px-2 py-1 rounded text-xs {{ $crypto->is_tradable ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700' }}">
+                            {{ $crypto->is_tradable ? 'Yes' : 'No' }}
+                        </span>
+                    </td>
+
+                    <td class="p-2 text-xs">
+                        {{ $crypto->price_updated_at ? $crypto->price_updated_at->diffForHumans() : 'Never' }}
+                    </td>
+
+                    <td class="p-2 flex space-x-1">
+                        <a href=""
+                           class="px-2 py-1 bg-blue-500 text-white rounded text-xs">
+                           <i class="fas fa-edit"></i>
+                        </a>
+
+                        <form action=""
+                              method="POST"
+                              onsubmit="return confirm('Delete {{ $crypto->symbol }}?');">
+                            @csrf @method('DELETE')
+                            <button class="px-2 py-1 bg-red-600 text-white rounded text-xs">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="10" class="text-center py-8 text-gray-600">
+                        <i class="fas fa-coins text-3xl mb-2"></i>
+                        <p>No cryptocurrencies found</p>
+                    </td>
+                </tr>
+                @endforelse
+
+                </tbody>
+            </table>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="cryptoTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Name</th>
-                            <th>Current Price</th>
-                            <th>24h Change</th>
-                            <th>24h Volume</th>
-                            <th>Real-time</th>
-                            <th>Active</th>
-                            <th>Tradable</th>
-                            <th>Last Updated</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($cryptocurrencies as $crypto)
-                        <tr id="crypto-row-{{ $crypto->id }}">
-                            <td>
-                                <strong>{{ $crypto->symbol }}</strong>
-                                @if($crypto->logo_url)
-                                    <img src="{{ $crypto->logo_url }}" alt="{{ $crypto->symbol }}" width="20" class="ml-2">
-                                @endif
-                            </td>
-                            <td>{{ $crypto->name }}</td>
-                            <td class="crypto-price" data-crypto-id="{{ $crypto->id }}">
-                                ${{ number_format($crypto->current_price, 8) }}
-                            </td>
-                            <td class="crypto-change" data-crypto-id="{{ $crypto->id }}">
-                                @if($crypto->price_change_24h >= 0)
-                                    <span class="text-success">
-                                        <i class="fas fa-arrow-up"></i> {{ number_format($crypto->price_change_24h, 2) }}%
-                                    </span>
-                                @else
-                                    <span class="text-danger">
-                                        <i class="fas fa-arrow-down"></i> {{ number_format($crypto->price_change_24h, 2) }}%
-                                    </span>
-                                @endif
-                            </td>
-                            <td>${{ number_format($crypto->volume_24h, 0) }}</td>
-                            <td>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" 
-                                           class="custom-control-input realtime-toggle" 
-                                           id="realtime-{{ $crypto->id }}" 
-                                           data-crypto-id="{{ $crypto->id }}"
-                                           {{ $crypto->enable_realtime ? 'checked' : '' }}>
-                                    <label class="custom-control-label" for="realtime-{{ $crypto->id }}"></label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" 
-                                           class="custom-control-input status-toggle" 
-                                           id="status-{{ $crypto->id }}" 
-                                           data-crypto-id="{{ $crypto->id }}"
-                                           {{ $crypto->is_active ? 'checked' : '' }}>
-                                    <label class="custom-control-label" for="status-{{ $crypto->id }}">
-                                        <span class="badge badge-{{ $crypto->is_active ? 'success' : 'secondary' }} ml-2">
-                                            {{ $crypto->is_active ? 'Active' : 'Inactive' }}
-                                        </span>
-                                    </label>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge badge-{{ $crypto->is_tradable ? 'success' : 'secondary' }}">
-                                    {{ $crypto->is_tradable ? 'Yes' : 'No' }}
-                                </span>
-                            </td>
-                            <td>
-                                <small>{{ $crypto->price_updated_at ? $crypto->price_updated_at->diffForHumans() : 'Never' }}</small>
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.cryptocurrencies.edit', $crypto->id) }}" 
-                                   class="btn btn-sm btn-primary" 
-                                   title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('admin.cryptocurrencies.destroy', $crypto->id) }}" 
-                                      method="POST" 
-                                      class="d-inline" 
-                                      onsubmit="return confirm('Are you sure you want to delete {{ $crypto->symbol }}?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="10" class="text-center text-muted">
-                                <div class="py-4">
-                                    <i class="fas fa-coins fa-3x mb-3"></i>
-                                    <p>No cryptocurrencies found. Click "Sync from Binance" to import.</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="mt-3">
-                {{ $cryptocurrencies->links() }}
-            </div>
+
+        <div class="p-4">
+            {{ $cryptocurrencies->links() }}
         </div>
     </div>
 </div>
@@ -228,338 +208,172 @@
 .crypto-price.updating {
     animation: pulse 0.5s ease-in-out;
 }
-
 @keyframes pulse {
     0%, 100% { background-color: transparent; }
-    50% { background-color: #fff3cd; }
-}
-
-.custom-switch .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: #28a745;
-    border-color: #28a745;
+    50% { background-color: #fef3c7; }
 }
 </style>
+
+<script src="{{ asset('js/binance.js') }}"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    window.startLivePrices([
+        'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'XRPUSDT',
+        'ADAUSDT', 'SHIBUSDT', 'LTCUSDT', 'LINKUSDT'
+    ]);
+});
+</script>
+
 
 @endsection
 
 @section('scripts')
 <script>
-// Real-time price updates
-let priceUpdateInterval;
+/**
+ * Correct backend routes
+ */
+const priceUrl = "{{ route('admin.cryptocurrencies.prices') }}";
+const statusUrl = "{{ route('admin.cryptocurrencies.status') }}";
+const syncUrl = "{{ route('admin.cryptocurrencies.sync-prices') }}";
+const syncBinanceUrl = "{{ route('admin.cryptocurrencies.sync-from-binance') }}";
 
+/**
+ * Fetch & Update Prices
+ */
 function updatePrices() {
-    console.log('🔄 Fetching cryptocurrency prices...');
-    
-    fetch('/api/v1/admin/crypto')
-        .then(response => {
-            console.log('📡 Response status:', response.status);
-            console.log('📡 Response headers:', response.headers);
-            return response;
-        })
-        .then(response => response.json())
+    fetch(priceUrl)
+        .then(res => res.json())
         .then(data => {
-            console.log('✅ API Response received:', data);
             if (data.success) {
-                console.log('📊 Processing', data.data.length, 'cryptocurrencies');
-                data.data.forEach(crypto => {
-                    updateCryptoRow(crypto);
-                });
-            } else {
-                console.error('❌ API returned success=false:', data.message);
-                showToast('Failed to fetch prices: ' + (data.message || 'Unknown error'), 'error');
+                data.data.forEach(crypto => updateCryptoRow(crypto));
             }
         })
-        .catch(error => {
-            console.error('💥 Network/JS Error:', error);
-            console.error('💥 Error details:', {
-                message: error.message,
-                name: error.name,
-                stack: error.stack
-            });
-            showToast('Error fetching price updates. Check console for details.', 'error');
-        });
+        .catch(err => console.error("Price fetch error:", err));
 }
 
-function updateCryptoRow(crypto) {
-    // Update price - prefer cached price if available
-    const priceCell = document.querySelector(`.crypto-price[data-crypto-id="${crypto.id}"]`);
-    if (priceCell) {
-        const newPrice = '$' + parseFloat(crypto.cached_price || crypto.current_price || 0).toFixed(8);
-        if (priceCell.textContent.trim() !== newPrice) {
-            priceCell.textContent = newPrice;
-            priceCell.classList.add('updating');
-            setTimeout(() => priceCell.classList.remove('updating'), 500);
-        }
-    }
-
-    // Update change
-    const changeCell = document.querySelector(`.crypto-change[data-crypto-id="${crypto.id}"]`);
-    if (changeCell) {
-        const change = parseFloat(crypto.price_change_24h || 0);
-        const icon = change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
-        const colorClass = change >= 0 ? 'text-success' : 'text-danger';
-        changeCell.innerHTML = `<span class="${colorClass}"><i class="fas ${icon}"></i> ${change.toFixed(2)}%</span>`;
-    }
-
-    // Update price updated time
-    const priceUpdatedCell = document.querySelector(`#crypto-row-${crypto.id} td:nth-child(9) small`);
-    if (priceUpdatedCell && crypto.price_updated_at) {
-        const updatedAt = new Date(crypto.price_updated_at);
-        const timeAgo = getTimeAgo(updatedAt);
-        priceUpdatedCell.textContent = timeAgo;
-    }
-}
-
-// Helper function to format time ago
-function getTimeAgo(date) {
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return `${diffDays}d ago`;
-}
-
+/**
+ * Update Service Status
+ */
 function updateServiceStatus() {
-    console.log('🔄 Fetching service status...');
-    
-    fetch('/api/v1/admin/crypto/status')
-        .then(response => {
-            console.log('📡 Status response status:', response.status);
-            return response;
-        })
-        .then(response => response.json())
+    fetch(statusUrl)
+        .then(res => res.json())
         .then(data => {
-            console.log('✅ Status API Response:', data);
             if (data.success) {
-                const status = data.data;
-                document.getElementById('live-connections').textContent = status.live_connections || 0;
-                
-                const statusBadge = document.getElementById('service-status');
-                if (status.service_running) {
-                    statusBadge.innerHTML = '<span class="badge badge-success"><i class="fas fa-check-circle"></i> Running</span>';
-                } else {
-                    statusBadge.innerHTML = '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> Offline</span>';
-                }
-                
-                document.getElementById('realtime-count').textContent = status.tracked_cryptocurrencies || 0;
-                document.getElementById('total-cryptos').textContent = status.total_cryptocurrencies || 0;
-                console.log('📊 Status updated:', status);
-            } else {
-                console.error('❌ Status API returned success=false:', data.message);
-                document.getElementById('service-status').innerHTML = '<span class="badge badge-warning">Error</span>';
-                showToast('Failed to fetch service status: ' + (data.message || 'Unknown error'), 'error');
+                let s = data;
+
+                document.getElementById('live-connections').textContent = s.connections ?? 0;
+                document.getElementById('realtime-count').textContent = s.tracked ?? 0;
+                document.getElementById('total-cryptos').textContent = s.total ?? 0;
+
+                document.getElementById('service-status').innerHTML =
+                    `<span class="px-2 py-1 rounded text-xs ${
+                        s.running ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    }">${s.running ? 'Running' : 'Offline'}</span>`;
             }
         })
-        .catch(error => {
-            console.error('💥 Status fetch error:', error);
-            document.getElementById('service-status').innerHTML = '<span class="badge badge-warning">Error</span>';
-            showToast('Error fetching service status. Check console for details.', 'error');
-        });
+        .catch(err => console.error("Status fetch error:", err));
 }
 
-// Toggle real-time tracking
-document.addEventListener('DOMContentLoaded', function() {
-    // Start price updates
-    updatePrices();
-    updateServiceStatus();
-    priceUpdateInterval = setInterval(updatePrices, 3000); // Update every 3 seconds
-    setInterval(updateServiceStatus, 10000); // Update status every 10 seconds
-
-    // Real-time toggle switches
-    document.querySelectorAll('.realtime-toggle').forEach(toggle => {
-        toggle.addEventListener('change', function() {
-            const cryptoId = this.dataset.cryptoId;
-            const isEnabled = this.checked;
-            
-            fetch(`/admin/cryptocurrencies/${cryptoId}/toggle-realtime`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ enable_realtime: isEnabled })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast(data.message, 'success');
-                    updateServiceStatus();
-                } else {
-                    this.checked = !isEnabled;
-                    showToast('Failed to toggle real-time tracking', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.checked = !isEnabled;
-                showToast('Error toggling real-time tracking', 'error');
-            });
-        });
-    });
-
-    // Status toggle switches
-    document.querySelectorAll('.status-toggle').forEach(toggle => {
-        toggle.addEventListener('change', function() {
-            const cryptoId = this.dataset.cryptoId;
-            const isActive = this.checked;
-            
-            fetch(`/admin/cryptocurrencies/${cryptoId}/toggle-status`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ is_active: isActive })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast(data.message, 'success');
-                    // Update the badge text in the label
-                    const label = document.querySelector(`label[for="status-${cryptoId}"] .badge`);
-                    if (label) {
-                        label.textContent = isActive ? 'Active' : 'Inactive';
-                        label.className = `badge badge-${isActive ? 'success' : 'secondary'} ml-2`;
-                    }
-                } else {
-                    this.checked = !isActive;
-                    showToast('Failed to toggle status', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.checked = !isActive;
-                showToast('Error toggling status', 'error');
-            });
-        });
-    });
-});
-
-function syncCryptos(event) {
-    if (!confirm('Sync cryptocurrencies from Binance?\n\nThis will import the top 50 cryptocurrencies by trading volume.\nIt may take 10-30 seconds.')) {
-        return;
-    }
-    
-    // Show loading state
-    const syncButton = event.target;
-    const originalText = syncButton.innerHTML;
-    syncButton.disabled = true;
-    syncButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
-    
-    showToast('Syncing cryptocurrencies from Binance... Please wait.', 'info');
-    
-    fetch('{{ route("admin.cryptocurrencies.sync-from-binance") }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ limit: 50 })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showToast(data.message, 'success');
-            // Reload page after 2 seconds to show new cryptocurrencies
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        } else {
-            showToast(data.message || 'Failed to sync cryptocurrencies', 'error');
-            syncButton.disabled = false;
-            syncButton.innerHTML = originalText;
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showToast('Error syncing cryptocurrencies. Check console for details.', 'error');
-        syncButton.disabled = false;
-        syncButton.innerHTML = originalText;
-    });
-}
-
+/**
+ * Sync Prices
+ */
 function syncPrices(event) {
-    // Show loading state
-    const syncButton = event.target;
-    const originalText = syncButton.innerHTML;
-    syncButton.disabled = true;
-    syncButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
-    
-    showToast('Syncing prices from CoinGecko... Please wait.', 'info');
-    
-    // Use the new batch update endpoint
-    fetch('/api/v1/admin/crypto/batch-update', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
+    const btn = event.target;
+    const html = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+    fetch(syncUrl, {
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showToast(data.message, 'success');
-            // Update prices in real-time without page reload
+        .then(res => res.json())
+        .then(data => {
+            showToast(data.message, data.success ? 'success' : 'error');
             updatePrices();
             updateServiceStatus();
-            
-            // Also sync through admin route for consistency
-            return fetch('{{ route("admin.cryptocurrencies.sync-prices") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            });
-        } else {
-            showToast(data.message || 'Failed to sync prices', 'error');
-            syncButton.disabled = false;
-            syncButton.innerHTML = originalText;
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showToast('Error syncing prices. Check console for details.', 'error');
-        syncButton.disabled = false;
-        syncButton.innerHTML = originalText;
-    })
-    .finally(() => {
-        // Reset button after a delay
-        setTimeout(() => {
-            syncButton.disabled = false;
-            syncButton.innerHTML = originalText;
-        }, 2000);
-    });
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = html;
+        });
 }
 
-function showToast(message, type = 'info') {
-    const alertClass = {
-        'success': 'alert-success',
-        'error': 'alert-danger',
-        'info': 'alert-info',
-        'warning': 'alert-warning'
-    }[type] || 'alert-info';
-    
-    const toast = document.createElement('div');
-    toast.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-    toast.innerHTML = `
-        ${message}
-        <button type="button" class="close" data-dismiss="alert">
-            <span>&times;</span>
-        </button>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.remove();
-    }, 5000);
+/**
+ * Sync from Binance
+ */
+function syncCryptos(event) {
+    if (!confirm("Import top coins from Binance?")) return;
+
+    const btn = event.target;
+    const html = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+
+    fetch(syncBinanceUrl, {
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
+    })
+        .then(res => res.json())
+        .then(data => {
+            showToast(data.message, data.success ? 'success' : 'error');
+            setTimeout(() => location.reload(), 1500);
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = html;
+        });
 }
+
+/**
+ * Update row UI
+ */
+function updateCryptoRow(c) {
+    const price = document.querySelector(`.crypto-price[data-crypto-id="${c.id}"]`);
+    if (!price) return;
+
+    const newPrice = "$" + parseFloat(c.current_price).toFixed(8);
+    if (price.textContent.trim() !== newPrice) {
+        price.textContent = newPrice;
+        price.classList.add('updating');
+        setTimeout(() => price.classList.remove('updating'), 400);
+    }
+
+    const change = document.querySelector(`.crypto-change[data-crypto-id="${c.id}"]`);
+    if (change) {
+        const pct = parseFloat(c.price_change_24h).toFixed(2);
+        const up = pct >= 0;
+        change.innerHTML = `<span class="${up ? 'text-green-600' : 'text-red-600'} flex items-center gap-1">
+            <i class="fas ${up ? 'fa-arrow-up' : 'fa-arrow-down'}"></i> ${pct}%
+        </span>`;
+    }
+}
+
+/** Toast Helper */
+function showToast(message, type = "info") {
+    const colors = {
+        success: "bg-green-600",
+        error: "bg-red-600",
+        info: "bg-blue-600",
+        warning: "bg-yellow-600",
+    };
+
+    const box = document.createElement("div");
+    box.className = `${colors[type]} text-white px-4 py-2 rounded shadow fixed top-5 right-5 z-50`;
+    box.textContent = message;
+    document.body.appendChild(box);
+    setTimeout(() => box.remove(), 3500);
+}
+
+/** Init */
+document.addEventListener("DOMContentLoaded", () => {
+    updatePrices();
+    updateServiceStatus();
+
+    setInterval(updatePrices, 3000);
+    setInterval(updateServiceStatus, 10000);
+});
 </script>
 @endsection
+

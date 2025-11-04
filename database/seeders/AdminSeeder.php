@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
         // Create Super Admin
         Admin::create([
             'name' => 'Super Admin',
-            'email' => 'admin@cryptoplatform.com',
+            'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
             'role' => 'super_admin',
             'is_active' => true,

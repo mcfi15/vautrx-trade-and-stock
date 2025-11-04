@@ -48,6 +48,9 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     
 });
 
+Route::get('/trade/{symbol}', [TradingController::class, 'show'])->name('trade.pair');
+
+
 Route::controller(TradingController::class)->group(function () {
     Route::get('/trading/pro', [TradingController::class, 'pro'])->name('pro');
 

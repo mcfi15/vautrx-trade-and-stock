@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             CryptocurrencySeeder::class,
+            TradingPairSeeder::class,
+
             // Add other seeders here
         ]);
     }

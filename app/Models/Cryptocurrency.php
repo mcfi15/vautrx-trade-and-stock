@@ -49,15 +49,26 @@ class Cryptocurrency extends Model
         return $this->hasMany(Wallet::class);
     }
 
-    public function baseTradingPairs()
+    public function basePairs()
     {
         return $this->hasMany(TradingPair::class, 'base_currency_id');
     }
 
-    public function quoteTradingPairs()
+    public function quotePairs()
     {
         return $this->hasMany(TradingPair::class, 'quote_currency_id');
     }
+
+
+    // public function baseTradingPairs()
+    // {
+    //     return $this->hasMany(TradingPair::class, 'base_currency_id');
+    // }
+
+    // public function quoteTradingPairs()
+    // {
+    //     return $this->hasMany(TradingPair::class, 'quote_currency_id');
+    // }
 
     public function transactions()
     {
@@ -74,15 +85,15 @@ class Cryptocurrency extends Model
         return $this->hasMany(Withdrawal::class);
     }
 
-    public function tradingPairsBase()
-    {
-        return $this->hasMany(TradingPair::class, 'base_currency_id');
-    }
+    // public function tradingPairsBase()
+    // {
+    //     return $this->hasMany(TradingPair::class, 'base_currency_id');
+    // }
 
-    public function tradingPairsQuote()
-    {
-        return $this->hasMany(TradingPair::class, 'quote_currency_id');
-    }
+    // public function tradingPairsQuote()
+    // {
+    //     return $this->hasMany(TradingPair::class, 'quote_currency_id');
+    // }
 
     public function scopeActive($query)
     {

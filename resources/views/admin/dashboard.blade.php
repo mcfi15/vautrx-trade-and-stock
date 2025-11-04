@@ -106,7 +106,7 @@
     <div class="bg-white rounded-lg shadow p-6">
         <h2 class="text-xl font-bold mb-4">Quick Actions</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <a href="{{ route('admin.cryptocurrencies.create') }}" class="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-indigo-500 hover:bg-indigo-50 transition">
+            <a href="" class="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-indigo-500 hover:bg-indigo-50 transition">
                 <i class="fas fa-plus-circle text-3xl text-indigo-600 mb-2"></i>
                 <p class="text-sm font-medium">Add Cryptocurrency</p>
             </a>
@@ -114,7 +114,7 @@
                 <i class="fas fa-link text-3xl text-green-600 mb-2"></i>
                 <p class="text-sm font-medium">Add Trading Pair</p>
             </a>
-            <form action="{{ route('admin.cryptocurrencies.update-prices') }}" method="POST" class="contents">
+            <form action="{{ url('admin.cryptocurrencies') }}" method="POST" class="contents">
                 @csrf
                 <button type="submit" class="p-4 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-blue-500 hover:bg-blue-50 transition">
                     <i class="fas fa-sync-alt text-3xl text-blue-600 mb-2"></i>

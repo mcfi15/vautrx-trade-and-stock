@@ -109,9 +109,6 @@
 
                 @forelse($cryptocurrencies as $crypto)
                 <tr id="crypto-row-{{ $crypto->id }}" class="hover:bg-gray-50">
-                    <td data-symbol="{{ $crypto->binance_symbol }}">
-                        $<span class="live-price">{{ number_format($crypto->current_price, 2) }}</span>
-                    </td>
 
                     <td class="p-2 font-semibold flex items-center gap-2">
                         {{ $crypto->symbol }}

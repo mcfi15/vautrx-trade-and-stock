@@ -48,20 +48,39 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     
 });
 
-Route::get('/trade/{symbol}', [TradingController::class, 'show'])->name('trade.pair');
+Route::get('/trade/spot', function () {
+    $defaultPair = \App\Models\TradingPair::active()->first();
+    if ($defaultPair) {
+        return redirect()->route('trade.pair', $defaultPair->id);
+    }
+    return view('trading.spot');
+});
+
+Route::get('/trade/{pairId}', [TradingController::class, 'show'])->name('trade.pair');
+
+
+// Route::get('/trade/{pairId}/data', [TradingController::class, 'fetchOrderData'])->name('trade.data');
+// Route::get('/orderbook/{pairId}/refresh', [TradingController::class, 'refreshOrderBook']);
+// Route::get('/trading/spot/{pairId}', [TradingController::class, 'show'])->name('trading.pair');
+//     Route::post('/trading/place-order', [TradingController::class, 'placeOrder'])->name('trading.place-order');
+//     Route::post('/trading/orders/{orderId}/cancel', [TradingController::class, 'cancelOrder'])->name('trading.cancel-order');
+    
+    // Default trading page
+    
 
 
 Route::controller(TradingController::class)->group(function () {
     Route::get('/trading/pro', [TradingController::class, 'pro'])->name('pro');
 
-    Route::get('/trading/spot', [TradingController::class, 'spot'])->name('spot');
+    // Route::get('/trading/spot', [TradingController::class, 'spot'])->name('spot');
 
     Route::get('/easy-convert', [TradingController::class, 'easy'])->name('easy-convert');
     
     
 });
 
-Route::get('/trading/{pairId}', [TradingController::class, 'show'])->name('show');
+// Route::get('/trading/{pairId}', [TradingController::class, 'show'])->name('show');
+
 // Trading
     // Route::controller('trading')->name('trading.')->group(function () {
         
@@ -105,6 +124,11 @@ Route::middleware('auth')->group(function () {
 // Authenticated routes
 Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    
+
+    Route::post('/trade/place-order', [TradingController::class, 'placeOrder'])->name('trade.place-order');
+    Route::post('/trade/orders/{orderId}/cancel', [TradingController::class, 'cancelOrder'])->name('trade.cancel-order');
     
     // Dashboard
     Route::get('/dashboard', [WalletController::class, 'index'])->name('dashboard');

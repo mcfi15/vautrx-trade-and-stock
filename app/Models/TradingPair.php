@@ -19,6 +19,11 @@ class TradingPair extends Model
         'quantity_precision',
         'trading_fee',
         'is_active',
+        'last_price',
+        'price_change_percent',
+        'high_24h',
+        'low_24h',
+        'volume_24h',
     ];
 
     protected $casts = [

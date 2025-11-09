@@ -325,7 +325,7 @@
 
                                     <div class="content text-white">Spot Professional <p class="featured">Hot</p> <span
                                             class="subtext">Tools for Pro</span> </div>
-                                </a><a class="dropdown-item" href="{{ url('trading/spot') }}">
+                                </a><a class="dropdown-item" href="{{ url('trade/spot') }}">
                                     <div class="nav-icon">
                                         <i class="icon-size send-to-back"></i>
                                     </div>
@@ -680,7 +680,7 @@
               <i class="fa fa-" aria-hidden="true"></i>
                               <a href="../Trade/tradepro">
                             Spot Professional</a>
-            </div--> <a class="dropdown-item" href="{{ url('trading/spot') }}">
+            </div--> <a class="dropdown-item" href="{{ url('trade/spot') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>

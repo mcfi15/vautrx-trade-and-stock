@@ -22,6 +22,8 @@ class Wallet extends Model
         'locked_balance' => 'decimal:18',
     ];
 
+    protected $appends = ['available_balance']; // ✅ Add this line
+
     public function user()
     {
         return $this->belongsTo(User::class);

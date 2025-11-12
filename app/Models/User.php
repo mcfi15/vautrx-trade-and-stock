@@ -50,6 +50,19 @@ class User extends Authenticatable
         'email_notifications' => 'boolean',
     ];
 
+    public function watchlists()
+    {
+        return $this->hasMany(\App\Models\Watchlist::class);
+    }
+
+    /**
+     * Get the user's portfolios.
+     */
+    public function portfolios()
+    {
+        return $this->hasMany(\App\Models\Portfolio::class);
+    }
+
     public function wallets()
     {
         return $this->hasMany(Wallet::class);
@@ -73,6 +86,11 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+    
+    public function stocktransactions()
+    {
+        return $this->hasMany(StockTransaction::class);
     }
 
     public function deposits()

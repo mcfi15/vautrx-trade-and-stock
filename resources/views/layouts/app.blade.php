@@ -20,20 +20,20 @@
     <link href="{{ asset(\App\Models\Setting::get('site_favicon')) }}" rel="icon" type="image/x-icon">
 
 
-    <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/add-style.css') }}">
-    <!--<link rel="stylesheet" href="/{{ asset('Public/template/epsilon/css/custom/bootstarp.css') }}">-->
-    <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/6pp9tx5LPOzE.css') }}">
+    <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/style.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/add-style.css?v=2') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/bootstrap.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/6pp9tx5LPOzE.css?v=6') }}">
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/8pHr7IdzNTAX.css') }}">
 
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/Fx80kkK9MFjp.css') }}">
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/RvcY6nkUjvCA.css') }}">
 
-    <link href="{{ asset('Public/template/epsilon/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('Public/template/epsilon/css/style.css?v=3') }}" rel="stylesheet">
 
-    <link href="{{ asset('Public/template/epsilon/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('Public/template/epsilon/css/custom.css?v=4') }}" rel="stylesheet">
 
-    <link href="Public/template/common/common.css') }}" rel="stylesheet">
+    <link href="Public/template/common/common.css?v=5') }}" rel="stylesheet">
     <style>
         .live-market {
             padding: 20px;
@@ -139,11 +139,11 @@
         }
 
         .read-more.ml-auto a {
-            color: #ffbe40 !important;
+            color: #1e90ff !important;
         }
 
         .slick-dots li button:before {
-            color: #ffbe40;
+            color: #1e90ff;
         }
 
         #dark .slip-limit-container .limit-input,
@@ -159,7 +159,7 @@
 
         #dark .home-markets .nav.nav-pills .nav-link.current {
             background-color: transparent;
-            border-bottom: 2px solid #ffbe40;
+            border-bottom: 2px solid #1e90ff;
             color: #fff !important;
             box-shadow: none;
         }
@@ -174,7 +174,7 @@
         .codono-distribution-table.table .btn-2,
         .p2p-list-table .btn-2 {
             background-color: transparent;
-            border-color: #ffbe40;
+            border-color: #1e90ff;
             color: #fff !important;
             border: 1px solid rgba(78, 78, 78, 1);
             border-radius: 6px;
@@ -363,7 +363,7 @@
         }
 
         .slick-dots li button:before {
-            background-color: rgba(255, 190, 64, .8) !important;
+            background-color: #1e90ff !important;
         }
 
         .index_quickRegTool-box__CSWGE {
@@ -1123,7 +1123,7 @@
         /*}*/
 
         /*.css-hoxete{*/
-        /*    background: #ffbe40;*/
+        /*    background: #1e90ff;*/
         /* color: white !important; */
         /*    font-weight: 500;*/
         /*}*/
@@ -1135,7 +1135,7 @@
         /*}*/
 
         /*.blue {*/
-        /*    color: #ffbe40;*/
+        /*    color: #1e90ff;*/
         /*}*/
 
 
@@ -1248,7 +1248,7 @@
         }
 
         form.needs-validation .other-link a {
-            color: #ffbe40 !important;
+            color: #1e90ff !important;
         }
 
         form.needs-validation .nav-pills .nav-link[aria-selected=true].active span {
@@ -1262,7 +1262,7 @@
 
 
         .form-wrapper .nav-pills .nav-link span {
-            color: #ffbe40 !important;
+            color: #1e90ff !important;
         }
 
         .form-wrapper .nav-pills .active span {
@@ -1480,10 +1480,10 @@
                         Trade</h2>
 
                     <div class="cex-ui-services">
-                        <a href="Trade.html" class="cex-ui-text cex-ui-text-small" id="">Spot</a>
+                        <a href="{{ url('trade/spot') }}" class="cex-ui-text cex-ui-text-small" id="">Spot</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Easy.html" class="cex-ui-text cex-ui-text-small" id="">Easy Convert</a>
+                        <a href="{{ url('easy-convert') }}" class="cex-ui-text cex-ui-text-small" id="">Easy Convert</a>
                     </div>
                 </div>
                 <div class="cex-ui-footer-content-menu-column">
@@ -1491,13 +1491,13 @@
                         Earn</h2>
 
                     <div class="cex-ui-services">
-                        <a href="Invest.html" class="cex-ui-text cex-ui-text-small" id="">Staking</a>
+                        <a href="{{ url('staking') }}" class="cex-ui-text cex-ui-text-small" id="">Staking</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Airdrop.html" class="cex-ui-text cex-ui-text-small" id="">Airdrop</a>
+                        <a href="{{ url('airdrop') }}" class="cex-ui-text cex-ui-text-small" id="">Airdrop</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Faucet.html" class="cex-ui-text cex-ui-text-small" id="">Faucet</a>
+                        <a href="{{ url('faucet') }}" class="cex-ui-text cex-ui-text-small" id="">Faucet</a>
                     </div>
                 </div>
                 <div class="cex-ui-footer-content-menu-column">
@@ -1508,13 +1508,13 @@
                         <a href="{{ url('about') }}" class="cex-ui-text cex-ui-text-small" id="">About Us</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Dex.html" class="cex-ui-text cex-ui-text-small" id="">Decentralized</a>
+                        <a href="{{ url('dex') }}" class="cex-ui-text cex-ui-text-small" id="">Decentralized</a>
                     </div>
                     <div class="cex-ui-services">
                         <a href="{{ url('markets') }}" class="cex-ui-text cex-ui-text-small" id="">Market</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Pool.html" class="cex-ui-text cex-ui-text-small" id="">Mining</a>
+                        <a href="{{ url('mining') }}" class="cex-ui-text cex-ui-text-small" id="">Mining</a>
                     </div>
                 </div>
                 <div class="cex-ui-footer-content-menu-column">
@@ -1522,18 +1522,18 @@
                         Terms</h2>
 
                     <div class="cex-ui-services">
-                        <a href="Article/detail/id/1.html" class="cex-ui-text cex-ui-text-small" id="">User
+                        <a href="{{ url('article/1') }}" class="cex-ui-text cex-ui-text-small" id="">User
                             Agreement</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Article/detail/id/2.html" class="cex-ui-text cex-ui-text-small" id="">Staking Terms</a>
+                        <a href="{{ url('article/2') }}" class="cex-ui-text cex-ui-text-small" id="">Staking Terms</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Article/detail/id/3.html" class="cex-ui-text cex-ui-text-small" id="">Privacy
+                        <a href="{{ url('article/3') }}" class="cex-ui-text cex-ui-text-small" id="">Privacy
                             Policy</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="Article/detail/id/4.html" class="cex-ui-text cex-ui-text-small" id="">Cookie Policy</a>
+                        <a href="{{ url('article/4') }}" class="cex-ui-text cex-ui-text-small" id="">Cookie Policy</a>
                     </div>
                 </div>
             </div>
@@ -1762,6 +1762,8 @@
         window.location.reload();
     }
 </script>
+<!-- Chart.js -->
+<script src="{{ asset('js/chart.js') }}"></script>
 <script src="{{ asset('Public/template/epsilon/js/popper.min.js') }}"></script>
 <script src="{{ asset('Public/template/epsilon/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('Public/template/epsilon/js/bootstrap-selec.min.js') }}"></script>

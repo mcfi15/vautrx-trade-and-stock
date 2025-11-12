@@ -19,6 +19,7 @@
                             <a href="/deposit/?coin=btc" class="btn-2"><i class="fa fa-download"></i> Deposit</a>
                             <a href="/withdraw/?coin=btc" class="btn-1"><i class="fa fa-upload"></i> Withdraw</a>
                             <a href="/gift/" class="btn-1"><i class="fa fa-gift"></i> Gift Cards</a>
+                            <a href="/deposit/?coin=btc" class="btn-2"><i class="fa fa-download"></i> Stock</a>
 
                         </div>
                         <div class=" d-lg-none w-100">

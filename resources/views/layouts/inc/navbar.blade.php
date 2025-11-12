@@ -71,13 +71,13 @@
                 .nav__item.overview {
                     color: #fff;
                     border-bottom: 1px solid #e4e4e4;
-                    background-color: #e0a800;
+                    background-color: #1e90ff;
                     height: 54px;
                     margin-bottom: 12px;
                 }
 
                 .nav__item:hover {
-                    background-color: #e0a800;
+                    background-color: #1e90ff;
                     cursor: pointer;
                 }
 
@@ -318,14 +318,26 @@
                             class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Trade </a>
                         <div class="dropdown-menu">
                             <div class="dropdown-body">
-                                <a class="dropdown-item" href="{{ url('trading/pro') }}">
+
+                                <a class="dropdown-item" href="{{ url('stock-market') }}">
+                                    <div class="nav-icon">
+                                        <i class="icon-size exchange-three"></i>
+                                    </div>
+
+                                    <div class="content text-white">Stock Trading <p class="featured">Hot</p> <span
+                                            class="subtext">Best Stock Trading Platform</span> </div>
+                                </a>
+
+                                {{-- <a class="dropdown-item" href="{{ url('trading/pro') }}">
                                     <div class="nav-icon">
                                         <i class="icon-size exchange-three"></i>
                                     </div>
 
                                     <div class="content text-white">Spot Professional <p class="featured">Hot</p> <span
                                             class="subtext">Tools for Pro</span> </div>
-                                </a><a class="dropdown-item" href="{{ url('trade/spot') }}">
+                                </a> --}}
+                                
+                                <a class="dropdown-item" href="{{ url('trade/spot') }}">
                                     <div class="nav-icon">
                                         <i class="icon-size send-to-back"></i>
                                     </div>
@@ -680,7 +692,7 @@
               <i class="fa fa-" aria-hidden="true"></i>
                               <a href="../Trade/tradepro">
                             Spot Professional</a>
-            </div--> <a class="dropdown-item" href="{{ url('trade/spot') }}">
+            </div--> <a class="dropdown-item" href="{{ url('trading/spot') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>

@@ -248,7 +248,7 @@
     -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     color: #fff;
-    background-color: #EE8267;
+    background-color: #1e90ff;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     text-transform: none;
     box-shadow: none;
@@ -617,7 +617,7 @@ label+.css-n8uc9q {
     -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     color: #fff;
-    background-color: #EE8267;
+    background-color: #1e90ff;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     text-transform: none;
     box-shadow: none;
@@ -735,7 +735,7 @@ label+.css-n8uc9q {
 }
 
 .css-jvsmlw .MuiCheckbox-root {
-    color: #EE8267;
+    color: #1e90ff;
 }
 
 .css-1m9pwf3 {
@@ -2706,7 +2706,7 @@ footer {
 
 .cex-ui-badge-warning {
     background-color: rgba(250,185,21,.1);
-    color: #fab915
+    color: #1e90ff
 }
 
 .cex-ui-badge-error {
@@ -4367,7 +4367,7 @@ footer {
 }
 
 .cex-ui-footer-content-menu-column:last-of-type .cex-ui-social .donation-button svg path:first-of-type {
-    fill: gold
+    fill: #1e90ff
 }
 
 @media(min-width: 900px) {
@@ -4583,7 +4583,7 @@ body#dark {
     width: 600px;
 }
 .slick-dots li button:before {
-    background-color: rgba(255, 190, 64, .8) !important;
+    background-color: #1e90ff !important;
 }
 .index_quickRegTool-box__CSWGE {
     width: 600px;
@@ -5167,10 +5167,10 @@ i.ion.ion-md-megaphone:before{
     color: rgba(197, 197, 197, 1);
 }
 .read-more.ml-auto a {
-    color: #ffbe40 !important;
+    color: #1e90ff !important;
 }
 .slick-dots li button:before{
-    color: #ffbe40;
+    color: #1e90ff;
 }
 #dark .slip-limit-container .limit-input, #dark .slip-limit-container .limit-button, #dark .card-header, #dark .card, #dark .home-markets > .tab-content {
     background-color: transparent;
@@ -5180,7 +5180,7 @@ i.ion.ion-md-megaphone:before{
 }
 #dark .home-markets .nav.nav-pills .nav-link.current {
     background-color: transparent;
-    border-bottom: 2px solid #ffbe40;
+    border-bottom: 2px solid #1e90ff;
     color: #fff !important;
     box-shadow: none;
 }
@@ -5189,9 +5189,9 @@ i.ion.ion-md-megaphone:before{
 }
 #dark #daily-top-winners .coin-list .btn-2, .codono-distribution-table.table .btn-2, .p2p-list-table .btn-2 {
     background-color: transparent;
-    border-color: #ffbe40;
+    border-color: #1e90ff;
     color: #fff!important;
     border: 1px solid rgba(78, 78, 78, 1);
     border-radius: 6px;
-}
+} 
 /* [ === HEADER STYLING END === ] */

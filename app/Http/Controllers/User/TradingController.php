@@ -30,137 +30,127 @@ class TradingController extends Controller
     }
 
     public function show($pairId)
-    {
-        try {
-            // Load trading pair with currencies
-            $tradingPair = TradingPair::with(['baseCurrency', 'quoteCurrency'])
-                ->findOrFail($pairId);
+{
+    try {
+        // Load trading pair with currencies
+        $tradingPair = TradingPair::with(['baseCurrency', 'quoteCurrency'])
+            ->findOrFail($pairId);
 
-            // Get markets data for the sidebar
-            $markets = [
-                'USDT' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
-                    ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'USDT'))
-                    ->active()
-                    ->get(),
+        $currentPrice = $tradingPair->getCurrentPrice() ?? 0;
 
-                'BTC' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
-                    ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'BTC'))
-                    ->active()
-                    ->get(),
 
-                'ETH' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
-                    ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'ETH'))
-                    ->active()
-                    ->get(),
+        // Get markets data for the sidebar
+        $markets = [
+            'USDT' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
+                ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'USDT'))
+                ->active()
+                ->get(),
 
-                'EUR' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
-                    ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'EUR'))
-                    ->active()
-                    ->get(),
-            ];
+            'BTC' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
+                ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'BTC'))
+                ->active()
+                ->get(),
 
-            // Load all active trading pairs for dropdown
-            $tradingPairs = TradingPair::with(['baseCurrency', 'quoteCurrency'])
-                ->where('is_active', true)
-                ->orderBy('symbol')
-                ->get();
+            'ETH' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
+                ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'ETH'))
+                ->active()
+                ->get(),
 
-            // Get the current user (can be null)
-            $user = Auth::user();
+            'EUR' => TradingPair::with(['baseCurrency', 'quoteCurrency'])
+                ->whereHas('quoteCurrency', fn($q) => $q->where('symbol', 'EUR'))
+                ->active()
+                ->get(),
+        ];
 
-            // Get wallets with proper error handling
-            $baseWallet = $this->getUserWallet($user, $tradingPair->base_currency_id);
-            $quoteWallet = $this->getUserWallet($user, $tradingPair->quote_currency_id);
+        // Load all active trading pairs for dropdown
+        $tradingPairs = TradingPair::with(['baseCurrency', 'quoteCurrency'])
+            ->where('is_active', true)
+            ->orderBy('symbol')
+            ->get();
 
-            // Debug wallet data
-            Log::info('Wallet data:', [
-                'user_id' => $user?->id,
-                'base_wallet' => $baseWallet ? [
-                    'balance' => $baseWallet->balance,
-                    'locked_balance' => $baseWallet->locked_balance,
-                    'available_balance' => $baseWallet->available_balance
-                ] : null,
-                'quote_wallet' => $quoteWallet ? [
-                    'balance' => $quoteWallet->balance,
-                    'locked_balance' => $quoteWallet->locked_balance,
-                    'available_balance' => $quoteWallet->available_balance
-                ] : null
-            ]);
+        // Get the current user (can be null)
+        $user = Auth::user();
 
-            // Null-safe user orders
-            $userOrders = collect();
-            $closedOrders = collect();
-            
-            if ($user) {
-                try {
-                    $userOrders = $user->orders()
-                        ->where('trading_pair_id', $pairId)
-                        ->whereIn('status', ['pending', 'partial'])
-                        ->latest()
-                        ->get();
+        // Get wallets with proper error handling
+        $baseWallet = $this->getUserWallet($user, $tradingPair->base_currency_id);
+        $quoteWallet = $this->getUserWallet($user, $tradingPair->quote_currency_id);
 
-                    $closedOrders = $user->orders()
-                        ->where('trading_pair_id', $pairId)
-                        ->whereIn('status', ['completed', 'cancelled', 'failed'])
-                        ->latest()
-                        ->take(20)
-                        ->get();
-                } catch (\Exception $e) {
-                    Log::error("Orders fetch failed: ".$e->getMessage(), [
-                        'user_id' => $user->id,
-                        'pair_id' => $pairId
-                    ]);
-                }
+        // Null-safe user orders
+        $userOrders = collect();
+        $closedOrders = collect();
+        
+        if ($user) {
+            try {
+                $userOrders = $user->orders()
+                    ->where('trading_pair_id', $pairId)
+                    ->whereIn('status', ['pending', 'partial'])
+                    ->latest()
+                    ->get();
+
+                $closedOrders = $user->orders()
+                    ->where('trading_pair_id', $pairId)
+                    ->whereIn('status', ['completed', 'cancelled', 'failed'])
+                    ->latest()
+                    ->take(20)
+                    ->get();
+            } catch (\Exception $e) {
+                Log::error("Orders fetch failed: ".$e->getMessage(), [
+                    'user_id' => $user->id,
+                    'pair_id' => $pairId
+                ]);
             }
-
-            // Public order book
-            $buyOrders = Order::where('trading_pair_id', $pairId)
-                ->where('side', 'buy')
-                ->where('type', 'limit')
-                ->whereIn('status', ['pending', 'partial'])
-                ->orderBy('price', 'desc')
-                ->take(20)
-                ->get();
-
-            $sellOrders = Order::where('trading_pair_id', $pairId)
-                ->where('side', 'sell')
-                ->where('type', 'limit')
-                ->whereIn('status', ['pending', 'partial'])
-                ->orderBy('price', 'asc')
-                ->take(20)
-                ->get();
-
-            // Recent trades
-            $recentTrades = $tradingPair->trades()
-                ->with(['buyer', 'seller'])
-                ->latest()
-                ->take(50)
-                ->get();
-
-            return view('trading.spot', compact(
-                'tradingPair',
-                'tradingPairs',
-                'baseWallet',
-                'quoteWallet',
-                'buyOrders',
-                'sellOrders',
-                'recentTrades',
-                'markets',
-                'userOrders',
-                'closedOrders'
-            ));
-
-        } catch (\Exception $e) {
-            Log::error('Trading page error: '.$e->getMessage(), [
-                'pair_id' => $pairId,
-                'user_id' => Auth::id(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return redirect('trade/spot')
-                ->with('error', 'Trading pair not found or temporarily unavailable.');
         }
+
+        // Public order book
+        $buyOrders = Order::where('trading_pair_id', $pairId)
+            ->where('side', 'buy')
+            ->where('type', 'limit')
+            ->whereIn('status', ['pending', 'partial'])
+            ->orderBy('price', 'desc')
+            ->take(20)
+            ->get();
+
+        $sellOrders = Order::where('trading_pair_id', $pairId)
+            ->where('side', 'sell')
+            ->where('type', 'limit')
+            ->whereIn('status', ['pending', 'partial'])
+            ->orderBy('price', 'asc')
+            ->take(20)
+            ->get();
+
+        // Recent trades
+        $recentTrades = $tradingPair->trades()
+            ->with(['buyer', 'seller'])
+            ->latest()
+            ->take(50)
+            ->get();
+
+        return view('trading.spot', compact(
+            'tradingPair',
+            'tradingPairs',
+            'baseWallet',
+            'quoteWallet',
+            'buyOrders',
+            'sellOrders',
+            'recentTrades',
+            'markets',
+            'userOrders',
+            'closedOrders',
+            'currentPrice'  // pass currentPrice to Blade
+        ));
+
+    } catch (\Exception $e) {
+        Log::error('Trading page error: '.$e->getMessage(), [
+            'pair_id' => $pairId,
+            'user_id' => Auth::id(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return redirect('trad/spot')
+            ->with('error', 'Trading pair not found or temporarily unavailable.');
     }
+}
+
 
     public function placeOrder(Request $request)
     {

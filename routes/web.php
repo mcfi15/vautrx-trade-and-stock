@@ -2,12 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\User\StockController;
 use App\Http\Controllers\User\WalletController;
 use App\Http\Controllers\User\TradingController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\PortfolioController;
+use App\Http\Controllers\User\WatchlistController;
 use App\Http\Controllers\Auth\GoogleAuthController;
-use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\User\StockTradingController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 
 
 /*
@@ -30,14 +34,27 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::get('/markets', 'markets');
     Route::get('/about', 'about');
     Route::get('/contact', 'contact');
-    Route::post('/post-message', 'postMessage');
-    Route::get('/offers', 'offer');
-    Route::get('/worker', 'worker');
-    Route::get('/hr-services', 'hrservice');
-    Route::get('/jobs', 'jobs');
-    Route::get('/view/{slug}', 'jobView');
-    Route::get('/application/{slug}', 'jobApplication');
-    Route::post('/application', 'storeApplication');
+    Route::get('/stock-market', 'stock');
+
+
+    Route::get('/article/1', 'article_1');
+    Route::get('/article/2', 'article_2');
+    Route::get('/article/3', 'article_3');
+    Route::get('/article/4', 'article_4');
+    Route::get('/article/10', 'article_10');
+    Route::get('/article/11', 'article_11');
+    Route::get('/article/13', 'article_13');
+    Route::get('/article/24', 'article_24');
+    Route::get('/article/25', 'article_25');
+    Route::get('/article/26', 'article_26');
+    Route::get('/article/27', 'article_27');
+    Route::get('/dex', 'dex');
+    // Route::get('/worker', 'worker');
+    // Route::get('/hr-services', 'hrservice');
+    // Route::get('/jobs', 'jobs');
+    // Route::get('/view/{slug}', 'jobView');
+    // Route::get('/application/{slug}', 'jobApplication');
+    // Route::post('/application', 'storeApplication');
 
     // Route::get('/categories', 'product');
     // Route::get('/product-view/{category_slug}/{product_slug}', 'productView');
@@ -135,6 +152,35 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     // Route::get('/markets', [DashboardController::class, 'markets'])->name('markets');
     
     
+    // Stocks
+    Route::prefix('stocks')->name('stocks.')->group(function () {
+        Route::get('/', [StockController::class, 'index'])->name('index');
+        // Route::get('/mobile', [StockController::class, 'mobileIndex'])->name('mobile-index');
+        Route::get('/{stock}', [StockController::class, 'show'])->name('show');
+        Route::get('/{stock}/chart-data', [StockController::class, 'chartData'])->name('chart-data');
+        Route::post('/{stock}/watchlist', [StockController::class, 'addToWatchlist'])->name('add-to-watchlist');
+        Route::delete('/{stock}/watchlist', [StockController::class, 'removeFromWatchlist'])->name('remove-from-watchlist');
+    });
+    
+    // Trading
+    Route::prefix('trading')->name('trading.')->middleware(['trading.enabled'])->group(function () {
+        Route::get('/', [StockTradingController::class, 'index'])->name('index');
+        Route::post('/buy', [StockTradingController::class, 'buy'])->name('buy');
+        Route::post('/sell', [StockTradingController::class, 'sell'])->name('sell');
+    });
+
+    // Watchlist
+    Route::prefix('watchlist')->name('watchlist.')->group(function () {
+        Route::get('/', [WatchlistController::class, 'index'])->name('index');
+        Route::patch('/{watchlist}', [WatchlistController::class, 'update'])->name('update');
+        Route::delete('/{watchlist}', [WatchlistController::class, 'destroy'])->name('destroy');
+    });
+    
+    // Portfolio
+    Route::prefix('portfolio')->name('portfolio.')->group(function () {
+        Route::get('/', [PortfolioController::class, 'index'])->name('index');
+        Route::get('/{portfolio}', [PortfolioController::class, 'show'])->name('show');
+    });
     
     // Wallet
     Route::prefix('wallet')->name('wallet.')->group(function () {

@@ -1,49 +1,107 @@
- <div class=" h-40 ">
-        <style>
-          .noWrapWrapper-1WIwNaDF {
-            display: none !important;
-          }
-        </style>
-        <div class="main-chart mb15">
-          <!-- TradingView Widget Start -->
-          <div class="tradingview-widget-container">
-            <div id="tradingview_e8053" class="charttcontnr"></div>
+<div class="h-40">
+    <div class="main-chart mb15">
+        <!-- TradingView Widget Start -->
+        <div class="tradingview-widget-container">
+            <div class="charttcontnr" id="tradingview_chart_container"></div>
             <script src="{{ asset('Public/s3.tradingview.com/tv.js') }}"></script>
             <script>
-              $(document).ready(function () {
-                if (window.innerWidth <= 768) {
-                  $('.charttcontnr').attr('id', 'tradingview_e8053_sm');
-                } else {
-                  $('.charttcontnr').attr('id', 'tradingview_e8053');
-                }
+                // Trading configuration from backend - FIXED
+const tradingConfig = {
+    baseSymbol: '{{ $tradingPair->baseCurrency->symbol }}',
+    quoteSymbol: '{{ $tradingPair->quoteCurrency->symbol }}',
+    currentPrice: {{ $tradingPair->getCurrentPrice() ?? 0 }}
+};
 
-                var chartParams = {
-                  "width": "100%",
-                  "height": 370,
-                  "symbol": "BINANCE:BTCUSDT",
-                  "interval": "D",
-                  "timezone": "Etc/UTC",
-                  "theme": 'dark',
-                  "style": "1",
-                  "locale": "en",
-                  "toolbar_bg": "#f1f3f6",
-                  "enable_publishing": false,
-                  "withdateranges": true,
-                  "hide_side_toolbar": false,
-                  "allow_symbol_change": false,
-                  "show_popup_button": true,
-                  "popup_width": "1000",
-                  "popup_height": "650",
-                  "hide_legend": true,
-                  "container_id": $('.charttcontnr').attr('id')
+// Function to get TradingView symbol format
+function getTradingViewSymbol(baseSymbol, quoteSymbol) {
+    const symbolMap = {
+        'USDT': 'USDT',
+        'BTC': 'BTC',
+        'ETH': 'ETH',
+        'BNB': 'BNB',
+        'ADA': 'ADA',
+        'DOT': 'DOT',
+        'LTC': 'LTC',
+        'BCH': 'BCH',
+        'XRP': 'XRP',
+        'LINK': 'LINK',
+        'EUR': 'EUR',
+    };
 
-                }
-                new TradingView.widget(chartParams);
-              });
+    const formattedBase = symbolMap[baseSymbol] || baseSymbol;
+    const formattedQuote = symbolMap[quoteSymbol] || quoteSymbol;
+    
+    if (quoteSymbol === 'EUR') {
+        return `COINBASE:${formattedBase}${formattedQuote}`;
+    } else {
+        return `BINANCE:${formattedBase}${formattedQuote}`;
+    }
+}
+
+// SIMPLIFIED Chart initialization - This is all you need
+function initializeTradingViewChart() {
+    // Get the correct symbol for the current trading pair
+    const symbol = getTradingViewSymbol(tradingConfig.baseSymbol, tradingConfig.quoteSymbol);
+    
+    // Set appropriate height
+    const chartHeight = window.innerWidth <= 768 ? 300 : 370;
+    
+    // Use consistent container ID
+    const containerId = 'tradingview_chart_container';
+    
+    // Make sure our container has the correct ID
+    const chartContainer = document.querySelector('.charttcontnr');
+    if (chartContainer) {
+        chartContainer.id = containerId;
+    }
+
+    console.log('Initializing TradingView chart with:', {
+        symbol: symbol,
+        baseSymbol: tradingConfig.baseSymbol,
+        quoteSymbol: tradingConfig.quoteSymbol,
+        containerId: containerId
+    });
+
+    // TradingView widget configuration
+    new TradingView.widget({
+        "width": "100%",
+        "height": chartHeight,
+        "symbol": symbol,
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": 'dark',
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#f1f3f6",
+        "enable_publishing": false,
+        "withdateranges": true,
+        "hide_side_toolbar": false,
+        "allow_symbol_change": true,
+        "show_popup_button": true,
+        "popup_width": "1000",
+        "popup_height": "650",
+        "hide_legend": true,
+        "container_id": containerId,
+        "studies": [
+            "RSI@tv-basicstudies",
+            "StochasticRSI@tv-basicstudies", 
+            "MASimple@tv-basicstudies"
+        ]
+    });
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTradingViewChart();
+});
+
+// Reinitialize on window resize
+window.addEventListener('resize', function() {
+    // Small delay to ensure resize is complete
+    setTimeout(initializeTradingViewChart, 300);
+});
             </script>
-          </div>
-          <!-- TradingView Widget End -->
-
         </div>
-
-      </div>
+        <!-- TradingView Widget End -->
+    </div>
+</div>

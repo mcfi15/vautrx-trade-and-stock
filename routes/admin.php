@@ -2,17 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\CryptocurrencyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\TransactionController;
-use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Controllers\Admin\TradingPairController;
-use App\Http\Controllers\Admin\OAuthSettingsController;
+use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DepositController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\WithdrawalController;
+use App\Http\Controllers\Admin\TradingPairController;
+use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\LoginHistoryController;
+use App\Http\Controllers\Admin\OAuthSettingsController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\CryptocurrencyController;
+use App\Http\Controllers\Admin\StockManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,6 +90,31 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])
         ->name('users.toggle-status');
+
+       // Real-Time Stock Management Routes
+    Route::prefix('stocks-management')->name('stocks-management.')->group(function () {
+        Route::get('/', [StockManagementController::class, 'index'])->name('index');
+        Route::post('/import', [StockManagementController::class, 'importStock'])->name('import');
+        Route::post('/bulk-import', [StockManagementController::class, 'bulkImport'])->name('bulk-import');
+        Route::post('/update-prices', [StockManagementController::class, 'updatePrices'])->name('update-prices');
+        Route::get('/lists', [StockManagementController::class, 'getStockLists'])->name('lists');
+        Route::get('/{symbol}/details', [StockManagementController::class, 'getStockDetails'])->name('details');
+        Route::post('/{stock}/toggle-status', [StockManagementController::class, 'toggleStatus'])->name('toggle-status');
+        Route::delete('/{stock}', [StockManagementController::class, 'destroy'])->name('destroy');
+    });
+    
+    // Stock Management
+    // Automatic Stock Import Routes (must be before resource routes)
+    Route::get('stocks/import/auto', [StockController::class, 'autoImport'])->name('stocks.auto-import');
+    Route::post('stocks/import/single', [StockController::class, 'importStock'])->name('stocks.import-single');
+    Route::post('stocks/import/bulk', [StockController::class, 'bulkImport'])->name('stocks.bulk-import');
+    Route::post('stocks/import/demo', [StockController::class, 'addDemoStocks'])->name('stocks.add-demo');
+    Route::post('stocks/update-all', [StockController::class, 'updateAllStocks'])->name('stocks.update-all');
+    Route::post('stocks/{stock}/sync', [StockController::class, 'syncStock'])->name('stocks.sync');
+    
+    // Standard Stock CRUD Routes
+    Route::resource('stocks', StockController::class);
+    Route::patch('stocks/{stock}/toggle-status', [StockController::class, 'toggleStatus'])->name('stocks.toggle-status');
     
     // Order Management
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');

@@ -19,20 +19,21 @@
                             <a href="{{ url('wallet/deposit') }}" class="btn-2"><i class="fa fa-download"></i> Deposit</a>
                             <a href="{{ url('wallet/withdraw') }}" class="btn-1"><i class="fa fa-upload"></i> Withdraw</a>
                             <a href="/gift/" class="btn-1"><i class="fa fa-gift"></i> Gift Cards</a>
+                            <a href="{{ url('stocks') }}" class="btn-2"><i class="fa fa-line-chart"></i> Stocks</a>
 
                         </div>
                         <div class=" d-lg-none w-100">
                             <div class="row w-100">
-                                <div class="col-6"><a href="/deposit/?coin=btc" class="btn-2 btn-block"><i
+                                <div class="col-6"><a href="{{ url('wallet/deposit') }}" class="btn-2 btn-block"><i
                                             class="fa fa-download"></i> Deposit</a></div>
-                                <div class="col-6 text-right"><a href="/withdraw/?coin=btc"
+                                <div class="col-6 text"><a href="{{ url('wallet/wallet') }}"
                                         class="btn-1 btn-block"><i class="fa fa-upload"></i> Withdraw</a></div>
                             </div>
                             <div class="row w-100 mt-2">
                                 <div class="col-6"><a href="#" class="btn-1 btn-block"><i
                                             class="fa fa-exchange"></i> Transfer</a></div>
-                                <div class="col-6 text-right"><a href="#" class="btn-1 btn-block"><i
-                                            class="fa fa-exchange"></i> P2p Wallet</a></div>
+                                <div class="col-6 text"><a href="{{ url('stocks') }}" class="btn-1 btn-block"><i
+                                            class="fa fa-line-chart"></i> Stocks</a></div>
                             </div>
                             <div class="row w-100 mt-2">
                                 <div class="col-12">
@@ -50,46 +51,55 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header p-l-5 p-r-5 hide-mobile">
+          <div class="row w-100 align-items-center">
+            <div class="col-md-4">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="hideLowValuesDesktop">
+                <label class="custom-control-label" for="hideLowValuesDesktop">
+                  Hide Low Balances
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 text-center">
+              <a href="/account/dust" class="btn btn-warning btn-sm">
+                Convert low balance to BNB
+              </a>
+            </div>
+            <div class="col-md-4">
+              <input class="form-control" placeholder="Search" id="searchFilterDesktop">
+            </div>
+          </div>
+                </div>
 
-                    <div class="col-4">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="hideLowValues" value="1"> <label
-                                class="custom-control-label" for="hideLowValues">Hide Low Balances</label>
-                        </div>
+                <!-- Mobile filter controls -->
+                <div class="d-lg-none p-3">
+                <div class="row">
+                    <div class="col-6">
+                    <div class="custom-control custom-checkbox mt-2">
+                        <input type="checkbox" class="custom-control-input" id="hideLowValuesMobile">
+                        <label class="custom-control-label" for="hideLowValuesMobile">
+                        Hide Low Balances
+                        </label>
                     </div>
-                    <div class="col-4">
-                        <a href="/account/dust" class="btn btn-warning btn-sm">Convert low balance to bnb</a>
                     </div>
-                    <div class="col-4">
-                        <input class="form-control" placeholder="Search" id="searchFilter">
+                    <div class="col-6">
+                    <input class="form-control" placeholder="Search" id="searchFilterMobile">
                     </div>
                 </div>
-                <!-- <div class="card-header p-l-5 p-r-5"> -->
-                <div class="d-lg-none">
-
-                    <div class="row  pl-1 pr-1">
-                        <div class="col-6 align-baseline">
-                            <div class="custom-control custom-checkbox mt-3">
-                                <input type="checkbox" class="custom-control-input" id="hideLowValues" value="1"> <label
-                                    class="custom-control-label" for="hideLowValues">Hide Low Balances</label>
-                            </div>
-                        </div>
-                        <div class="col-6 mt-1">
-                            <input class="form-control" placeholder="Search" id="searchFilterMob">
-                        </div>
+                <div class="row text-center mt-3">
+                    <div class="col-12">
+                    <a href="/account/dust" class="btn btn-warning btn-sm">
+                        Convert low balance to BNB
+                    </a>
                     </div>
-                    <div class="row text-center mt-3 ">
-                        <div class="col-12">
-                            <a href="/Finance/dust" class="btn btn-warning btn-sm">Convert low balance to bnb</a>
-                        </div>
-                    </div>
+                </div>
                 </div>
                 <!-- </div> -->
                 <div class="card-body">
 
                     
                     <div class="table-responsive">
-                        <table class="table wallet-table table-hover text-left" id="cryptoTable">
+                        <table class="table wallet-table table-hover text-left" id="walletTable">
                             <thead>
                                 <tr>
                                     <th scope="col">Coin</th>
@@ -105,55 +115,44 @@
                             </thead>
                             <tbody>
 
+
+
+
                                 @foreach($wallets as $wallet)
-                                <tr>
-                                    <td class="col-3">
-                                        <div class="pair-name">
-                                            <div class="d-block d-sm-none">
-                                                <div class="icon"
-                                                    style="background-image: url('{{ $wallet->cryptocurrency->logo_url }}')"
-                                                    onerror="this.onerror=null; this.src='{{ asset('Upload/coin/default.png') }}'">
-                                                </div>
-                                                <small>{{ strtoupper($wallet->cryptocurrency->symbol ?? 'N/A') }}</small>
-                                            </div>
-                                            <div class="hide-mobile flex-box">
-                                                <div class="icon"
-                                                    style="background-image: url('{{ $wallet->cryptocurrency->logo_url }}')"
-                                                    onerror="this.onerror=null; this.src='{{ asset('Upload/coin/default.png') }}'">
-                                                </div>
-                                                <small>{{ strtoupper($wallet->cryptocurrency->symbol ?? 'N/A') }} [ {{ $wallet->cryptocurrency->name ?? 'Unknown' }} ]</small>
-                                            </div>
-
-                                        </div>
-                                    </td>
-                                    <td class="data_balance btc">
-                                        {{ number_format($wallet->balance, 8) }}
-                                    
-                                    </td>
-
-                                    <td class="hide-mobile">
-                                        
+                                <tr class="wallet-row"
+                                    data-symbol="{{ strtolower($wallet->cryptocurrency->symbol) }}"
+                                    data-balance="{{ $wallet->balance }}">
+                                <td>
+                                    <div class="pair-name d-flex align-items-center">
+                                    <div class="icon mr-2"
+                                        style="background-image: url('{{ $wallet->cryptocurrency->logo_url }}'); width:24px; height:24px; background-size:cover;"
+                                        onerror="this.onerror=null; this.src='{{ asset('Upload/coin/default.png') }}'"></div>
+                                    <small>{{ strtoupper($wallet->cryptocurrency->symbol ?? 'N/A') }} [{{ $wallet->cryptocurrency->name ?? 'Unknown' }}]</small>
+                                    </div>
+                                </td>
+                                <td class="text balance">
+                                    {{ number_format($wallet->balance, 8) }}
+                                </td>
+                                <td class="hide-mobile text">
                                     {{ number_format($wallet->locked_balance ?? 0, 8) }}
-                                    </td>
-                                    <td class="hide-mobile data_total">
-                                       {{ number_format($wallet->balance + ($wallet->locked_balance ?? 0), 8) }} 
-                                        
-                                    </td>
-                                    <td class="hide-mobile data_price"><img src="{{ asset('uploads/coin/651a8af250cf6.png') }}"
-                                            width="16px" height="16px" alt="USDT"> <span>
-                                               {{ number_format($wallet->cryptocurrency->current_price ?? 0, 2) }} 
-                                        
-                                            </span></td>
-                                    <td class="hide-mobile data_usdt"><img src="{{ asset('uploads/coin/651a8af250cf6.png') }}"
-                                            width="16px" height="16px" alt="USDT"> <span>
-                                                {{ number_format(($wallet->balance * ($wallet->cryptocurrency->current_price ?? 0)), 2) }}
-                                            </span></td>
-                                    <td class="col-2 text-right">
-                                        <a href="{{ url('wallet/deposit/'. $wallet->cryptocurrency_id) }}" class="green"><i class="fa fa-download"></i>
-                                            Deposit</a> /
-                                        <a href="{{ url('wallet/withdraw/'. $wallet->cryptocurrency_id) }}" class="red"><i class="fa fa-upload"></i>
-                                            Withdraw</a>
-                                    </td>
+                                </td>
+                                <td class="hide-mobile text">
+                                    {{ number_format($wallet->balance + ($wallet->locked_balance ?? 0), 8) }}
+                                </td>
+                                <td class="hide-mobile text">
+                                    ${{ number_format($wallet->cryptocurrency->current_price ?? 0, 2) }}
+                                </td>
+                                <td class="hide-mobile text">
+                                    ${{ number_format(($wallet->balance * ($wallet->cryptocurrency->current_price ?? 0)), 2) }}
+                                </td>
+                                <td class="text">
+                                    <a href="{{ url('wallet/deposit/' . $wallet->cryptocurrency_id) }}" class="green">
+                                    <i class="fa fa-download"></i> Deposit
+                                    </a> /
+                                    <a href="{{ url('wallet/withdraw/' . $wallet->cryptocurrency_id) }}" class="red">
+                                    <i class="fa fa-upload"></i> Withdraw
+                                    </a>
+                                </td>
                                 </tr>
                                 @endforeach
                                 
@@ -172,5 +171,32 @@
         </div>
     </div>
 </div>
+
+{{-- ✅ JS for Hide Low & Search --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const hideLowDesktop = document.getElementById('hideLowValuesDesktop');
+  const hideLowMobile = document.getElementById('hideLowValuesMobile');
+  const searchDesktop = document.getElementById('searchFilterDesktop');
+  const searchMobile = document.getElementById('searchFilterMobile');
+  const rows = document.querySelectorAll('#walletTable tbody tr');
+
+  function filterWallets() {
+    const hideLow = hideLowDesktop.checked || hideLowMobile.checked;
+    const searchTerm = (searchDesktop.value || searchMobile.value).toLowerCase();
+
+    rows.forEach(row => {
+      const symbol = row.dataset.symbol;
+      const balance = parseFloat(row.dataset.balance);
+      const matchSearch = symbol.includes(searchTerm);
+      const matchBalance = !hideLow || balance > 0.0001;
+      row.style.display = matchSearch && matchBalance ? '' : 'none';
+    });
+  }
+
+  [hideLowDesktop, hideLowMobile].forEach(el => el.addEventListener('change', filterWallets));
+  [searchDesktop, searchMobile].forEach(el => el.addEventListener('keyup', filterWallets));
+});
+</script>
 
 @endsection

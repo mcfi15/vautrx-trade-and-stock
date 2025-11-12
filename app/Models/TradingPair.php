@@ -59,6 +59,7 @@ class TradingPair extends Model
     {
         return $query->where('is_active', true);
     }
+    
 
     public function getCurrentPrice()
     {

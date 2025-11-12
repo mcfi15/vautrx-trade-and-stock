@@ -20,7 +20,7 @@
   --common-text: #000;
   --gradient-bg-1: linear-gradient(180deg, #080f24 90%, #080f24);
   --gradient-bg-2: linear-gradient(to top right, #181A20 90%, #181A20);
-  --gradient-bg-3: linear-gradient(90deg, #ffebba 3%, #181A20);
+  --gradient-bg-3: linear-gradient(90deg, #80b9f3 3%, #181A20);
   --gradient-bg-transparent: linear-gradient(to top, #181A20 50%, #181A20);
   --gradient-bg-transparent_modal: linear-gradient(to top, #0f202ce6 10%, #17222ae6);
   --box-shadow-1: 0 15px 10px rgb(0 0 0 / 10%);
@@ -28,11 +28,11 @@
   --green: #28baa7;
   --green-2: rgb(22, 185, 121);
   --red: #e54c67;
-  --yellow: #ffbe40;
-  --ok-yellow: #ffbe40;
+  --yellow: #1e90ff;
+  --ok-yellow: #1e90ff;
   --box-bg-dark:#181A20;
   --soft-dark-bg:#0B0E11;
-  --theme-yellow:#ffbe40;
+  --theme-yellow:#1e90ff;
   --common-input-bg:#f7f7f7;
   --trade-pro:#fff;
 }
@@ -854,7 +854,7 @@ main .home-banner .graph-padding {
 
 .trade .market-pairs .nav-link:hover,
 .trade .market-pairs .nav-item:hover .bootstrap-select .btn-light {
-  color: #ffbe40 !important;
+  color: #1e90ff !important;
 }
 
 .trade {
@@ -1116,7 +1116,7 @@ main .home-banner .graph-padding {
   background: -webkit-gradient(linear,
       left top,
       right top,
-      from(#ffbe40),
+      from(#1e90ff),
       to(#ffe9b6));
   content: "";
   height: 5px;
@@ -1213,7 +1213,7 @@ main .home-banner .graph-padding {
 }
 
 .cd-form input.form-control:focus {
-  border-color: #ffc45f;
+  border-color: #1e90ff;
   box-shadow: unset;
 }
 
@@ -1237,7 +1237,7 @@ main .home-banner .graph-padding {
   color: var(--dark-bg-color);
   position: relative;
   -webkit-backface-visibility: hidden;
-  background: #ffbe40;
+  background: #1e90ff;
   z-index: 1;
   border-radius: 5px;
   padding: 10px 25px;
@@ -1245,9 +1245,9 @@ main .home-banner .graph-padding {
 }
 
 .btn-4:hover {
-  color: #ffbe40;
+  color: #1e90ff;
   background: black;
-  border: 1px solid #ffbe40;
+  border: 1px solid #1e90ff;
 }
 
 .btn-4 span {
@@ -1267,7 +1267,7 @@ main .home-banner .graph-padding {
       right top,
       color-stop(3%, #0a9482),
       to(#28baa7));
-  background: linear-gradient(90deg, #ffbe40, 3%, #ffbe40);
+  background: linear-gradient(90deg, #1e90ff, 3%, #1e90ff);
   transition: opacity 0.2s ease-out;
   border-radius: 0.25rem;
   opacity: 0;
@@ -1276,9 +1276,9 @@ main .home-banner .graph-padding {
 
 .btn-4:hover:after {
   opacity: 1;
-  color: #ffbe40;
+  color: #1e90ff;
   background: white;
-  border: 1px solid #ffbe40;
+  border: 1px solid #1e90ff;
 }
 
 .btn-5 {
@@ -1369,7 +1369,7 @@ section.apps .appss-content .apps-property li:before,
 .app-page .app-banner li:before {
   content: "\f149";
   font-family: "Ionicons";
-  color: #ffbe40;
+  color: #1e90ff;
   position: absolute;
   margin-left: -25px;
 }
@@ -1397,8 +1397,8 @@ section.apps .appss-content .download-buttons a,
 
 section.apps .appss-content .download-buttons a:hover,
 .app-page .app-banner .download-buttons a:hover {
-  background-color: #ffbe40;
-  border-color: #ffbe40;
+  background-color: #1e90ff;
+  border-color: #1e90ff;
   color: var(--white);
 }
 
@@ -1437,8 +1437,8 @@ section.social-media ul.social-icons li a {
 }
 
 section.social-media ul.social-icons li a:hover {
-  color: #ffbe40;
-  border-color: #ffbe40;
+  color: #1e90ff;
+  border-color: #1e90ff;
 }
 
 section.social-media h3 {
@@ -1460,7 +1460,7 @@ section.social-media h3 {
 }
 
 .blog .blog-grid .card .card-body .blog-categorie {
-  color: #ffbe40;
+  color: #1e90ff;
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 15px;
@@ -1728,7 +1728,7 @@ section.guide {
 }
 
 .home-registration .spot-title {
-  color: #ffc45f;
+  color: #1e90ff;
   font-size: 31px;
 }
 
@@ -2125,7 +2125,7 @@ footer hr {
   width: 20px;
   height: 20px;
   border-radius: 11px;
-  border: 2px solid #ffbe40;
+  border: 2px solid #1e90ff;
   background-color: transparent;
 }
 
@@ -2138,7 +2138,7 @@ footer hr {
   margin-top: -18px;
   content: " ";
   display: block;
-  background: #ffbe40;
+  background: #1e90ff;
 }
 
 .deposit-money .radio-list .active:after {
@@ -2190,7 +2190,7 @@ footer hr {
 .deposit-money .deposit-faq-item [aria-expanded="true"]:after {
   content: "\f077";
   font-family: "FontAwesome";
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .deposit-money .deposit-faq-item [aria-expanded="false"]:after {
@@ -2283,8 +2283,8 @@ footer hr {
 .btn-popover {
   padding: 0;
   margin-bottom: 30px;
-  color: #ffbe40;
-  border-bottom: 1px dashed #ffbe40;
+  color: #1e90ff;
+  border-bottom: 1px dashed #1e90ff;
 }
 
 .popover-body img {
@@ -2409,7 +2409,7 @@ a:not([href]):hover {
 }
 
 .deposit-crypto-alert .number {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   height: 30px;
   width: 30px;
   border-radius: 50%;
@@ -2420,7 +2420,7 @@ a:not([href]):hover {
 }
 
 .deposit-crypto-alert .number:after {
-  border-bottom: 1px solid #ffbe40;
+  border-bottom: 1px solid #1e90ff;
   content: "";
   height: 1px;
   width: 100%;
@@ -2905,14 +2905,14 @@ a:not([href]):hover {
 }
 
 .form-wrapper .nav-pills .nav-link {
-  color: #ffbe40;
+  color: #1e90ff;
   border-radius: 0;
   font-weight: 600;
   font-size: 16px;
 }
 
 .form-wrapper .nav-pills .active {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   color: black;
   border-radius: 5px;
 }
@@ -2924,11 +2924,11 @@ a:not([href]):hover {
 }
 
 .form-wrapper .other-link a {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .form-wrapper .other-link a:hover {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .register .form-wrapper,
@@ -3023,7 +3023,7 @@ a:not([href]):hover {
 .phone-select.bootstrap-select .btn-light:focus,
 .phone-select.bootstrap-select .btn-light:active {
   background-color: #fff;
-  border: 1px solid #ffbe40;
+  border: 1px solid #1e90ff;
   box-shadow: none !important;
 }
 
@@ -3304,7 +3304,7 @@ a:not([href]):hover {
 
 .page-bottom-faq .faq-item .title:hover h3,
 .page-bottom-faq .faq-item .title:hover .icon:before {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .page-bottom-faq .faq-item .desc {
@@ -3324,7 +3324,7 @@ a:not([href]):hover {
 .page-bottom-faq .faq-item .title .icon:before {
   content: "\f067";
   display: inline-block;
-  color: #ffbe40;
+  color: #1e90ff;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
   text-rendering: auto;
@@ -3447,7 +3447,7 @@ a:not([href]):hover {
 }
 
 .bg-info {
-  background-color: #ffc45f !important;
+  background-color: #1e90ff !important;
 }
 
 .ico-log table td {
@@ -3477,21 +3477,21 @@ a:not([href]):hover {
 
 .btn-select .btn-radio {
   border-radius: 5px;
-  border: 1px solid #ffbe40;
+  border: 1px solid #1e90ff;
   padding: 5px 15px !important;
 }
 
 .btn-select .btn-radio:hover {
-  background-color: #ffbe40;
-  border-color: #ffbe40;
+  background-color: #1e90ff;
+  border-color: #1e90ff;
   color: var(--white);
 
   cursor: pointer;
 }
 
 .btn-select .active {
-  background-color: #ffbe40;
-  border-color: #ffbe40;
+  background-color: #1e90ff;
+  border-color: #1e90ff;
   color: var(--white);
 }
 
@@ -3696,7 +3696,7 @@ a:not([href]):hover {
 
 .warning-modal .icon,
 .warning-modal .title {
-  color: #ffc767;
+  color: #1e90ff;
 }
 
 .success-modal .icon,
@@ -3736,7 +3736,7 @@ a:not([href]):hover {
 
 .user-activity .card-body .nav-item .active,
 .user-activity .card-body .nav-link:hover {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   color: var(--white);
 }
 
@@ -3844,7 +3844,7 @@ a:not([href]):hover {
 }
 
 .lending-page .coin-list ul .active {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   color: var(--white);
 }
 
@@ -4106,7 +4106,7 @@ a:not([href]):hover {
 }
 
 .launchpad-page .times div {
-  color: #ffbe40;
+  color: #1e90ff;
   font-size: 16px;
   font-weight: 800;
   margin-right: 5px;
@@ -4213,11 +4213,11 @@ a:not([href]):hover {
 }
 
 .vote-item:hover {
-  /* border-color: #ffbe40; */
+  /* border-color: #1e90ff; */
 }
 
 .vote-item:hover .bottom {
-  /* background-color: #ffbe40; */
+  /* background-color: #1e90ff; */
 }
 
 .vote-item .bottom {
@@ -4238,7 +4238,7 @@ a:not([href]):hover {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  border: 6px solid #ffbe40;
+  border: 6px solid #1e90ff;
   background-color: #fff;
   overflow: hidden;
 }
@@ -4287,7 +4287,7 @@ a:not([href]):hover {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 6px solid #ffbe40;
+  border: 6px solid #1e90ff;
   background-color: #fff;
   overflow: hidden;
   margin: 0 auto;
@@ -4456,7 +4456,7 @@ a:not([href]):hover {
   font-weight: 800;
   font-size: 21px;
   padding: 15px;
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .btcr-banner .times .time-wrapper p {
@@ -4544,7 +4544,7 @@ a:not([href]):hover {
 
 .arrow-green .slick-prev:before,
 .arrow-green .slick-next:before {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .btcr-page .roadmap .item {
@@ -4554,7 +4554,7 @@ a:not([href]):hover {
 }
 
 .btcr-page .roadmap-carousel .slick-current .wrapper {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   border-radius: 5px;
   color: var(--white);
 }
@@ -4565,7 +4565,7 @@ a:not([href]):hover {
   height: 0px;
   border-style: solid;
   border-width: 0 10px 10px 10px;
-  border-color: transparent transparent #ffbe40 transparent;
+  border-color: transparent transparent #1e90ff transparent;
   display: inline-block;
   position: absolute;
   margin-top: -25px;
@@ -4576,7 +4576,7 @@ a:not([href]):hover {
   height: 20px;
   width: 20px;
   background-color: var(--white);
-  border: 5px solid #ffbe40;
+  border: 5px solid #1e90ff;
   border-radius: 50%;
   position: absolute;
   left: 50%;
@@ -4649,7 +4649,7 @@ a:not([href]):hover {
 }
 
 .btcr-page .table .thead-dark th {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   padding: 15px !important;
 }
 
@@ -4717,7 +4717,7 @@ a:not([href]):hover {
 }
 
 .btcr-page .discount-rate .item:nth-child(3) .rate {
-  background-color: #faba23;
+  background-color: #1e90ff;
 }
 
 .btcr-page .discount-rate .item:nth-child(4) .rate {
@@ -4790,7 +4790,7 @@ a:not([href]):hover {
 
 .btcr-page .burn {
   background-image: url(../img/redesign/btcr-burn-bg.jpg);
-  color: #ffd071;
+  color: #1e90ff;
 }
 
 .btcr-page .decentralized {
@@ -4960,7 +4960,7 @@ a:not([href]):hover {
 }
 
 .page-inner-menu li i {
-  color: #ffbe40 !important;
+  color: #1e90ff !important;
 }
 
 .pnl-page {
@@ -5896,7 +5896,7 @@ a:not([href]):hover {
   display: block;
   width: 222px;
   padding: 8px 0;
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
   /* text-shadow:0 5px 3px rgb(0 0 0 / 30%) !important; */
   color: black;

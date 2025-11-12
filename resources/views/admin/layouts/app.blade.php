@@ -50,6 +50,9 @@
                     <a href="{{ route('admin.cryptocurrencies.index') }}" class="hover:bg-indigo-700 px-2 lg:px-3 py-2 rounded-md text-sm transition-all">
                         <i class="fas fa-coins mr-1"></i><span class="hidden lg:inline">Crypto</span>
                     </a>
+                    <a href="{{ url('admin/stocks/index') }}" class="hover:bg-indigo-700 px-2 lg:px-3 py-2 rounded-md text-sm transition-all">
+                        <i class="fas fa-coins mr-1"></i><span class="hidden lg:inline">Stock</span>
+                    </a>
                     <a href="{{ route('admin.users.index') }}" class="hover:bg-indigo-700 px-2 lg:px-3 py-2 rounded-md text-sm transition-all">
                         <i class="fas fa-users mr-1"></i><span class="hidden lg:inline">Users</span>
                     </a>
@@ -106,7 +109,10 @@
                     <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
                 </a>
                 <a href="{{ route('admin.cryptocurrencies.index') }}" class="block hover:bg-indigo-800 px-3 py-2 rounded-md">
-                    <i class="fas fa-coins mr-2"></i>Cryptocurrencies
+                    <i class="fas fa-coins mr-2"></i>Crypto
+                </a>
+                <a href="{{ url('admin/stocks') }}" class="block hover:bg-indigo-800 px-3 py-2 rounded-md">
+                    <i class="fas fa-coins mr-2"></i>Stock
                 </a>
                 <a href="{{ route('admin.users.index') }}" class="block hover:bg-indigo-800 px-3 py-2 rounded-md">
                     <i class="fas fa-users mr-2"></i>Users

@@ -230,7 +230,7 @@
         }
 
         .slick-dots li button:before {
-            background-color: rgba(255, 190, 64, .8) !important;
+            background-color: #1e90ff !important;
         }
 
         .index_quickRegTool-box__CSWGE {
@@ -942,14 +942,14 @@
                     <div class="announcements-single-item">
 
                         <div>
-                            <a href="Article/detail/id/13.html">Successfully Finalizes Extensive Database Enhancement for
+                            <a href="{{ url('article/13') }}">Successfully Finalizes Extensive Database Enhancement for
                                 Enhanced Exchange Performance...</a>
                         </div>
                         <div>
-                            <a href="Article/detail/id/11.html">Notice About Unauthorized Text Message Activity...</a>
+                            <a href="{{ url('article/11') }}">Notice About Unauthorized Text Message Activity...</a>
                         </div>
                         <div>
-                            <a href="Article/detail/id/10.html">We care about you, your funds are secure with us!...</a>
+                            <a href="{{ url('article/10') }}">We care about you, your funds are secure with us!...</a>
                         </div>
                     </div>
                     <!--div class="read-more ml-auto">
@@ -1038,7 +1038,7 @@
     </section>
 
     <!-- Home Market End -->
-    <style>
+    {{-- <style>
         .viewall_btn {
             font-size: 20px;
         }
@@ -1213,7 +1213,7 @@
             allcoin();
         }
         trends();
-    </script>
+    </script> --}}
 
 
     <div class="ics ics--keep wp-block-lazyblock-section lazyblock-section-6aWzL">
@@ -1256,7 +1256,7 @@
                         <div class="wp-container-4 wp-block-buttons wow animate__fadeInUp"
                             style="visibility: visible; animation-name: fadeInUp;">
                             <div class="wp-block-button"><a class="wp-block-button__link"
-                                    href="Article/detail/id/1.html">Know
+                                    href="{{ url('article/1') }}">Know
                                     more</a></div>
                         </div>
                     </div>
@@ -1331,7 +1331,7 @@
                                         d="M13.3536 4.60355C13.5488 4.40829 13.5488 4.09171 13.3536 3.89645L10.1716 0.714465C9.97631 0.519203 9.65973 0.519203 9.46447 0.714465C9.2692 0.909727 9.2692 1.22631 9.46447 1.42157L12.2929 4.25L9.46447 7.07843C9.2692 7.27369 9.2692 7.59027 9.46447 7.78553C9.65973 7.9808 9.97631 7.9808 10.1716 7.78553L13.3536 4.60355ZM4.37114e-08 4.75L13 4.75L13 3.75L-4.37114e-08 3.75L4.37114e-08 4.75Z"
                                         fill="#FFBE40"></path>
                                 </svg>
-                                <a href="{{ url('trading/spot') }}">Trade</a>
+                                <a href="{{ url('trade/spot') }}">Trade</a>
                             </div><img
                                 src="{{ asset('Public/template/epsilon/img/redesign/homepage/spot_dark-image-1.png') }}">
                         </div>
@@ -1590,7 +1590,7 @@
             <div class="blog-single-item arrow-black">
                 <div>
                     <div class="blog-grid">
-                        <a href="Article/detail/id/27.html" class="card">
+                        <a href="{{ url('article/27') }}" class="card">
                             <figure>
 
                                 <img class="img-fluid" src="{{ asset('Upload/article/6787e4782c20a.jpg') }}"
@@ -1611,7 +1611,7 @@
                 </div>
                 <div>
                     <div class="blog-grid">
-                        <a href="Article/detail/id/26.html" class="card">
+                        <a href="{{ url('article/26') }}" class="card">
                             <figure>
 
                                 <img class="img-fluid" src="{{ asset('Upload/article/6787e33cb17aa.jpg') }}"
@@ -1633,7 +1633,7 @@
                 </div>
                 <div>
                     <div class="blog-grid">
-                        <a href="Article/detail/id/25.html" class="card">
+                        <a href="{{ url('article/25') }}" class="card">
                             <figure>
 
                                 <img class="img-fluid" src="{{ asset('Upload/article/6787e179ee977.jpg') }}"
@@ -1654,7 +1654,7 @@
                 </div>
                 <div>
                     <div class="blog-grid">
-                        <a href="Article/detail/id/24.html" class="card">
+                        <a href="{{ url('article/24') }}" class="card">
                             <figure>
 
                                 <img class="img-fluid" src="{{ asset('Upload/article/6787dfe23969d.jpg') }}"

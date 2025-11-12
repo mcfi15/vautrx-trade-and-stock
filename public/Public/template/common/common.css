@@ -10,7 +10,7 @@
   
   --blue:#007bff;
   --orange:#ec5840;
-  --ok-yellow:#ffc45f;
+  --ok-yellow:#1e90ff;
 }
 .featured {
     background-color: var(--ok-yellow);

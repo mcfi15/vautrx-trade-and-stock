@@ -1,19 +1,19 @@
 <div class="market-trade">
     <div class="d-flex justify-content-between align-items-center">
-        <ul class="nav nav-pills" role="tablist">
-            <li class="nav-item">
-                <span class="nav-link active" onclick="switchOrderType('limit')">Limit</span>
-            </li>
-            <li class="nav-item">
-                <span class="nav-link" onclick="switchOrderType('market')">Market</span>
-            </li>
-            <li class="nav-item">
-                <span class="nav-link" onclick="switchOrderType('stop_limit')">Stop-Limit</span> <!-- Changed to stop_limit -->
-            </li>
+        <ul id="orderTypeTabs" class="nav nav-pills mb-3" role="tablist">
+        <li class="nav-item">
+            <span class="nav-link active" data-type="limit">Limit</span>
+        </li>
+        <li class="nav-item">
+            <span class="nav-link" data-type="market">Market</span>
+        </li>
+        <li class="nav-item">
+            <span class="nav-link" data-type="stop">Stop-Limit</span>
+        </li>
         </ul>
         <div class="hide-mobile">
             <button class="btn btn-sm btn-outline-warning">
-                <a href="{{ url('wallet/transfer') }}">Transfer</a>
+                <a href="{{ url('wallet') }}">Transfer</a>
             </button>
         </div>
     </div>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="input-group" id="buypricebox">
                         <input class="form-control" placeholder="Price" type="number" id="buy_price" name="price"
-                            step="0.00000001" value="{{ number_format($tradingPair->getCurrentPrice(), 8) }}" />
+       step="0.00000001" value="{{ number_format($currentPrice, 8, '.', '') }}" />
                         <div class="input-group-append">
                             <button style="min-width: 2.5rem" class="btn btn-increment hide-mobile" type="button"
                                 onclick="incrementValue('buy_price', 0.01)">
@@ -148,7 +148,7 @@
                     </div>
                     <div class="input-group" id="sellpricebox">
                         <input class="form-control" placeholder="Price" type="number" id="sell_price" name="price"
-                            step="0.00000001" value="{{ number_format($tradingPair->getCurrentPrice(), 8) }}" />
+       step="0.00000001" value="{{ number_format($currentPrice, 8, '.', '') }}" />
                         <div class="input-group-append">
                             <button style="min-width: 2.5rem" class="btn btn-increment hide-mobile" type="button"
                                 onclick="incrementValue('sell_price', 0.01)">

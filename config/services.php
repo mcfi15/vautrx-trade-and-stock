@@ -326,4 +326,32 @@ return [
         ],
     ],
 
+    'market_data' => [
+        'provider' => env('MARKET_DATA_PROVIDER', 'finnhub'),
+        'key' => env('MARKET_DATA_KEY'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Financial Market Data Services
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for financial market data providers
+    |
+    */
+
+    'fmp' => [
+        'api_key' => env('FMP_API_KEY', 'demo'),
+        'base_url' => env('FMP_BASE_URL', 'https://financialmodelingprep.com/api/v3'),
+    ],
+
+    'alpha_vantage' => [
+        'api_key' => env('ALPHA_VANTAGE_API_KEY'),
+        'base_url' => env('ALPHA_VANTAGE_BASE_URL', 'https://www.alphavantage.co/query'),
+    ],
+
+    'yahoo_finance' => [
+        'base_url' => env('YAHOO_FINANCE_BASE_URL', 'https://query1.finance.yahoo.com/v8/finance'),
+    ],
+
 ];

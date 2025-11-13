@@ -1379,6 +1379,10 @@
         .tradingview-widget-container {
             padding: 0px !important;
         }
+
+        .text-colo {
+            color: #1e90ff;
+        }
     </style>
 
     <script src="{{ asset('Public/template/epsilon/js/jquery-3.4.1.min.js') }}"></script>

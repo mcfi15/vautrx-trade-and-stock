@@ -393,8 +393,8 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown icon-flex-wrapper ml-3" id=" _box">
-                        <div class="nav-icon">
-                            <i class="icon-size system"></i>
+                        <div class="nav-icon text-colo">
+                            <i class="icon-size system "></i>
                         </div>
                         <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
                             data-toggle="dropdown" href="#" role="button"> </a>
@@ -409,7 +409,7 @@
                                             class="subtext">Rent mining machines</span> </div>
                                 </a><a class="dropdown-item" href="Issue.html">
                                     <div class="nav-icon">
-                                        <i class="icon-size flask"></i>
+                                        <i class="icon-size flask" style="color:#1e90ff !important;"></i>
                                     </div>
 
                                     <div class="content text-white">Lab <p class="featured">Innovate</p> <span
@@ -681,18 +681,18 @@
                     href="#" role="button">Trade</a>
                 <div class="dropdown-menu">
                     <div class="dropdown-body">
-                        <a class="dropdown-item" href="{{ url('trading/pro') }}">
+                        <a class="dropdown-item" href="{{ url('stock-market') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>
                             <div class="content">
-                                Spot Professional </div>
+                                Stock Trading </div>
                         </a>
                         <!--div class="nav__item">
               <i class="fa fa-" aria-hidden="true"></i>
                               <a href="../Trade/tradepro">
                             Spot Professional</a>
-            </div--> <a class="dropdown-item" href="{{ url('trading/spot') }}">
+            </div--> <a class="dropdown-item" href="{{ url('trade/spot') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>

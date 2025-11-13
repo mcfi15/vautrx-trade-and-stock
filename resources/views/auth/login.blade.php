@@ -123,9 +123,9 @@
                         </div> 
                       </div>
                     </div>
-                    <button type="submit" class="btn btn-2 d-block w-100 m-t-30">Sign In</button>
+                    <button type="submit" style="background-color: #1e90ff; border-color:white;" class="btn btn-2 d-block w-100 m-t-30">Sign In</button>
                     <div class="other-link">
-                      <a href="{{ route('password.request') }}">I forgot my password</a><a href="{{ url('register') }}" class="float-right">Sign
+                      <a href="{{ route('password.request') }}">I forgot my password</a><a href="{{ url('register') }}" class="float-right text-white">Sign
                         up</a>
                     </div>
                   </form>

@@ -6,6 +6,7 @@ use App\Http\Controllers\User\StockController;
 use App\Http\Controllers\User\WalletController;
 use App\Http\Controllers\User\TradingController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\EasyTradeController;
 use App\Http\Controllers\User\PortfolioController;
 use App\Http\Controllers\User\WatchlistController;
 use App\Http\Controllers\Auth\GoogleAuthController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 
 Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->group(function () {
     Route::get('/','index');
+    Route::post('/do-trade', 'doTrade')->middleware(['auth', 'verify.email'])->name('do-trade');
     Route::get('/markets', 'markets');
     Route::get('/about', 'about');
     Route::get('/contact', 'contact');
@@ -75,6 +77,8 @@ Route::get('/trade/spot', function () {
 
 Route::get('/trade/{pairId}', [TradingController::class, 'show'])->name('trade.pair');
 
+Route::get('/easy-trade', [EasyTradeController::class, 'index'])->name('easytrade.index');
+
 
 // Route::get('/trade/{pairId}/data', [TradingController::class, 'fetchOrderData'])->name('trade.data');
 // Route::get('/orderbook/{pairId}/refresh', [TradingController::class, 'refreshOrderBook']);
@@ -86,15 +90,15 @@ Route::get('/trade/{pairId}', [TradingController::class, 'show'])->name('trade.p
     
 
 
-Route::controller(TradingController::class)->group(function () {
-    Route::get('/trading/pro', [TradingController::class, 'pro'])->name('pro');
+// Route::controller(TradingController::class)->group(function () {
+//     Route::get('/trading/pro', [TradingController::class, 'pro'])->name('pro');
 
-    // Route::get('/trading/spot', [TradingController::class, 'spot'])->name('spot');
+//     // Route::get('/trading/spot', [TradingController::class, 'spot'])->name('spot');
 
-    Route::get('/easy-convert', [TradingController::class, 'easy'])->name('easy-convert');
+//     Route::get('/easy-convert', [TradingController::class, 'easy'])->name('easy-convert');
     
     
-});
+// });
 
 // Route::get('/trading/{pairId}', [TradingController::class, 'show'])->name('show');
 
@@ -143,6 +147,8 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     
+
+    Route::post('/easytrade/doTrade', [EasyTradeController::class, 'doTrade'])->name('easytrade.doTrade');
 
     Route::post('/trade/place-order', [TradingController::class, 'placeOrder'])->name('trade.place-order');
     Route::post('/trade/orders/{orderId}/cancel', [TradingController::class, 'cancelOrder'])->name('trade.cancel-order');

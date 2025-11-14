@@ -104,4 +104,20 @@ class Cryptocurrency extends Model
     {
         return $query->where('is_tradable', true);
     }
+
+    public function getPriceChangePercentage24hAttribute()
+{
+    if (!$this->current_price || !$this->price_change_24h) {
+        return 0;
+    }
+
+    $previous_price = $this->current_price - $this->price_change_24h;
+
+    if ($previous_price <= 0) {
+        return 0;
+    }
+
+    return round(($this->price_change_24h / $previous_price) * 100, 2);
+}
+
 }

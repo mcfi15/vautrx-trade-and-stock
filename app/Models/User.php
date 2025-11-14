@@ -162,6 +162,13 @@ class User extends Authenticatable
         }
     }
 
+    public function getWalletBySymbol($symbol)
+    {
+        $crypto = \App\Models\Cryptocurrency::where('symbol', $symbol)->first();
+        if (!$crypto) return null;
+        return $this->getWallet($crypto->id);
+    }
+
     public function getTotalPortfolioValue()
     {
         $total = 0;

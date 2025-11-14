@@ -20,7 +20,7 @@
                   <form action="{{ route('login') }}" class="needs-validation" method="post" >
                     @csrf
                     <h1 class="title text-center m-b-30">
-                      <span class="h1 m-r-5 text-white font-bold">Sign in to Dectrx</span>
+                      <span class="h1 m-r-5 text-white font-bold">Sign in to {{ \App\Models\Setting::get('site_name', 'Website Name') }}</span>
                     </h1>
 
                     @if(session('error'))

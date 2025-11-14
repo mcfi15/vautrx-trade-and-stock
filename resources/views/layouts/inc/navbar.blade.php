@@ -344,7 +344,7 @@
 
                                     <div class="content text-white">Spot Classic <span class="subtext">Trade on our
                                             award-winning platform</span> </div>
-                                </a><a class="dropdown-item" href="{{ url('easy-convert') }}">
+                                </a><a class="dropdown-item" href="{{ url('easy-trade') }}">
                                     <div class="nav-icon">
                                         <i class="icon-size exchange"></i>
                                     </div>
@@ -702,7 +702,7 @@
                         <!--div class="nav__item">
               <i class="fa fa-" aria-hidden="true"></i>
                                               <a href="/Trade">              Spot Classic</a>
-            </div--> <a class="dropdown-item" href="{{ url('easy-convert') }}">
+            </div--> <a class="dropdown-item" href="{{ url('easy-trade') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>

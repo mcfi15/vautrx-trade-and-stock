@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Stock;
+use App\Models\Wallet;
 use App\Models\TradingPair;
 use Illuminate\Http\Request;
 use App\Models\Cryptocurrency;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
 {
@@ -37,8 +40,65 @@ class FrontendController extends Controller
             ->get(),
         ];
 
-	return view('frontend.index', compact('markets'));
+        $user = Auth::user();
+        $cryptos = Cryptocurrency::where('is_active', true)->get();
+        $balances = [];
+
+        if ($user) {
+            
+            foreach ($cryptos as $crypto) {
+                $balances[$crypto->symbol] = $user->getWallet($crypto->id)?->available_balance ?? 0;
+            }
+        }
+
+	return view('frontend.index', compact('markets', 'cryptos', 'balances', 'user'));
     }
+
+    public function doTrade(Request $request)
+{
+    if (!Auth::check()) {
+        return response()->json(['status' => 0, 'info' => 'Please login first.']);
+    }
+
+    $request->validate([
+        'coin' => 'required|exists:cryptocurrencies,symbol',
+        'amount' => 'required|numeric|min:0.00000001',
+        'type' => 'required|in:buy'
+    ]);
+
+    $user = Auth::user();
+    $coin = Cryptocurrency::where('symbol', $request->coin)->first();
+    $amount = $request->amount;
+
+    DB::beginTransaction();
+    try {
+        $usdtWallet = $user->getWalletBySymbol('USDT');
+        if (!$usdtWallet || $usdtWallet->balance < $amount) {
+            return response()->json(['status' => 0, 'info' => 'Insufficient USDT balance.']);
+        }
+
+        $coinWallet = $user->getWallet($coin->id);
+        if (!$coinWallet) {
+            $coinWallet = Wallet::create([
+                'user_id' => $user->id,
+                'cryptocurrency_id' => $coin->id,
+                'balance' => 0,
+                'locked_balance' => 0
+            ]);
+        }
+
+        // Deduct USDT, credit crypto
+        $usdtWallet->decrement('balance', $amount);
+        $coinWallet->increment('balance', $amount / $coin->current_price);
+
+        DB::commit();
+        return response()->json(['status' => 1, 'info' => 'Bought '.$coin->symbol.' successfully!']);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['status' => 0, 'info' => 'Trade failed: '.$e->getMessage()]);
+    }
+}
 
     public function markets(){
         $markets = [
@@ -69,6 +129,7 @@ class FrontendController extends Controller
 
         return view('frontend.markets', compact('markets'));
     }
+
 
     public function about(){
         

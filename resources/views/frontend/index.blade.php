@@ -3,51 +3,80 @@
 {{-- @section('title', 'Dashboard') --}}
 
 @section('content')
-    <!-- Home Slider Start -->
-    <section class="banner-section">
-        <div class="container">
-            <div class="banner-inner-section">
-                <div class="banner-left-section">
-                    <div class="index_banner-title__Ueyv2" data-wow-delay="0.2s">
-                        <h1 class="Main-heading">Empowering the Future of Crypto Trading</h1>
-                        <p>Seamlessly Buy, Sell, Trade, and Hold Cryptocurrencies on
-                            {{ \App\Models\Setting::get('site_name', 'Website Name') }}.com</p>
-                    </div>
-
-
-                    <div class="banner-email">
-                        <div class="index_quick-reg-wrapper__AGLkO">
-                            @guest
-                                <div class="col-md-8 col-sm-12">
-                                    <a href="{{ route('auth.google') }}" class="btn white-bg btn-block btn-lg common-text"
-                                        data-onsuccess="onSignIn">
-
-                                        <span><img src='{{ asset('Public/template/epsilon/img/redesign/google-icon.svg') }}' />
-                                            Signin with
-                                            Google</span></a>
-                                    <div class="hr-box">
-                                        <div class="hr-line"></div>
-                                        <div data-bn-type="text" class="hr-text">or continue with </div>
-                                        <div class="hr-line"></div>
-                                    </div>
-
-                                    <a href="{{ url('register') }}" class="btn yellow-bg btn-block btn-lg">Sign up using
-                                        Email</a>
-
-                                </div>
-                            @endguest
-                        </div>
-                    </div>
+<!-- Home Slider Start -->
+<section class="banner-section">
+    <div class="container">
+        <div class="banner-inner-section">
+            <div class="banner-left-section">
+                <div class="index_banner-title__Ueyv2" data-wow-delay="0.2s">
+                    <h1 class="Main-heading">Empowering the Future of Crypto Trading</h1>
+                    <p>Seamlessly Buy, Sell, Trade, and Hold Cryptocurrencies on
+                        {{ \App\Models\Setting::get('site_name', 'Website Name') }}.com
+                    </p>
                 </div>
 
 
-                <img src="{{ asset('Public/template/epsilon/img/new/buy-and-sell-banner.png') }}"
-                    class="index_banner-image Light__mode">
-                <img src="{{ asset('Public/template/epsilon/img/new/buy-and-sell-banner.png') }}"
-                    class="index_banner-image Dark__mode">
+                <div class="banner-email">
+                    <div class="index_quick-reg-wrapper__AGLkO">
+                        @auth
+                        <div class="easytrade-form-wrapper">
+                            <div class="easytrade-form-inner">
+                                <h1 class="text-center m-b-30">Buy Crypto with USDT</h1>
+
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <select id="easycoin" class="bootstrap-select" data-live-search="true" data-width="200px">
+                                            @foreach($cryptos as $crypto)
+                                                <option value="{{ $crypto->symbol }}"
+                                                    data-value="{{ $crypto->symbol }}"
+                                                    data-price="{{ $crypto->current_price }}"
+                                                    data-content="<img src='{{ $crypto->logo_url ?? asset('default-coin.png') }}'> {{ $crypto->symbol }}">
+                                                    {{ $crypto->symbol }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        <input type="number" name="amount" id="easyamount" class="form-control" placeholder="Enter USDT amount" />
+
+                                        <button class="btn btn-primary ml-2" onclick="easytrade();">Buy</button>
+                                    </div>
+                                </div>
+
+                                <div id="tradeResult" class="mt-2"></div>
+                            </div>
+                        </div>
+                        @else
+                            <div class="col-md-8 col-sm-12">
+                                <a href="{{ route('auth.google') }}" class="btn white-bg btn-block btn-lg common-text"
+                                    data-onsuccess="onSignIn">
+
+                                    <span><img src='{{ asset('Public/template/epsilon/img/redesign/google-icon.svg') }}' />
+                                        Signin with
+                                        Google</span></a>
+                                <div class="hr-box">
+                                    <div class="hr-line"></div>
+                                    <div data-bn-type="text" class="hr-text">or continue with </div>
+                                    <div class="hr-line"></div>
+                                </div>
+
+                                <a href="{{ url('register') }}" class="btn yellow-bg btn-block btn-lg">Sign up using
+                                    Email</a>
+
+                            </div>
+                        @endauth
+
+                    </div>
+                </div>
             </div>
+
+
+            <img src="{{ asset('Public/template/epsilon/img/new/buy-and-sell-banner.png') }}"
+                class="index_banner-image Light__mode">
+            <img src="{{ asset('Public/template/epsilon/img/new/buy-and-sell-banner.png') }}"
+                class="index_banner-image Dark__mode">
         </div>
-    </section>
+    </div>
+</section>
     <style>
         .banner-email .dropdown-menu img {
             width: 24px;
@@ -1762,4 +1791,41 @@
         }
     </script>
 
+
 @endsection
+
+@push('scripts')
+  <script>
+function easytrade() {
+    const coin = $('#easycoin').find(':selected').data('value');
+    const price = parseFloat($('#easycoin').find(':selected').data('price'));
+    const amount = parseFloat($('#easyamount').val());
+
+    if (!amount || amount <= 0) {
+        $('#tradeResult').html('<span class="text-danger">Please enter a valid USDT amount!</span>');
+        return;
+    }
+
+    $.post("{{ route('do-trade') }}", {
+        _token: "{{ csrf_token() }}",
+        coin: coin,
+        amount: amount,
+        type: 'buy'  // Only buy allowed
+    }, function(data) {
+        if (data.status === 1) {
+            $('#tradeResult').html('<span class="text-success">' + data.info + '</span>');
+        } else {
+            $('#tradeResult').html('<span class="text-danger">' + data.info + '</span>');
+        }
+    }, 'json');
+}
+</script>
+@endpush
+
+
+
+
+
+
+
+

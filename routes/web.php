@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\StockController;
 use App\Http\Controllers\User\WalletController;
+use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\User\TradingController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\EasyTradeController;
@@ -216,7 +217,18 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
             $loginHistories = Auth::user()->loginHistories()->paginate(20);
             return view('wallet.login-history', compact('loginHistories'));
         })->name('login-history');
+
     });
+
+
+    Route::get('/user-center', [SettingController::class, 'index'])->name('user-center');
+    Route::get('/kyc', [SettingController::class, 'kyc'])->name('kyc');
+    Route::post('/kyc', [SettingController::class, 'submit'])->name('kyc.submit');
+    Route::get('/fees', [SettingController::class, 'fees'])->name('fees');
+    Route::get('/login-history', [SettingController::class, 'log'])->name('login-history');
+    Route::get('/security', [SettingController::class, 'security'])->name('security');
+    Route::get('/change-password', [SettingController::class, 'changePassword'])->name('change-password');
+    Route::post('/change-password', [SettingController::class, 'changePasswordUpdate'])->name('user.password.update');
 
     
 });

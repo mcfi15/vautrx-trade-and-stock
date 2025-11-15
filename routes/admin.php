@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DepositController;
+use App\Http\Controllers\Admin\AdminKycController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Admin\TradingPairController;
@@ -44,18 +45,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('/', [AdminDashboardController::class, 'index']);
 
     // Cryptocurrency Management
-        Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index'])
+    Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index'])
             ->name('cryptocurrencies.index');
 
         // Fetch live prices
-        Route::get('/cryptocurrencies/prices', [CryptocurrencyController::class, 'fetchPrices'])
+    Route::get('/cryptocurrencies/prices', [CryptocurrencyController::class, 'fetchPrices'])
             ->name('cryptocurrencies.prices');
 
         // Service status (real-time connections, API health)
-        Route::get('/cryptocurrencies/status', [CryptocurrencyController::class, 'serviceStatus'])
+    Route::get('/cryptocurrencies/status', [CryptocurrencyController::class, 'serviceStatus'])
             ->name('cryptocurrencies.status');
 
-        Route::get('/cryptocurrencies/sync-prices', [CryptocurrencyController::class, 'syncPrices'])
+    Route::get('/cryptocurrencies/sync-prices', [CryptocurrencyController::class, 'syncPrices'])
     ->name('cryptocurrencies.sync-prices');
 
 
@@ -172,4 +173,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     // Login History Management
     Route::get('login-history', [LoginHistoryController::class, 'index'])->name('login-history.index');
     Route::get('login-history/{id}', [LoginHistoryController::class, 'show'])->name('login-history.show');
+
+    Route::get('/kyc', [AdminKycController::class, 'index'])->name('admin.kyc.index');
+    Route::get('/kyc/show/{user}', [AdminKycController::class, 'show'])->name('admin.kyc.show');
+    Route::put('/kyc/approve/{user}', [AdminKycController::class, 'approve'])->name('admin.kyc.approve');
+    Route::put('/kyc/reject/{user}', [AdminKycController::class, 'reject'])->name('admin.kyc.reject');
 });

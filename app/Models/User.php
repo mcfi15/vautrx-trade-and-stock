@@ -30,6 +30,16 @@ class User extends Authenticatable
         'email_verification_token_expires_at',
         'email_verified_for_login_at',
         'email_notifications',
+        'kyc_full_name',
+        'kyc_document_type',
+        'kyc_document_number',
+        'kyc_front',
+        'kyc_back',
+        'kyc_selfie',
+        'kyc_proof',
+        'kyc_status',
+        'kyc_rejection_reason',
+
     ];
 
     protected $hidden = [

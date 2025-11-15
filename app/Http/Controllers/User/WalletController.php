@@ -189,7 +189,14 @@ class WalletController extends Controller
 
     public function showWithdraw($cryptoId = null)
     { 
+        
         $user = Auth::user();
+         // KYC REQUIRED BEFORE WITHDRAWAL
+        if ($user->kyc_status !== 'approved') {
+            return redirect('kyc')
+                ->with('error', 'You must complete KYC verification before withdrawing.');
+        }
+
         $cryptocurrencies = Cryptocurrency::active()->get();
         
         // If no cryptocurrency ID provided, show selection page

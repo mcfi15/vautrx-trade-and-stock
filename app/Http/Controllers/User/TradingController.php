@@ -17,17 +17,6 @@ use App\Services\TradingEngineService;
 class TradingController extends Controller
 {
 
-    public function pro(){
-        return view('trading.tradepro');
-    }
-
-    // public function spot(){
-    //     return view('trading.spot');
-    // }
-
-    public function easy(){
-        return view('easy.index');
-    }
 
     public function show($pairId)
 {
@@ -146,7 +135,7 @@ class TradingController extends Controller
             'trace' => $e->getTraceAsString()
         ]);
 
-        return redirect('trad/spot')
+        return redirect('trade/spot')
             ->with('error', 'Trading pair not found or temporarily unavailable.');
     }
 }

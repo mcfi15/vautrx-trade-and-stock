@@ -356,9 +356,13 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown icon-flex-wrapper ml-3" id="Earn_box">
-                        <div class="nav-noicon"></div> <a aria-expanded="false" aria-haspopup="true"
-                            class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Earn <span
-                                class="featured">Hot</span></a>
+                        <div class="nav-noicon">
+                            </div> 
+                            <a aria-expanded="false" aria-haspopup="true"
+                            class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">Earn 
+                            <span
+                                class="featured">Hot</span>
+                            </a>
                         <div class="dropdown-menu">
                             <div class="dropdown-body">
                                 <a class="dropdown-item" href="Invest.html">
@@ -548,19 +552,16 @@
                         <p class="font-weight-medium"><a href="mailto:{{ auth()->user()->email }}" class="__cf_email__" data-cfemail="5526203c2c3934213d153d3c677b3c3b">[email&#160;protected]</a></p>
                         </div>
                         <div class="dropdown-body">
-                        <a class="dropdown-item" href="/User/index">
+                        <a class="dropdown-item" href="{{ url('user-center') }}">
                             <span>User Center</span></a
                         >
-                        <a class="dropdown-item" href="/User/authentication">
+                        <a class="dropdown-item" href="{{ url('kyc') }}">
                             <span>KYC</span></a
                         >
-                        <a class="dropdown-item" href="/User/log"
+                        <a class="dropdown-item" href="{{ url('login-history') }}"
                             ><span>User Actions</span></a
                         >
-                        <a class="dropdown-item" href="/Finance/mytj"
-                            ><span>Invite a Friend</span></a
-                        >
-                        <a class="dropdown-item" href="/Transfer/giftcard"
+                        <a class="dropdown-item" href="{{ url('giftcard') }}"
                             ><span>Gift Card</span></a
                         >
                         <form method="POST" action="{{ route('logout') }}">
@@ -611,7 +612,7 @@
                 </p>
                 <div class="nav__item">
                     <i class="fa fa-cog" aria-hidden="true"></i>
-                    <a href="/account-setting/">Account settings</a>
+                    <a href="{{ url('user-center') }}">Account settings</a>
                 </div>
                 <div class="nav__item WalletNav">
                     <i class="fa fa-money" aria-hidden="true"></i>

@@ -3,6 +3,7 @@
 @section('title', 'Easy Trade')
 
 @section('content')
+
 <section class="swap-page dark-bg pb-3">
     <div class="container">
         <div class="row justify-content-center inner-wrapper">

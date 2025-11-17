@@ -173,6 +173,10 @@ class FrontendController extends Controller
         return view('frontend.dex');
     }
 
+    // public function invest(){
+    //     return view('invest.index');
+    // }
+
     public function stock()
     {
         // // Redirect authenticated users to dashboard

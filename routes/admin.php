@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DepositController;
 use App\Http\Controllers\Admin\AdminKycController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\StakePlanController;
+use App\Http\Controllers\Admin\UserStakeController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Admin\TradingPairController;
 use App\Http\Controllers\Admin\TransactionController;
@@ -178,4 +180,34 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('/kyc/show/{user}', [AdminKycController::class, 'show'])->name('admin.kyc.show');
     Route::put('/kyc/approve/{user}', [AdminKycController::class, 'approve'])->name('admin.kyc.approve');
     Route::put('/kyc/reject/{user}', [AdminKycController::class, 'reject'])->name('admin.kyc.reject');
+
+    Route::resource('stake-plans', StakePlanController::class)->names('admin.stake-plans');
+    Route::get('stake-plans/create', [StakePlanController::class, 'create'])->name('stake-plans.create');
+    Route::post('stake-plans', [StakePlanController::class, 'store'])->name('stake-plans.store');
+    Route::get('stake-plans/{stakePlan}/edit', [StakePlanController::class, 'edit'])->name('stake-plans.edit');
+    Route::put('stake-plans/{stakePlan}', [StakePlanController::class, 'update'])->name('stake-plans.update');
+    Route::delete('stake-plans/{stakePlan}', [StakePlanController::class, 'destroy'])->name('stake-plans.destroy');
+
+
+    Route::get('/user-stakes', [UserStakeController::class, 'index'])->name('user-stakes.index');
+    Route::post('/user-stakes/approve/{id}', [UserStakeController::class, 'approve'])->name('user-stakes.approve');
+
+    Route::post('/user-stakes/complete/{id}', [UserStakeController::class, 'complete'])
+     ->name('user-stakes.complete');
+
+    Route::post('/user-stakes/reject/{id}', [UserStakeController::class, 'reject'])->name('user-stakes.reject');
+
+    // Route::resource('stake-plans', App\Http\Controllers\Admin\StakePlanController::class);
+
+    // Route::get('/stakes', [App\Http\Controllers\Admin\UserStakeController::class, 'index'])
+    //     ->name('admin.stakes.index');
+
+    // Route::post('/stakes/{id}/approve', [App\Http\Controllers\Admin\UserStakeController::class, 'approve'])
+    //     ->name('admin.stakes.approve');
+
+    // Route::post('/stakes/{id}/complete', [App\Http\Controllers\Admin\UserStakeController::class, 'complete'])
+    //     ->name('admin.stakes.complete');
+
+
+    
 });

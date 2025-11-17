@@ -7,7 +7,7 @@
 <div class="container py-5 text-light" style="background-color: #0d1117; min-height: 100vh;">
     <!-- Header -->
     <div class="mb-5">
-        <a href="{{ route('wallet.index') }}" class="text-decoration-none text-warning fw-semibold mb-3 d-inline-flex align-items-center">
+        <a href="{{ route('wallet.index') }}" class="text-decoration-none text-primary fw-semibold mb-3 d-inline-flex align-items-center">
             <i class="fa fa-arrow-left me-2"></i> Back to Wallet
         </a>
         <h1 class="fw-bold display-6">Select Cryptocurrency for Deposit</h1>
@@ -66,7 +66,7 @@
                     <div class="card-body text-center">
                         <!-- Crypto Icon -->
                         <div class="mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center text-dark fw-bold fs-4"
-                            style="width:70px; height:70px; background-color:#ffbe40; box-shadow:0 0 15px rgba(255,190,64,0.5);">
+                            style="width:70px; height:70px; background-color:#1e90ff; box-shadow:0 0 15px #1e90ff;">
                             {{ strtoupper(substr($crypto->symbol, 0, 2)) }}
                         </div>
 
@@ -90,7 +90,7 @@
                         </div>
 
                         <hr class="border-secondary my-3">
-                        <button class="btn btn-outline-warning btn-sm w-100 fw-semibold">
+                        <button class="btn btn-outline-primary btn-sm w-100 fw-semibold">
                             <i class="fa fa-arrow-down me-2"></i> Deposit {{ strtoupper($crypto->symbol) }}
                         </button>
                     </div>
@@ -116,7 +116,7 @@
     <!-- Help Section -->
     <div class="card bg-dark border-warning mt-5 rounded-4">
         <div class="card-body d-flex align-items-start">
-            <i class="fa fa-info-circle text-warning fs-4 me-3 mt-1"></i>
+            <i class="fa fa-info-circle text-primary fs-4 me-3 mt-1"></i>
             <div>
                 <h5 class="text-warning fw-bold mb-3">How to Deposit</h5>
                 <ul class="text-white small ps-3 mb-0">
@@ -172,14 +172,14 @@ body {
     transition: 0.3s ease-in-out;
 }
 .card:hover {
-    border-color: #ffbe40 !important;
+    border-color: #1e90ff !important;
 }
 .btn-warning {
-    background-color: #ffbe40 !important;
-    border-color: #ffbe40 !important;
+    background-color: #1e90ff !important;
+    border-color: #1e90ff !important;
 }
 .btn-warning:hover {
-    background-color: #e0a930 !important;
+    background-color: #1e90ff !important;
 }
 input::placeholder {
     color: #999 !important;

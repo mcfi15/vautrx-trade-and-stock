@@ -92,18 +92,115 @@
 
         <!-- Navigation -->
         <nav class="flex-1 overflow-y-auto mt-4">
-            <ul class="space-y-1">
-                <li><a href="{{ route('admin.dashboard') }}" class="nav-item"><i class="fas fa-tachometer-alt w-5"></i><span class="ml-3">Dashboard</span></a></li>
-                <li><a href="{{ route('admin.cryptocurrencies.index') }}" class="nav-item"><i class="fas fa-coins w-5"></i><span class="ml-3">Crypto</span></a></li>
-                <li><a href="{{ url('admin/stocks') }}" class="nav-item"><i class="fas fa-chart-line w-5"></i><span class="ml-3">Stock</span></a></li>
-                <li><a href="{{ route('admin.users.index') }}" class="nav-item"><i class="fas fa-users w-5"></i><span class="ml-3">Users</span></a></li>
-                <li><a href="{{ url('admin/kyc') }}" class="nav-item"><i class="fas fa-id-card w-5"></i><span class="ml-3">KYC</span></a></li>
-                <li><a href="{{ route('admin.orders.index') }}" class="nav-item"><i class="fas fa-list w-5"></i><span class="ml-3">Orders</span></a></li>
-                <li><a href="{{ route('admin.deposits.index') }}" class="nav-item"><i class="fas fa-arrow-down w-5"></i><span class="ml-3">Deposits</span></a></li>
-                <li><a href="{{ route('admin.withdrawals.index') }}" class="nav-item"><i class="fas fa-arrow-up w-5"></i><span class="ml-3">Withdrawals</span></a></li>
-                <li><a href="{{ route('admin.settings.index') }}" class="nav-item"><i class="fas fa-cog w-5"></i><span class="ml-3">Settings</span></a></li>
-            </ul>
-        </nav>
+    <ul class="space-y-1">
+
+        <!-- Dashboard -->
+        <li>
+            <a href="{{ route('admin.dashboard') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-tachometer-alt w-5"></i>
+                <span class="ml-3">Dashboard</span>
+            </a>
+        </li>
+
+        <!-- Crypto -->
+        <li>
+            <a href="{{ route('admin.cryptocurrencies.index') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-coins w-5"></i>
+                <span class="ml-3">Crypto</span>
+            </a>
+        </li>
+
+        <!-- Stock -->
+        <li>
+            <a href="{{ url('admin/stocks') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-chart-line w-5"></i>
+                <span class="ml-3">Stock</span>
+            </a>
+        </li>
+
+        <!-- Users -->
+        <li>
+            <a href="{{ route('admin.users.index') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-users w-5"></i>
+                <span class="ml-3">Users</span>
+            </a>
+        </li>
+
+        <!-- KYC -->
+        <li>
+            <a href="{{ url('admin/kyc') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-id-card w-5"></i>
+                <span class="ml-3">KYC</span>
+            </a>
+        </li>
+
+        <!-- Orders -->
+        <li>
+            <a href="{{ route('admin.orders.index') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-list w-5"></i>
+                <span class="ml-3">Orders</span>
+            </a>
+        </li>
+
+        <!-- Staking Dropdown -->
+        <li x-data="{ open: false }">
+            <button @click="open = !open"
+                class="flex items-center justify-between w-full px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <div class="flex items-center">
+                    <i class="fas fa-layer-group w-5"></i>
+                    <span class="ml-3">Staking</span>
+                </div>
+                <i class="fas fa-chevron-down transition" :class="{ 'rotate-180': open }"></i>
+            </button>
+
+            <div x-show="open" x-transition class="ml-10 mt-1 space-y-1">
+                <a href="{{ url('admin/stake-plans') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Staking Plans
+                </a>
+                <a href="{{ url('admin/user-stakes') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    User Stake
+                </a>
+            </div>
+        </li>
+
+        <!-- Deposits -->
+        <li>
+            <a href="{{ route('admin.deposits.index') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-arrow-down w-5"></i>
+                <span class="ml-3">Deposits</span>
+            </a>
+        </li>
+
+        <!-- Withdrawals -->
+        <li>
+            <a href="{{ route('admin.withdrawals.index') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-arrow-up w-5"></i>
+                <span class="ml-3">Withdrawals</span>
+            </a>
+        </li>
+
+        <!-- Settings -->
+        <li>
+            <a href="{{ route('admin.settings.index') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-cog w-5"></i>
+                <span class="ml-3">Settings</span>
+            </a>
+        </li>
+
+    </ul>
+</nav>
+
 
     </aside>
 
@@ -134,6 +231,9 @@
             overlay.classList.add('hidden');
         });
     </script>
+
+<!-- Add this once in your layout (before </body>) -->
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 </body>
 </html>

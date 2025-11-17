@@ -9,16 +9,16 @@
         color: #e6edf3;
         font-family: 'Inter', sans-serif;
     }
-    .accent { color: #ffbe40 !important; }
-    .bg-accent { background-color: #ffbe40 !important; }
+    .accent { color: #1e90ff !important; }
+    .bg-accent { background-color: #1e90ff !important; }
     .btn-accent {
-        background-color: #ffbe40;
+        background-color: #1e90ff;
         color: #000;
         border: none;
         transition: 0.3s;
     }
     .btn-accent:hover {
-        background-color: #ffca61;
+        background-color: #1e90ff;
         color: #000;
     }
     .card {
@@ -32,16 +32,16 @@
         color: #e6edf3;
     }
     .form-control:focus {
-        border-color: #ffbe40;
+        border-color: #1e90ff;
         box-shadow: 0 0 0 0.25rem rgba(255,190,64,0.25);
     }
     .alert-warning {
         background-color: rgba(255, 190, 64, 0.1);
-        border-color: #ffbe40;
-        color: #ffbe40;
+        border-color: #1e90ff;
+        color: #1e90ff;
     }
     .hover-glow:hover {
-        box-shadow: 0 0 12px rgba(255,190,64,0.4);
+        box-shadow: 0 0 12px #1e90ff;
         transition: 0.3s ease-in-out;
     }
 </style>

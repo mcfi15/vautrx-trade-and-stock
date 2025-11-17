@@ -3,6 +3,9 @@
         <head>
             <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/icon-park.css') }}" />
             <style>
+                .icon{
+                    color:#1e90ff;
+                }
                 .banner-section {
                     height: 514px !important;
                 }
@@ -321,9 +324,9 @@
 
                                 <a class="dropdown-item" href="{{ url('stock-market') }}">
                                     <div class="nav-icon">
-                                        <i class="icon-size exchange-three"></i>
+                                        <i class="icon fa fa-random"></i>
                                     </div>
-
+ 
                                     <div class="content text-white">Stock Trading <p class="featured">Hot</p> <span
                                             class="subtext">Best Stock Trading Platform</span> </div>
                                 </a>
@@ -339,14 +342,14 @@
                                 
                                 <a class="dropdown-item" href="{{ url('trade/spot') }}">
                                     <div class="nav-icon">
-                                        <i class="icon-size send-to-back"></i>
+                                        <i class="icon fa fa-send-o"></i>
                                     </div>
 
                                     <div class="content text-white">Spot Classic <span class="subtext">Trade on our
                                             award-winning platform</span> </div>
                                 </a><a class="dropdown-item" href="{{ url('easy-trade') }}">
                                     <div class="nav-icon">
-                                        <i class="icon-size exchange"></i>
+                                        <i class="icon fa fa-exchange"></i>
                                     </div>
 
                                     <div class="content text-white">Easy Convert <p class="featured">New</p> <span
@@ -365,23 +368,23 @@
                             </a>
                         <div class="dropdown-menu">
                             <div class="dropdown-body">
-                                <a class="dropdown-item" href="Invest.html">
+                                <a class="dropdown-item" href="{{ url('staking') }}">
                                     <div class="nav-icon">
-                                        <i class="icon-size broadcast-one"></i>
+                                        <i class="icon fa fa-lock"></i>
                                     </div>
 
                                     <div class="content text-white">Staking <span class="subtext">Stake and Get
                                             Rewards</span> </div>
                                 </a><a class="dropdown-item" href="Airdrop.html">
                                     <div class="nav-icon">
-                                        <i class="icon-size parachute"></i>
+                                        <i class="icon fa fa-cloud-download"></i>
                                     </div>
 
                                     <div class="content text-white">Airdrop <span class="subtext">Earn Tokens</span>
                                     </div>
                                 </a><a class="dropdown-item" href="Faucet.html">
                                     <div class="nav-icon">
-                                        <i class="icon-size water"></i>
+                                        <i class="icon fa fa-tint"></i>
                                     </div>
 
                                     <div class="content text-white">Faucet <p class="featured">Grab</p> <span
@@ -406,14 +409,14 @@
                             <div class="dropdown-body">
                                 <a class="dropdown-item" href="Pool.html">
                                     <div class="nav-icon">
-                                        <i class="icon-size heavy-metal"></i>
+                                        <i class="icon fa fa-server"></i>
                                     </div>
 
                                     <div class="content text-white">Mining <p class="featured">Mine to Earn</p> <span
                                             class="subtext">Rent mining machines</span> </div>
                                 </a><a class="dropdown-item" href="Issue.html">
                                     <div class="nav-icon">
-                                        <i class="icon-size flask" style="color:#1e90ff !important;"></i>
+                                        <i class="icon fa fa-flask" ></i>
                                     </div>
 
                                     <div class="content text-white">Lab <p class="featured">Innovate</p> <span
@@ -426,7 +429,7 @@
                 <ul class="navbar-nav ml-auto align-items-center">
                     <li class="nav-item header-custom-icon ml-3">
                         <a class="nav-link" href="#" id="clickFullscreen">
-                            <i class="icon ion-md-expand"></i>
+                            <i style="color:#1e90ff;" class="fa fa-expand"></i>
                         </a>
                     </li>
 
@@ -457,7 +460,7 @@
                     <li class="nav-item header-custom-icon login-menu ml-3">
                         <a class="cd-signup nav-link"
                             onclick="document.getElementById('walletPage').style.display = document.getElementById('walletPage').style.display=='block'?'none':'block';document.getElementById('profilePage').style.display='none';">
-                            <i class="icon ion-ios-wallet"></i> wallet
+                            <i style="color:#1e90ff;" class="fa fa-briefcase "></i> wallet
                             <svg version="1.1" id="Caret-Down--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16"
                                 xml:space="preserve" enable-background="new 0 0 32 32" height="16" width="16">
@@ -472,6 +475,7 @@
                         </a>
                         <div id="walletPage" class="" style="position: absolute;z-index:99;display:none;">
                             <div class="dropdown-body">
+                                
                                 <a class="dropdown-item logout_a" href="{{ url('wallet') }}"> <img
                                         src="{{ asset('uploads/icons/Wallet--Streamline-Plump.svg') }}"
                                         style="width:2.5ex; margin-right:2ex;" /> Spot wallet</a>
@@ -576,7 +580,7 @@
 
                     <li class="nav-item header-custom-icon ml-3">
                         <a class="nav-icon changeThemeLight bg-transparent" href="#!">
-                            <i class="icon-size moon"></i>
+                            <i style="color:#1e90ff;" class="fa fa-moon-o "></i>
                         </a>
                     </li>
                 </ul>
@@ -587,7 +591,7 @@
         <div class="nav-mobile pt-2">
             <span class="mob_dark_mode">
                 <a class="nav-icon changeThemeLight bg-transparent" href="#!">
-                    <i class="icon-size moon"></i>
+                    <i style="color:#1e90ff;" class="fa fa-moon-o "></i>
                 </a>
             </span>
             <div class="">
@@ -723,7 +727,7 @@
                     href="#" role="button">Earn</a>
                 <div class="dropdown-menu">
                     <div class="dropdown-body">
-                        <a class="dropdown-item" href="Invest.html">
+                        <a class="dropdown-item" href="{{ url('staking') }}">
                             <div class="icon">
                                 <i class="fa fa-" aria-hidden="true"></i>
                             </div>

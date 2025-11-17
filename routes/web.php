@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\User\StakeController;
 use App\Http\Controllers\User\StockController;
 use App\Http\Controllers\User\WalletController;
 use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\User\TradingController;
+use App\Http\Controllers\User\StakingController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\EasyTradeController;
 use App\Http\Controllers\User\PortfolioController;
@@ -52,6 +54,11 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::get('/article/26', 'article_26');
     Route::get('/article/27', 'article_27');
     Route::get('/dex', 'dex');
+
+    // Route::get('/invest', 'invest');
+
+
+    
     // Route::get('/worker', 'worker');
     // Route::get('/hr-services', 'hrservice');
     // Route::get('/jobs', 'jobs');
@@ -79,6 +86,11 @@ Route::get('/trade/spot', function () {
 Route::get('/trade/{pairId}', [TradingController::class, 'show'])->name('trade.pair');
 
 Route::get('/easy-trade', [EasyTradeController::class, 'index'])->name('easytrade.index');
+
+Route::get('/staking', [StakingController::class, 'staking'])->name('staking');
+
+Route::post('/staking/invest', [StakingController::class, 'invest'])
+    ->middleware(['auth', 'verify.email'])->name('staking.invest');
 
 
 // Route::get('/trade/{pairId}/data', [TradingController::class, 'fetchOrderData'])->name('trade.data');
@@ -213,10 +225,10 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::post('/deposits/{deposit}/payment-proof', [WalletController::class, 'uploadPaymentProof'])->name('deposit.payment-proof');
         
         // Login History
-        Route::get('/login-history', function() {
-            $loginHistories = Auth::user()->loginHistories()->paginate(20);
-            return view('wallet.login-history', compact('loginHistories'));
-        })->name('login-history');
+        // Route::get('/login-history', function() {
+        //     $loginHistories = Auth::user()->loginHistories()->paginate(20);
+        //     return view('wallet.login-history', compact('loginHistories'));
+        // })->name('login-history');
 
     });
 

@@ -6,7 +6,7 @@
 <div class="container my-5 text-light">
   <!-- Header -->
   <div class="mb-4">
-    <a href="{{ route('wallet.index') }}" class="text-decoration-none text-warning fw-semibold">
+    <a href="{{ route('wallet.index') }}" class="text-decoration-none text-primary fw-semibold">
       <i class="fa fa-arrow-left me-2"></i> Back to Wallet
     </a>
     <h1 class="display-6 fw-bold mt-3">Select Cryptocurrency for Withdrawal</h1>
@@ -18,7 +18,7 @@
     <a href="{{ url('wallet/deposit') }}" class="btn btn-outline-light">
       <i class="fa fa-plus-circle me-2"></i> Deposit
     </a>
-    <a href="{{ route('wallet.withdraw') }}" class="btn btn-warning text-dark fw-semibold">
+    <a href="{{ route('wallet.withdraw') }}" class="btn btn-primary text-dark fw-semibold">
       <i class="fa fa-minus-circle me-2"></i> Withdraw
     </a>
     <a href="{{ route('wallet.transactions') }}" class="btn btn-outline-light">
@@ -72,7 +72,7 @@
              style="background: linear-gradient(135deg, #1e1e1e, #2c2c2c); cursor: pointer;">
           <div class="card-body">
             <div class="d-flex align-items-center justify-content-center mx-auto mb-3"
-                 style="width:70px; height:70px; border-radius:50%; background: linear-gradient(135deg, #ffbe40, #ffda85); color:#1e1e1e; font-weight:700; font-size:1.5rem;">
+                 style="width:70px; height:70px; border-radius:50%; background: linear-gradient(135deg, #1e90ff, #1e90ff); color:#1e1e1e; font-weight:700; font-size:1.5rem;">
               {{ strtoupper(substr($wallet->cryptocurrency->symbol, 0, 2)) }}
             </div>
             <h5 class="fw-semibold text-light mb-1">{{ $wallet->cryptocurrency->name }}</h5>
@@ -87,7 +87,7 @@
               @if($wallet->locked_balance > 0)
               <div class="d-flex justify-content-between">
                 <span class="text-muted">Locked:</span>
-                <span class="fw-semibold text-warning">{{ number_format($wallet->locked_balance, 8) }}</span>
+                <span class="fw-semibold text-primary">{{ number_format($wallet->locked_balance, 8) }}</span>
               </div>
               @endif
 
@@ -105,7 +105,7 @@
             </div>
 
             <div class="mt-3 pt-2 border-top border-secondary">
-              <span class="text-warning fw-semibold">
+              <span class="text-primary fw-semibold">
                 <i class="fa fa-arrow-up me-2"></i>
                 Withdraw {{ strtoupper($wallet->cryptocurrency->symbol) }}
                 <i class="fa fa-arrow-right ms-2"></i>
@@ -125,7 +125,7 @@
       <i class="fa fa-wallet text-muted fs-1 mb-3"></i>
       <h5 class="fw-semibold text-light mb-2">No Funds Available for Withdrawal</h5>
       <p class="text-muted mb-4">You need to deposit cryptocurrency before making withdrawals</p>
-      <a href="{{ url('wallet/deposit') }}" class="btn btn-warning text-dark me-2">
+      <a href="{{ url('wallet/deposit') }}" class="btn btn-primary text-dark me-2">
         <i class="fa fa-plus-circle me-2"></i> Deposit Funds
       </a>
       <a href="{{ route('wallet.index') }}" class="btn btn-outline-light">
@@ -136,11 +136,11 @@
   </div>
 
   <!-- Help Section -->
-  <div class="alert bg-black border border-warning mt-4 rounded-3 shadow-sm">
+  <div class="alert bg-black border border-primary mt-4 rounded-3 shadow-sm">
     <div class="d-flex">
-      <i class="fa fa-exclamation-triangle text-warning fs-5 me-3 mt-1"></i>
+      <i class="fa fa-exclamation-triangle text-primary fs-5 me-3 mt-1"></i>
       <div>
-        <h5 class="fw-semibold text-warning mb-2">Withdrawal Information</h5>
+        <h5 class="fw-semibold text-primary mb-2">Withdrawal Information</h5>
         <ul class="mb-0 text-light small">
           <li>Double-check the withdrawal address before submitting</li>
           <li>Withdrawals are subject to network fees and minimum amounts</li>
@@ -173,7 +173,7 @@
       </div>
       <div class="col-md-4">
         <div class="p-3 rounded-3 bg-dark">
-          <h4 class="fw-bold text-warning mb-1">{{ $walletsWithBalance->count() }}</h4>
+          <h4 class="fw-bold text-primary mb-1">{{ $walletsWithBalance->count() }}</h4>
           <small class="text-muted">Assets Available</small>
         </div>
       </div>

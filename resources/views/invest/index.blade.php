@@ -1,0 +1,677 @@
+@extends('layouts.app')
+
+@section('title', 'Staking')
+
+@section('content')
+
+<section class="generic">
+<!-- Page container -->
+
+<main class="wrapper stake-page ">
+    <!-- Account Heading Start -->
+    <div class="page-top-banner">
+        <div class="filter" style="background-image: url('{{ asset('Public/template/epsilon/img/redesign/slider/filter2-min.png') }}');">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <h1>{{ \App\Models\Setting::get('site_name', 'Website Name') }}</h1>
+                                                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Account Heading End -->
+    	<!-- Account Heading End -->
+	<div class="container">
+		<div class="row mt-3 mb-3">
+			<div class="col-12 col-md-6 order-2 order-md-1">
+  <div class="page-title-content d-flex align-items-start mt-2">
+      </div>
+</div>
+
+			<div class="col-12 col-md-6 order-1 order-md-2 float-right">
+			  <ul class="text-right breadcrumbs list-unstyle">
+				<li>
+				  <a
+					class="btn btn-warning btn-sm"
+					href="/"
+					>Home</a
+				  >
+				</li>
+				<li>
+				  <a
+					class="btn btn-warning btn-sm active"
+					href="{{ url('invest') }}"
+					>Invest</a
+				  >
+				</li>
+				<li >
+				 
+                  <a
+                  class="btn btn-warning btn-sm"
+                  
+                  > Invest Log</a
+                >
+				</li>
+			  </ul>
+			</div>
+		  </div>
+
+          @if(session('error'))
+            <div class="alert alert-danger alert-dismissible p-3 fade show" role="alert">
+                <i class="fa fa-exclamation-triangle-fill mr-2"></i>
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible p-3 fade show" role="alert">
+                <i class="fa fa-check-circle-fill mr-2"></i>
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+<section class="">
+    <div class="container">
+
+        <div class="stake-table table-responsive card p-20">
+            <h1 class="f-s-30 f-w-700 m-b-15">Plans</h1>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">Name</th>
+                    <th>Coin</th>
+                    <th>Percent</th>
+                    <th>Lock Period</th>
+                    <th class="text-center">Minimum Amt</th>
+                    <th class="text-right"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                @foreach($plans as $plan)
+                <tr>
+                    <td class="text-center">{{ $plan->name }}</td>
+
+                    <td>
+                        <div class="icon">
+                            <img src="{{ $plan->cryptocurrency->logo_url }}" alt="">
+                            <span class="coin">{{ $plan->cryptocurrency->symbol }}</span>
+                        </div>
+                    </td>
+
+                    <td>{{ $plan->percent }}%</td>
+
+                    <td>
+                        <div class="btn-select">
+                            <div class="btn-group-toggle" data-toggle="buttons">
+                                @foreach($plan->durations as $period)
+                                <label class="btn btn-radio">
+                                    {{ $period }}
+                                    <input type="radio" name="period_{{ $plan->id }}" value="{{ $period }}">
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="text-center">{{ $plan->min_amount }}</td>
+
+                    <td class="text-right">
+                        @auth
+                            <button class="btn btn-4" role="button" data-toggle="modal" data-target="#stakeModal_{{ $plan->id }}">
+                                Stake now
+                            </button>
+                        @endauth
+
+                        @guest
+                            <a href="{{ route('login') }}" class="btn btn-4">Login to Stake</a>
+                        @endguest
+                    </td>
+                </tr>
+                @endforeach
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <div class="page-bottom-info p-0 card">
+             
+
+            <div class="grey-bg">
+                <div class="container">
+                    <div class="card p-20">
+                    <div class="row ">
+                        <h2 class="col-12 section-title" style="padding-bottom:24px;">Why Choose Staking?</h2>
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+                            <article class="item">
+                                <div class="icon">
+                                    <img alt="Dectrx" src="/Public/template/epsilon/img/seo-advantage1.png" class="img-fluid">
+                                </div>
+                                <div class="text-wrapper choose_section">
+                                    <div class="title">
+                                       Compounding Interest
+                                    </div>
+                                    <div class="desc">
+                                        Staking allows your cryptocurrency assets to grow exponentially through compounding interest. When you stake your coins, the rewards you earn are added to your staked amount. This process repeats, resulting in your assets growing at an increasing rate over time. It's a fantastic way to maximize your passive income without active trading.
+                                    </div>
+                                    <!-- <div class="desc"> -->
+                                        <!-- In Dectrx P2P, no trading commission is charged from market takers. Market makers, on the other hand, pay a low commission after each completed order. We are committed to applying the lowest P2P trading commission among all markets. -->
+                                    <!-- </div> -->
+                                </div>
+                            </article>                      
+                        </div>
+
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+                            <article class="item">
+                                <div class="icon">
+                                    <img alt="Dectrx" src="/Public/template/epsilon/img/seo-advantage2.png" class="img-fluid">
+                                </div>
+                                <div class="text-wrapper choose_section">
+                                    <div class="title">
+                                        Increased Security
+                                    </div>
+                                    <div class="desc">
+                                        Staking is not only about rewards; it's an integral part of maintaining and securing a blockchain network. When you stake your coins, you're supporting the network's operations, including validating transactions and securing the system against malicious threats. By participating, you contribute to the overall health, speed, and reliability of the network.
+                                    </div>
+                                    <!-- <div class="desc"> -->
+                                        <!-- At Dectrx P2P you can buy and sell crypto with over 150 payment methods including bank transfer, cash, PayPal, M-Pesa and many e-wallets. -->
+                                    <!-- </div> -->
+                                </div>
+                            </article>                      
+                        </div>
+
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+                            <article class="item">
+                                <div class="icon">
+                                    <img alt="Dectrx" src="/Public/template/epsilon/img/seo-advantage3.png" class="img-fluid">
+                                </div>
+                                <div class="text-wrapper choose_section">
+                                    <div class="title">
+                                        Predictable Rewards
+                                    </div>
+                                    <div class="desc">
+                                        The volatile nature of cryptocurrency trading isn't for everyone. Staking offers a stable alternative. Rewards are often predictable, based on set percentages and timeframes. You'll know upfront the potential returns, offering clarity and peace of mind.
+                                    </div>
+                                    <!-- <div class="desc"> -->
+                                        <!-- In Dectrx P2P, you can buy and sell crypto from existing offers or create a trading post at the prices you set yourself. -->
+                                    <!-- </div> -->
+                                </div>
+                            </article>                      
+                        </div>
+
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+                            <article class="item">
+                                <div class="icon">
+                                    <img alt="Dectrx" src="/Public/template/epsilon/img/seo-advantage4.png" class="img-fluid">
+                                </div>
+                                <div class="text-wrapper choose_section">
+                                    <div class="title">
+                                       Participate in Governance
+                                    </div>
+                                    <div class="desc">
+                                        Some staking platforms grant governance rights to their stakers. By staking certain cryptocurrencies, you might receive voting power proportional to your stake. This means you can influence key decisions, propose changes, or vote on the future developments of the network.
+                                    </div>
+                                    <!-- <div class="desc"> -->
+                                        <!-- You can buy Bitcoin with cash on Dectrx P2P and you don't need to use a bank account or online wallet to do fiat-crypto transactions. -->
+                                    <!-- </div> -->
+                                </div>
+                            </article>                      
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+            </div>
+        <!-- FAQ -->
+    
+        <!-- FAQ End -->
+
+    </div>
+</section>
+        <section class="container">       
+            <div class="page-bottom-faq card p-10">
+                <h3 class="section-title"> FAQ</h3>
+                <div class="page-bottom-tabs">
+                            <!-- <div class="row accordion" id="faq-accordion"> -->
+                                <!-- <div class="col-lg-6"> -->
+                                    <!-- <div class="faq-item"> -->
+                                        <!-- <div class="title" data-toggle="collapse" data-target="#one"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- What is Locked Staking? -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                        <!-- <div id="one" class="collapse" data-parent="#faq-accordion"> -->
+                                            <!-- <div class="desc"> -->
+                                                <!-- Locked Staking is the process of holding funds in a cryptocurrency wallet to support the operations of a blockchain network. -->
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+
+                                    <!-- <div class="faq-item"> -->
+                                        <!-- <div class="title" data-toggle="collapse" data-target="#two"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- What will happen when I'm holding Locked Staking? -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                        <!-- <div id="two" class="collapse" data-parent="#faq-accordion"> -->
+                                            <!-- <div class="desc"> -->
+                                                <!-- We will reduce the cryptocurrency amounts which you're holding in your spot wallet. -->
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                    <!-- <div class="faq-item link-page"> -->
+                                        <!-- <div class="title"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- <a href="faq-detail-2.html"> -->
+                                                    <!-- What happens when I redeem early? -->
+                                                <!-- </a> -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                    <!-- <div class="faq-item link-page"> -->
+                                        <!-- <div class="title"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- <a href="faq-detail-2.html"> -->
+                                                   <!-- If a link will be given to a topic somewhere -->
+                                                <!-- </a> -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+
+                                <!-- </div> -->
+                                <!-- <div class="col-lg-6"> -->
+                                    <!-- <div class="faq-item link-page"> -->
+                                        <!-- <div class="title"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- <a href="faq-detail-2.html"> -->
+                                                   <!-- If a link will be given to a topic somewhere -->
+                                                <!-- </a> -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                    <!-- <div class="faq-item link-page"> -->
+                                        <!-- <div class="title"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- <a href="faq-detail-2.html"> -->
+                                                   <!-- If a link will be given to a topic somewhere -->
+                                                <!-- </a> -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                    <!-- <div class="faq-item"> -->
+                                        <!-- <div class="title" data-toggle="collapse" data-target="#one1"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- How to buy cryptocurrency on Dectrx P2P? -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                        <!-- <div id="one1" class="collapse" data-parent="#faq-accordion"> -->
+                                            <!-- <div class="desc"> -->
+                                                <!-- When you complete your identity verification and add your payment methods, you are now ready to receive crypto on the Dectrx P2P platform. First, choose from all the available offers on the marketplace. After that, create an order to receive your crypto and pay the seller with their preferred payment method. Finally, after you complete the fiat transfer and confirm your payment on Dectrx P2P, get your crypto from the seller. -->
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                    <!-- <div class="faq-item"> -->
+                                        <!-- <div class="title" data-toggle="collapse" data-target="#two1"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- How to sell cryptocurrency on Dectrx P2P? -->
+                                            <!-- </h3>                            -->
+                                        <!-- </div> -->
+                                        <!-- <div id="two1" class="collapse" data-parent="#faq-accordion"> -->
+                                            <!-- <div class="desc"> -->
+                                                <!-- You can sell cryptocurrencies instantly and securely on the Dectrx P2P platform! First, browse the crypto you want to sell and find the most suitable offer among other users' offers. To create an order, you must first transfer the cryptocurrencies you want to sell to the P2P wallet section of your account. -->
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                    <!-- <div class="faq-item"> -->
+                                        <!-- <div class="title" data-toggle="collapse" data-target="#three1"> -->
+                                            <!-- <div class="icon"></div> -->
+                                            <!-- <h3> -->
+                                                <!-- What are the downsides of P2P exchanges? -->
+                                            <!-- </h3>                        -->
+                                        <!-- </div> -->
+                                        <!-- <div id="three1" class="collapse" data-parent="#faq-accordion"> -->
+                                            <!-- <div class="desc"> -->
+                                                <!-- P2P exchanges also have disadvantages. These disadvantages include long trading times, not very intuitive user experience, and low liquidity. Compared to regular cryptocurrency exchanges, they have lower trading volumes, a smaller user base and longer trading cycles. -->
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+
+                                    <!-- </div> -->
+                                <!-- </div>       -->
+                            <!-- </div> -->
+							
+							<div class="row accordion" id="faq-accordion">
+                                <div class="col-lg-6">
+                                    <div class="faq-item">
+                                        <div class="title" data-toggle="collapse" data-target="#one">
+                                            <div class="icon"></div>
+                                            <h3>
+                                                What is Cryptocurrency Staking?
+                                            </h3>                           
+                                        </div>
+                                        <div id="one" class="collapse" data-parent="#faq-accordion">
+                                            <div class="desc">
+                                                Cryptocurrency staking can be likened to a traditional bank deposit but with potentially higher returns. By holding and locking up a certain amount of cryptocurrency in a secure wallet, stakers help validate and process transactions on the blockchain network. As a thank-you gesture, the network rewards stakers with additional coins.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-item">
+                                        <div class="title" data-toggle="collapse" data-target="#two">
+                                            <div class="icon"></div>
+                                            <h3>
+                                                How are Staking Rewards Calculated?
+                                            </h3>                           
+                                        </div>
+                                        <div id="two" class="collapse" data-parent="#faq-accordion">
+                                            <div class="desc">
+                                                Staking rewards are often calculated based on two key factors: the amount of cryptocurrency staked and the duration of the staking period. Some platforms offer tiered rewards, where higher amounts or longer periods attract better reward rates.
+                                            </div>
+                                        </div>
+                                    </div>
+									
+									<div class="faq-item">
+                                        <div class="title" data-toggle="collapse" data-target="#three">
+                                            <div class="icon"></div>
+                                            <h3>
+                                                Can I Withdraw My Staked Coins Anytime?
+                                            </h3>                           
+                                        </div>
+                                        <div id="three" class="collapse" data-parent="#faq-accordion">
+                                            <div class="desc">
+                                                Most staking plans have a defined lock-in period, which you'll choose at the outset. Withdrawing before this period concludes can result in penalties or loss of earned rewards. However, we always strive to provide flexibility, and there may be plans with shorter lock-ins or even options to stake without a fixed term.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="faq-item">
+                                        <div class="title" data-toggle="collapse" data-target="#one1">
+                                            <div class="icon"></div>
+                                            <h3>
+                                                Are there fees associated with staking?
+                                            </h3>                           
+                                        </div>
+                                        <div id="one1" class="collapse" data-parent="#faq-accordion">
+                                            <div class="desc">
+                                                Yes, some platforms may charge fees for staking operations to cover network costs and platform maintenance. We ensure transparency in our fee structure, with no hidden costs, ensuring that our users reap maximum benefits from staking.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="faq-item">
+                                        <div class="title" data-toggle="collapse" data-target="#two1">
+                                            <div class="icon"></div>
+                                            <h3>
+                                                Is Staking Safe?
+                                            </h3>                           
+                                        </div>
+                                        <div id="two1" class="collapse" data-parent="#faq-accordion">
+                                            <div class="desc">
+                                                Staking, when done on a reputable platform, is generally secure. We prioritize user security, utilizing state-of-the-art encryption and security measures. However, users should always ensure their software and wallets are up to date to prevent vulnerabilities.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="faq-item">
+                                        <div class="title" data-toggle="collapse" data-target="#three1">
+                                            <div class="icon"></div>
+                                            <h3>
+                                                How Do I Start Staking on This Platform?
+                                            </h3>                       
+                                        </div>
+                                        <div id="three1" class="collapse" data-parent="#faq-accordion">
+                                            <div class="desc">
+                                                Starting is simple! Register on our platform, transfer your desired cryptocurrency to your staking wallet, choose your preferred staking plan, and activate staking. Our user-friendly interface ensures a seamless experience.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>      
+                            </div>
+							
+                </div>
+            </div>
+        </section>
+    <script>
+        function investnow(id,coinname) {
+            var amount=$("input[id='inv_box"+id+"']").val();
+            if(amount==null || amount <=0){
+            layer.tips('Enter Amount', "input[id='inv_box"+id+"']", {tips: 1});
+            return false;
+            }
+            period=$("input[name='"+id+"period']:checked").val();
+            if(period==null || period <=0){
+            layer.tips('Choose Period', "div[id='select_period_"+id+"']", {tips: 1});
+            return false;
+            }
+            var msg = 'You want to invest '+amount+coinname;
+            
+             layer.confirm(msg, {
+                 btn: ['Confirm','Cancel'] //PUSH_BUTTON
+               }, function(){
+                $.post("/Invest/makeinvest/id" + id + "/amount/" + amount + "/period/" + period,{id:id,amount:amount,period:period} , function (data) {
+                    layer.closeAll('loading');
+                    trans_lock = 0;
+                    if (data.status == 1) {
+        
+                        layer.msg(data.info, {icon: 1});
+                                window.location.href = "/Invest/listinvest";
+                    } else {
+                        if(data.error){
+                            layer.msg(data.error, {icon: 2});    
+                        }
+                        else{
+                            layer.msg(data.info, {icon: 2});    
+                        }
+                    }
+        
+                }, 'json');
+                });
+            }
+        </script>	
+
+@auth
+@foreach($plans as $plan)
+<div class="modal fade" id="stakeModal_{{ $plan->id }}" tabindex="-1" role="dialog" aria-labelledby="LOCK" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header d-flex align-items-center">
+        <h5 class="modal-title">
+          <div class="coin-title d-flex align-items-center">
+            <div class="title">Lock {{ $plan->id }}</div>
+          </div>
+        </h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-sm-12 col-md-12">
+
+            <div class="row">
+
+              <div class="col-sm-6">
+
+                <div class="form-group">
+                  <label>Type </label>
+                  <input type="text" name="investtype" value="Locked" disabled class="form-control" />
+                </div>
+
+                <div class="form-group btn-select">
+                  <label>Duration</label>
+
+                  <div class="btn-group-toggle" id="select_period_{{ $plan->id }}" data-toggle="buttons">
+                    @foreach($plan->durations as $period)
+                    <label class="btn btn-radio">
+                        {{ $period }}
+                        <input type="radio" name="modal_period_{{ $plan->id }}" value="{{ $period }}">
+                    </label>
+                    @endforeach
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <ul>
+                  <li>
+                    Minimum Locked Amount
+                    <span class="pull-right">{{ $plan->min_amount }}</span>
+                  </li>
+                  <li>
+                    Annual Yield Percentage
+                    <span class="pull-right">{{ $plan->percent }}%</span>
+                  </li>
+                </ul>
+
+                <div class="form-group m-t-15">
+                  <label>Lock Amount</label>
+
+                  <span class="pull-right">
+                    <span id="user_balance_{{ $plan->id }}">{{ $userBalances[$plan->cryptocurrency_id] ?? 0 }}</span>
+                    <span>{{ $plan->cryptocurrency->symbol }}</span>
+                  </span>
+
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="inv_box_{{ $plan->id }}" placeholder="Please enter amount">
+
+                    <div class="input-group-append input-inner-btn">
+                      <button class="btn p-0 green f-s-13 bold" type="button"
+                        onclick="$('#inv_box_{{ $plan->id }}').val($('#user_balance_{{ $plan->id }}').text()).trigger('change');">
+                        <small>Max</small>
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-1" data-dismiss="modal">Cancel</button>
+
+        <button type="button" class="btn-2" onclick="investnow({{ $plan->id }}, '{{ strtolower($plan->cryptocurrency->symbol) }}', {{ $plan->min_amount }})">
+          Confirm Purchase
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+@endforeach
+@endauth
+
+{{-- Hidden form to submit --}}
+<form id="stakeForm" method="POST" action="{{ route('staking.invest') }}" style="display:none;">
+    @csrf
+    <input type="hidden" name="plan_id" id="form_plan_id">
+    <input type="hidden" name="amount" id="form_amount">
+    <input type="hidden" name="duration" id="form_duration">
+</form>
+
+</main>
+</section>
+<style>
+	.choose_section .title{
+		font-size: 20px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		font-weight: 600;
+	}
+	.choose_section .desc{
+		text-align:justify;
+	}.icon:before{
+		vertical-align: text-top;
+	}.faq-item h3{
+		font-size:18px;
+	}
+	@media screen and (max-width: 480px) and (min-width: 300px) {
+		.section-title{
+			font-size:20px !important;
+			padding-bottom:10px;
+		}.choose_section .title{
+		font-size: 16px;
+	}
+		.choose_section .desc{
+			text-align:left;
+			padding-bottom:20px;
+		}
+	}
+	
+</style>
+
+@endsection
+
+@push('scripts')
+<script>
+function investnow(planId, symbol, minAmount) {
+    // pick amount from input
+    var amount = document.getElementById('inv_box_' + planId).value;
+    var durationRad = document.querySelector('input[name="modal_period_' + planId + '"]:checked');
+
+    if (!durationRad) {
+        alert('Please choose a duration.');
+        return;
+    }
+
+    var duration = durationRad.value;
+
+    amount = parseFloat(amount);
+    if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid amount.');
+        return;
+    }
+
+    if (amount < parseFloat(minAmount)) {
+        alert('Amount is below minimum: ' + minAmount);
+        return;
+    }
+
+    // confirm user is logged in (server-side will enforce, but quick check)
+    @if (!Auth::check())
+        window.location.href = "{{ route('login') }}";
+        return;
+    @endif
+
+    // submit via hidden form (non-AJAX fallback)
+    document.getElementById('form_plan_id').value = planId;
+    document.getElementById('form_amount').value = amount;
+    document.getElementById('form_duration').value = duration;
+    document.getElementById('stakeForm').submit();
+}
+</script>
+@endpush

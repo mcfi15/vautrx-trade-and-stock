@@ -205,7 +205,7 @@ tbody tr:hover {
 }
 
 .yellow {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .red {
@@ -262,17 +262,17 @@ tbody tr:hover {
 }
 
 .btn.main {
-  background: #ffbe40;
+  background: #1e90ff;
   color: #fff;
   padding: 10px;
   width: 100%;
-  border: 1px solid #ffbe40;
+  border: 1px solid #1e90ff;
 }
 
 .btn.main:hover {
   background: white;
-  color: #ffbe40;
-  border-color: #ffbe40;
+  color: #1e90ff;
+  border-color: #1e90ff;
 }
 
 .btn.transparent {
@@ -298,7 +298,7 @@ tbody tr:hover {
 
 .btn-1:hover,
 .btn-2:hover {
-  background: #fbc049;
+  background: #1e90ff;
   color: #fff;
   text-decoration: none;
   border-color: var(--common-text) !important;
@@ -319,9 +319,9 @@ tbody tr:hover {
 
 .sw-theme-dots .toolbar>.btn,
 .btn-2 {
-  background: #ffbe40;
+  background: #1e90ff;
   color: #000;
-  border-color: #ffbe40;
+  border-color: #1e90ff;
 }
 
 
@@ -330,8 +330,8 @@ tbody tr:hover {
       left top,
       right top,
       color-stop(3%, #ffebba),
-      to(#ffc45f));
-  background: linear-gradient(90deg, #ffebba 3%, #ffc45f);
+      to(#1e90ff));
+  background: linear-gradient(90deg, #ffebba 3%, #1e90ff);
   color: #07212a;
   position: relative;
   -webkit-backface-visibility: hidden;
@@ -353,9 +353,9 @@ tbody tr:hover {
   background: -webkit-gradient(linear,
       left top,
       right top,
-      color-stop(3%, #ffc45f),
+      color-stop(3%, #1e90ff),
       to(#ffebba));
-  background: linear-gradient(90deg, #ffc45f 3%, #ffebba);
+  background: linear-gradient(90deg, #1e90ff 3%, #ffebba);
   transition: opacity 0.5s ease-out;
   border-radius: 0.25rem;
   opacity: 0;
@@ -679,7 +679,7 @@ header .dropdown-menu a.text-muted:hover {
 }
 
 .dropdown-item:nth-child(4) .icon i {
-  color: #fbbc06;
+  color: #1e90ff;
 }
 
 .dropdown-item:nth-child(5) .icon {
@@ -793,7 +793,7 @@ main .home-banner .video-single-item .slick-dots li button:before {
 }
 
 main .home-banner .video-single-item .slick-dots li.slick-active button:before {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
 }
 
 main .page-top-banner {
@@ -1047,7 +1047,7 @@ main .home-banner .btn.buy:hover {}
 
 .slick-prev:before,
 .slick-next:before {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .announcements-block .icon {
@@ -1305,7 +1305,7 @@ ul.social-icons li a {
 }
 
 ul.social-icons li a:hover {
-  color: #ffbe40;
+  color: #1e90ff;
   background-color: #07212a;
   border-color: #07212a;
 }
@@ -1399,7 +1399,7 @@ footer a:hover {
 }
 
 .market-pairs .nav-link.active {
-  color: #ffbe40 !important;
+  color: #1e90ff !important;
   background: transparent !important;
 }
 
@@ -1893,9 +1893,9 @@ tbody.ob-heading {
 
 .market-trade .nav .nav-item .nav-link.active {
   background: #fff;
-  color: #ffbe40;
+  color: #1e90ff;
   font-weight: 600;
-  border-top: 2px solid #ffbe40;
+  border-top: 2px solid #1e90ff;
   padding: 8px â€‹15px 10px 15px !important;
 }
 
@@ -2006,7 +2006,7 @@ tbody.ob-heading {
 .market-trade button.sell,
 .market-trade button.buy-trade,
 .otc-form .buy {
-  background: #ffbe40;
+  background: #1e90ff;
   color: #fff;
   text-transform: uppercase;
   padding: 10px;
@@ -2091,7 +2091,7 @@ tbody.ob-heading {
 .order-history .header .filterMenu li.active a,
 .market-history .header .filterMenu li.active a {
   color: white;
-  background-color: #ffbe40;
+  background-color: #1e90ff;
 }
 
 .order-history .nav-link,
@@ -2102,7 +2102,7 @@ tbody.ob-heading {
 
 .order-history .nav-link.active,
 .market-history .nav-link.active {
-  color: #ffbe40 !important;
+  color: #1e90ff !important;
   background: transparent !important;
   font-weight: 600;
 }
@@ -2315,14 +2315,14 @@ tbody.ob-heading {
 
 .markets-pair-list .btn-2 {
   background-color: transparent;
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 #daily-top-winners .coin-list .btn-2,
 .codono-distribution-table.table .btn-2,
 .p2p-list-table .btn-2 {
-  background-color: #ffbe40;
-  border-color: #ffbe40;
+  background-color: #1e90ff;
+  border-color: #1e90ff;
   color: #000 !important;
 }
 
@@ -2330,8 +2330,8 @@ tbody.ob-heading {
 .codono-distribution-table.table .btn-2:hover,
 .p2p-list-table .btn-2:hover {
   background-color: transparent;
-  color: #ffbe40;
-  border-color: #ffbe40 !important;
+  color: #1e90ff;
+  border-color: #1e90ff !important;
 }
 
 .p2p-list-table.sell-table .btn-2 {
@@ -2347,9 +2347,9 @@ tbody.ob-heading {
 }
 
 .markets-pair-list .btn-2:hover {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   color: #fff;
-  border-color: #ffbe40 !important;
+  border-color: #1e90ff !important;
 }
 
 .p2p-list-table span:not(.input-group-text),
@@ -2745,7 +2745,7 @@ tbody.ob-heading {
 }
 
 .security-status.average span {
-  color: #f6a61d;
+  color: #1e90ff;
 }
 
 .security-status.strong span {
@@ -2764,7 +2764,7 @@ tbody.ob-heading {
 }
 
 .security-status.average ul li:nth-child(-n + 2) {
-  background-color: #f6a61d;
+  background-color: #1e90ff;
 }
 
 .security-status.poor ul li:first-child {
@@ -3461,9 +3461,9 @@ section.swap-page .title {
   background: -webkit-gradient(linear,
       left top,
       right top,
-      from(#ffbe40),
+      from(#1e90ff),
       to(#ffe9b6));
-  background: linear-gradient(90deg, #ffbe40, #ffe9b6);
+  background: linear-gradient(90deg, #1e90ff, #ffe9b6);
   border-radius: 10px 10px 0 0;
   position: absolute;
   left: 0;
@@ -3515,12 +3515,12 @@ section.swap-page .title {
 .swap-form-wrapper .creation-more-container .input-group>.input-group-append>.btn strong,
 .swap-form-wrapper .swap-from .input-group>.input-group-append>.btn strong {
   display: inline-block;
-  border: 1px solid #ffbe40;
+  border: 1px solid #1e90ff;
   width: 30px;
   height: 30px;
   line-height: 30px;
   text-align: center;
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   color: #fff;
 }
 
@@ -3824,7 +3824,7 @@ section.swap-page .title {
 }
 
 .transfer-form-wrapper .amount .balance .current_balance {
-  color: #ffbe40;
+  color: #1e90ff;
   font-weight: 700;
   margin-left: 5px;
 }
@@ -4548,7 +4548,7 @@ section.apps .appss-content .btn {
 .otc-form-wrapper .nav-pills .show>.nav-link {
   color: #000;
   background-color: transparent;
-  border-bottom: 2px solid #ffbe40;
+  border-bottom: 2px solid #1e90ff;
   border-radius: 0;
   font-weight: 700;
 }
@@ -4691,7 +4691,7 @@ section.apps .appss-content .btn {
 }
 
 .p2p-page .buy-sell-buttons .btn-buy.active {
-  background-color: #ffbe40;
+  background-color: #1e90ff;
   color: #ffffff;
   box-shadow: 1px 0 4px rgb(0 0 0 / 25%);
 }
@@ -4746,7 +4746,7 @@ section.apps .appss-content .btn {
 .p2p-page .p2p-left-menu li.active a,
 .p2p-page .coin-list-items li.active a {
   color: #000;
-  border-color: #ffbe40;
+  border-color: #1e90ff;
 }
 
 .home-markets #spot .filter-buttons .coin-list-items li a:after {
@@ -4824,7 +4824,7 @@ section.apps .appss-content .btn {
 }
 
 .home-markets #spot .filter-buttons .filterItem .active {
-  background-color: #ffbe40 !important;
+  background-color: #1e90ff !important;
   color: #fff !important;
 }
 
@@ -5139,7 +5139,7 @@ input[type="radio"].toggle.checked+label {
 .nav-pills .nav-link.active,
 .nav-pills .show>.nav-link {
   color: #000;
-  background-color: #ffbe40;
+  background-color: #1e90ff;
 }
 
 .lab-page {
@@ -5469,7 +5469,7 @@ input[type="radio"].toggle.checked+label {
 }
 
 .card-item.bg-3 .heading {
-  background-color: #ffba4e;
+  background-color: #1e90ff;
 }
 
 .card-item.bg-4 .heading {
@@ -5489,7 +5489,7 @@ input[type="radio"].toggle.checked+label {
   color: #fff;
   text-align: center;
   cursor: pointer;
-  background: #ffbe40;
+  background: #1e90ff;
   transition: 1s ease;
   border: none;
 }
@@ -5530,12 +5530,12 @@ table.dataTable>thead .sorting_desc_disabled:after {
 }
 
 .page-item.active .page-link {
-  background-color: #ffbe40;
-  border-color: #ffbe40;
+  background-color: #1e90ff;
+  border-color: #1e90ff;
 }
 
 .page-link {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .page-link:focus {
@@ -5589,7 +5589,7 @@ table.dataTable>thead .sorting_desc_disabled:after {
 }
 
 .missionItem .content a {
-  color: #ffbe40;
+  color: #1e90ff;
 }
 
 .missionItem .content p {

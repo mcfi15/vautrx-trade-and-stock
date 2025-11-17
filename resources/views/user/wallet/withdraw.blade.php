@@ -6,7 +6,7 @@
 <div class="container py-5 bg-transparent text-light rounded-3 shadow-lg">
     <!-- Header -->
     <div class="mb-5">
-        <a href="{{ route('wallet.index') }}" class="text-decoration-none text-warning">
+        <a href="{{ route('wallet.index') }}" class="text-decoration-none text-primary">
             <i class="fa fa-arrow-left me-2"></i> Back to Wallet
         </a>
         <h1 class="fw-bold text-white mt-3">Withdraw {{ $cryptocurrency->name ?? 'Cryptocurrency' }}</h1>
@@ -37,7 +37,7 @@
         <!-- Withdrawal Form -->
         <div class="col-lg-6">
             <div class="bg-transparent p-4 rounded-3 shadow-sm">
-                <h2 class="h5 fw-semibold mb-3 text-warning">Withdrawal Details</h2>
+                <h2 class="h5 fw-semibold mb-3 text-primary">Withdrawal Details</h2>
 
                 <form action="{{ route('wallet.withdraw.process') }}" method="POST">
                     @csrf
@@ -60,11 +60,11 @@
                                    min="{{ $cryptocurrency->min_withdraw_amount ?? 0.001 }}"
                                    max="{{ $wallet->available_balance ?? 0 }}"
                                    placeholder="0.00000000">
-                            <span class="input-group-text bg-dark text-warning border-0">
+                            <span class="input-group-text bg-dark text-primary border-0">
                                 {{ strtoupper($cryptocurrency->symbol ?? '') }}
                             </span>
                         </div>
-                        <button type="button" onclick="setMaxAmount()" class="btn btn-link text-warning p-0 mt-2">
+                        <button type="button" onclick="setMaxAmount()" class="btn btn-link text-primary p-0 mt-2">
                             Use Max: {{ number_format($wallet->available_balance ?? 0, 8) }}
                         </button>
                         @error('amount')
@@ -74,7 +74,7 @@
 
                     <!-- Fee Info -->
                     <div class="bg-dark p-3 rounded-3 mb-4">
-                        <h6 class="fw-semibold text-warning mb-2">Transaction Details</h6>
+                        <h6 class="fw-semibold text-primary mb-2">Transaction Details</h6>
                         <div class="small">
                             <div class="d-flex justify-content-between">
                                 <span>Available Balance:</span>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn w-100 text-dark fw-bold py-2" style="background-color:#ffbe40;">
+                    <button type="submit" class="btn w-100 text-dark fw-bold py-2" style="background-color:#1e90ff;">
                         <i class="fa fa-paper-plane me-2"></i> Submit Withdrawal
                     </button>
                 </form>
@@ -107,12 +107,12 @@
         <div class="col-lg-6">
             <!-- Balance Card -->
             <div class="bg-dark p-4 rounded-3 shadow-sm mb-4">
-                <h2 class="h5 fw-semibold text-warning mb-3">Current Balance</h2>
+                <h2 class="h5 fw-semibold text-primary mb-3">Current Balance</h2>
                 <div class="text-center">
                     <div class="display-6 fw-bold text-white">
                         {{ number_format($wallet->balance ?? 0, 8) }}
                     </div>
-                    <p class="text-warning">{{ strtoupper($cryptocurrency->symbol ?? '') }}</p>
+                    <p class="text-primary">{{ strtoupper($cryptocurrency->symbol ?? '') }}</p>
                     <div class="row text-center">
                         <div class="col">
                             <small class="text-light">Available</small>
@@ -128,24 +128,24 @@
 
             <!-- Info Sections -->
             <div class="bg-dark p-4 rounded-3 shadow-sm mb-4">
-                <h2 class="h5 fw-semibold text-warning mb-3">Withdrawal Info</h2>
+                <h2 class="h5 fw-semibold text-primary mb-3">Withdrawal Info</h2>
                 <div class="small">
                     <div class="d-flex mb-3">
-                        <i class="fa fa-info-circle text-warning me-3"></i>
+                        <i class="fa fa-info-circle text-primary me-3"></i>
                         <div>
                             <strong>Processing Time</strong>
                             <p class="mb-0 text-secondary">Processed within 5–30 mins during business hours.</p>
                         </div>
                     </div>
                     <div class="d-flex mb-3">
-                        <i class="fa fa-shield-alt text-warning me-3"></i>
+                        <i class="fa fa-shield-alt text-primary me-3"></i>
                         <div>
                             <strong>Security</strong>
                             <p class="mb-0 text-secondary">Withdrawals require email verification and security checks.</p>
                         </div>
                     </div>
                     <div class="d-flex">
-                        <i class="fa fa-clock text-warning me-3"></i>
+                        <i class="fa fa-clock text-primary me-3"></i>
                         <div>
                             <strong>Network Confirmation</strong>
                             <p class="mb-0 text-secondary">Depends on blockchain congestion.</p>
@@ -156,7 +156,7 @@
 
             <!-- Network Info -->
             <div class="bg-transparent p-4 rounded-3 shadow-sm">
-                <h2 class="h5 fw-semibold text-warning mb-3">Network Information</h2>
+                <h2 class="h5 fw-semibold text-primary mb-3">Network Information</h2>
                 <div class="small">
                     <div class="d-flex justify-content-between">
                         <span>Network:</span>
@@ -177,11 +177,11 @@
 
     <!-- Recent Withdrawals -->
     <div class="bg-transparent rounded-3 shadow-sm p-4 mt-5">
-        <h2 class="h5 fw-semibold text-warning mb-3">Recent Withdrawals</h2>
+        <h2 class="h5 fw-semibold text-primary mb-3">Recent Withdrawals</h2>
         @forelse($withdrawals as $withdrawal)
         <div class="d-flex justify-content-between align-items-center border-bottom border-dark py-3">
             <div class="d-flex align-items-center">
-                <div class="bg-dark text-warning rounded-circle d-flex justify-content-center align-items-center" style="width:40px;height:40px;">
+                <div class="bg-dark text-primary rounded-circle d-flex justify-content-center align-items-center" style="width:40px;height:40px;">
                     <i class="fa fa-arrow-up"></i>
                 </div>
                 <div class="ms-3">
@@ -191,12 +191,12 @@
                 </div>
             </div>
             <div class="text-end">
-                <div class="fw-bold text-warning">-{{ number_format($withdrawal->amount, 8) }}</div>
+                <div class="fw-bold text-primary">-{{ number_format($withdrawal->amount, 8) }}</div>
                 <small class="text-light">{{ strtoupper($cryptocurrency->symbol ?? '') }}</small>
                 <div>
                     <span class="badge 
                         @if($withdrawal->status === 'completed') bg-success
-                        @elseif($withdrawal->status === 'pending') bg-warning text-dark
+                        @elseif($withdrawal->status === 'pending') bg-primary text-dark
                         @else bg-danger @endif">
                         {{ ucfirst($withdrawal->status) }}
                     </span>

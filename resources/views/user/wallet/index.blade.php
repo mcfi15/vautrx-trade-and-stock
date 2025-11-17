@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="container wallet-page">
-    <div class="row">
+    <div class="row"> 
         <div class="col-xl-12 m-t-30">
             <div class="card">
                 <div class="card-body">
@@ -27,7 +27,7 @@
                                 <div class="col-6"><a href="{{ url('wallet/deposit') }}" class="btn-2 btn-block"><i
                                             class="fa fa-download"></i> Deposit</a></div>
                                 <div class="col-6 text"><a href="{{ url('wallet/wallet') }}"
-                                        class="btn-1 btn-block"><i class="fa fa-upload"></i> Withdraw</a></div>
+                                        class="btn-2 btn-block"><i class="fa fa-upload"></i> Withdraw</a></div>
                             </div>
                             <div class="row w-100 mt-2">
                                 <div class="col-6"><a href="#" class="btn-1 btn-block"><i
@@ -61,7 +61,7 @@
               </div>
             </div>
             <div class="col-md-4 text-center">
-              <a href="/account/dust" class="btn btn-warning btn-sm">
+              <a href="/account/dust" style="background-color:#1e90ff;border-color:#1e90ff;" class="btn btn-warning btn-sm">
                 Convert low balance to BNB
               </a>
             </div>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="row text-center mt-3">
                     <div class="col-12">
-                    <a href="/account/dust" class="btn btn-warning btn-sm">
+                    <a href="/account/dust" style="background-color:#1e90ff;border-color:#1e90ff;" class="btn btn-warning btn-sm">
                         Convert low balance to BNB
                     </a>
                     </div>

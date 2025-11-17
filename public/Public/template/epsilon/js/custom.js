@@ -47,19 +47,19 @@
 
   if ($.fn.cookie) {
     if ($.cookies.get("themeMode") == "dark") {
-      $(".changeThemeLight i").attr("class", "icon ion-md-sunny");
+      $(".changeThemeLight i").attr("class", "fa fa-sun-o");
       $("header").attr("class", "dark-bb");
       $("body").attr("id", "dark");
       if (typeof chartParams != "undefined" && chartParams !== null) {
         chartParams["theme"] = "Dark";
         new TradingView.widget(chartParams);
-      }
+      } 
     } else {
       if (typeof chartParams != "undefined" && chartParams !== null) {
         chartParams["theme"] = "Light";
         new TradingView.widget(chartParams);
       }
-      $(".changeThemeLight i").attr("class", "icon ion-md-moon");
+      $(".changeThemeLight i").attr("class", "fa fa-moon-o");
       $("header").attr("class", "light-bb");
       $("body").attr("id", "light");
     }
@@ -72,7 +72,7 @@
   $(".changeThemeLight").on("click", function (e) {
     ThemeOn = !ThemeOn;
     if (ThemeOn) {
-      $(".changeThemeLight i").attr("class", "icon ion-md-sunny");
+      $(".changeThemeLight i").attr("class", "fa fa-sun-o");
       $("header").attr("class", "dark-bb");
       $("body").attr("id", "dark");
        $.cookies.set("themeMode", "dark");
@@ -85,7 +85,7 @@
         chartParams["theme"] = "Light";
         new TradingView.widget(chartParams);
       }
-      $(".changeThemeLight i").attr("class", "icon ion-md-moon");
+      $(".changeThemeLight i").attr("class", "fa fa-moon-o");
       $("header").attr("class", "light-bb");
       $("body").attr("id", "light");
       $.cookies.set("themeMode", "light");

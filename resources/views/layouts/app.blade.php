@@ -1449,9 +1449,8 @@
         <div class="cex-ui-footer-content-menu cex-ui-footer-content-menu--grid">
             <div class="subscription-form-wrapper">
                
-                <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" alt="Logo" >
+                <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" class="img-fluid m-b-15" width="152px">
                 
-                {{-- <img src="Upload/public/65d5f518818ac.png" alt="{{ \App\Models\Setting::get('site_name', 'Website Name') }}" class="img-fluid m-b-15" width="152px"> --}}
                 <div>Trade securely and efficiently on {{ \App\Models\Setting::get('site_name', 'Website Name') }}, the leading cryptocurrency exchange platform. Buy, sell,
                     and swap Bitcoin, Ethereum, and altcoins with low fees, advanced security, and real-time market
                     data.</div>
@@ -1769,7 +1768,7 @@
 <script src="{{ asset('Public/template/epsilon/js/jquery.mCustomScrollbar.js') }}"></script>
 <script src="{{ asset('Public/template/epsilon/js/intlTelInput-jquery.js') }}"></script>
 <script src="{{ asset('Public/template/epsilon/js/utils.js') }}"></script>
-<script src="{{ asset('Public/template/epsilon/js/custom.js') }}"></script>
+<script src="{{ asset('Public/template/epsilon/js/custom.js?v=1') }}"></script>
 <script>
 
 </script>

@@ -401,7 +401,7 @@
                     </li>
                     <li class="nav-item dropdown icon-flex-wrapper ml-3" id=" _box">
                         <div class="nav-icon text-colo">
-                            <i class="icon-size system "></i>
+                            <i class="icon fa fa-sliders "></i>
                         </div>
                         <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
                             data-toggle="dropdown" href="#" role="button"> </a>
@@ -497,11 +497,11 @@
 
                     <li class="nav-item header-custom-icon login-menu ml-3">
                         <a class="cd-signin nav-link" href="{{ url('login') }}">
-                            <i class="icon ion-ios-log-in"></i> Sign In</a>
+                            <i style="color:#1e90ff;" class="fa fa-sign-in"></i> Sign In</a>
                     </li>
                     <li class="nav-item header-custom-icon login-menu ml-3">
                         <a class="cd-signup nav-link" href="{{ url('register') }}">
-                            <i class="icon ion-ios-person-add"></i> Sign Up</a>
+                            <i style="color:#1e90ff;" class="fa fa-user-plus"></i> Sign Up</a>
                     </li>
 
                     @endauth

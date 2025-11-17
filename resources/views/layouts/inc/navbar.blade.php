@@ -666,10 +666,10 @@
 
                 <div class="d-flex justify-content-around align-items-center w-100">
                     <div class="nav__item">
-                        <a class="btn btn-outline-warning btn-sm text-dark" href="{{ url('login') }}">Sign In</a>
+                        <a class="btn btn-outline-primary btn-sm text-dark" href="{{ url('login') }}">Sign In</a>
                     </div>
                     <div class="nav__item">
-                        <a class="btn btn-outline-warning btn-sm text-dark" href="{{ url('register') }}">Sign Up</a>
+                        <a class="btn btn-outline-primary btn-sm text-dark" href="{{ url('register') }}">Sign Up</a>
                     </div>
                 </div>
 

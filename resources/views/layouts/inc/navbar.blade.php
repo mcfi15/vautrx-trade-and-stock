@@ -456,7 +456,7 @@
                     <div class="dropdown-menu">
                         <div class="dropdown-body">
 
-                            <a class="dropdown-item" href="{{ url('stock-market') }}">
+                            <a class="dropdown-item" href="{{ url('/stock-market') }}">
                                 <div class="nav-icon">
                                     <i class="icon fa fa-random"></i>
                                 </div>
@@ -474,14 +474,14 @@
                                         class="subtext">Tools for Pro</span> </div>
                             </a> --}}
 
-                            <a class="dropdown-item" href="{{ url('trade/spot') }}">
+                            <a class="dropdown-item" href="{{ url('/trade/spot') }}">
                                 <div class="nav-icon">
                                     <i class="icon fa fa-send-o"></i>
                                 </div>
 
                                 <div class="content text-white">Spot Classic <span class="subtext">Trade on our
                                         award-winning platform</span> </div>
-                            </a><a class="dropdown-item" href="{{ url('easy-trade') }}">
+                            </a><a class="dropdown-item" href="{{ url('/easy-trade') }}">
                                 <div class="nav-icon">
                                     <i class="icon fa fa-exchange"></i>
                                 </div>
@@ -527,7 +527,7 @@
                     </div>
                 </li>
                 <li id="Market_box" class="nav-item ml-3">
-                    <a href="{{ url('markets') }}" class="nav-link icon-flex-wrapper">
+                    <a href="{{ url('/markets') }}" class="nav-link icon-flex-wrapper">
 
                         <div class="nav-noicon"></div> Market
                     </a>

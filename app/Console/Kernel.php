@@ -12,6 +12,8 @@ class Kernel extends ConsoleKernel
         // Run the Laravel command that syncs crypto prices every minute
         $schedule->command('crypto:sync-prices')->everyMinute()->withoutOverlapping();
 
+        $schedule->command('stocks:update-live')->everyMinute();
+
         // Update stock prices every 5 minutes during market hours (9 AM - 4 PM EST)
         $schedule->command('stocks:update-prices')
                  ->everyFiveMinutes()

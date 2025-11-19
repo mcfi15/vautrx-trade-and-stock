@@ -596,4 +596,24 @@ class StockDataService
 
         return $data;
     }
+
+    public function updateSingleStock($symbol)
+{
+    $url = "https://financialmodelingprep.com/api/v3/quote/$symbol?apikey=" . env('FMP_API_KEY');
+
+    $data = json_decode(file_get_contents($url), true);
+
+    if (!isset($data[0])) return false;
+
+    $stock = Stock::where('symbol', $symbol)->first();
+
+    if ($stock) {
+        $stock->update([
+            'current_price' => $data[0]['price'],
+            'last_updated' => now()
+        ]);
+    }
+
+    return true;
+}
 }

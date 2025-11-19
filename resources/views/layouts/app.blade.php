@@ -1510,7 +1510,7 @@
                 <div class="cex-ui-services">
 
 
-                    <a href="cdn-cgi/l/email-protection.html#4b383e3b3b24393f0b2f2e283f393365282426"
+                    <a href="mailto:support@vautrx.com"
                         class="cex-ui-text cex-ui-text-small" style="white-space: nowrap; margin-bottom: 5px;">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                             <path fill="#fff"
@@ -1519,7 +1519,7 @@
                         <span class="__cf_email__"
                             data-cfemail="b8cbcdc8c8d7caccf8dcdddbcccac096dbd7d5">[email&#160;protected]</span> </a>
 
-                    <a href="cdn-cgi/l/email-protection.html#375e5951587753525443454f1954585a"
+                    <a href="mailto:info@vautrx.com"
                         class="cex-ui-text cex-ui-text-small" style="white-space: nowrap; margin-bottom: 5px;">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                             <path fill="#fff"
@@ -1620,7 +1620,7 @@
     </div>
 </footer>
 
-<script>
+{{-- <script>
 var LANGS = {
     en: { flag: "gb", name: "English" },
     tr: { flag: "tr", name: "Turkish" },
@@ -1666,7 +1666,7 @@ $(document).ready(function () {
         }, 50);
     });
 });
-</script>
+</script> --}}
 
 
 
@@ -1689,10 +1689,10 @@ $(document).ready(function () {
 </style>
 
 <script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script>
-<script>window.$zoho = window.$zoho || {}; $zoho.salesiq = $zoho.salesiq || { ready: function () { } }</script>
-<script id="zsiqscript"
-    src="https://salesiq.zohopublic.com/widget?wc=siqc39ef4e4296674bd7777095ed2e835ec5cd224cf3ba652fbb6c09f55b1433961"
-    defer></script>
+
+<script src="//code.tidio.co/uqbpiq2aat8nk1xcocsltwkbetan75qy.js" async></script>
+
+
 <style>
     @media only screen and (max-width: 991px) {
         footer {

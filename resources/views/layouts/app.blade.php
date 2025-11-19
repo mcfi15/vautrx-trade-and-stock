@@ -1637,43 +1637,33 @@ var LANGS = {
     zhcn: { flag: "cn", name: "Simplified Chinese" }
 };
 
-// Update UI when language changes
+// Update language UI instantly
 function updateLangUI(lang) {
     var sel = LANGS[lang] || LANGS['en'];
-
     $("#langselection img").attr("src", "https://flagcdn.com/w40/" + sel.flag + ".png");
     $("#langselection span").text(sel.name);
 }
 
-// Save + reload page with locale prefix
-function changeLanguage(lang) {
-    localStorage.setItem("site_lang", lang);
-
-    updateLangUI(lang);
-
-    // Redirect to /lang/current-path
-    var path = window.location.pathname.split("/").filter(Boolean);
-    var supported = Object.keys(LANGS);
-
-    if (path.length && supported.includes(path[0])) {
-        path[0] = lang;
-    } else {
-        path.unshift(lang);
-    }
-
-    window.location.href = "/" + path.join("/");
-}
-
 $(document).ready(function () {
 
-    // Restore selected language
+    // Restore saved language
     var saved = localStorage.getItem("site_lang") || "en";
     updateLangUI(saved);
 
-    // When clicking on an item
+    // Click event
     $(".dropdown-item").on("click", function () {
         var lang = $(this).data("lang");
-        changeLanguage(lang);
+
+        // Save
+        localStorage.setItem("site_lang", lang);
+
+        // Update UI instantly
+        updateLangUI(lang);
+
+        // Optional: reload page (no redirect, no URL change)
+        setTimeout(() => {
+            window.location.reload(true);
+        }, 50);
     });
 });
 </script>

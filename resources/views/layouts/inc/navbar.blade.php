@@ -644,56 +644,59 @@
 
 
                 <li class="nav-item dropdown header-custom-icon langMenu ml-3">
-                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                        <div id="langselection">
-                            <img src="https://flagcdn.com/w40/gb.png" class="position-left" alt="English">
-                            <span class="cret-after-nav-item">English</span>
-                        </div>
-                    </a>
-                    <div class="dropdown-menu">
-                        <div class="dropdown-body">
-                            <span class="dropdown-item" onclick="chooseLang('en')">
-                                <img src="https://flagcdn.com/w20/gb.png" alt=""> English
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('tr')">
-                                <img src="https://flagcdn.com/w20/tr.png" alt=""> Turkish
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('es')">
-                                <img src="https://flagcdn.com/w20/es.png" alt=""> Spanish
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('nl')">
-                                <img src="https://flagcdn.com/w20/nl.png" alt=""> Dutch
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('il')">
-                                <img src="https://flagcdn.com/w20/il.png" alt=""> Hebrew
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('de')">
-                                <img src="https://flagcdn.com/w20/de.png" alt=""> German
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('ko')">
-                                <img src="https://flagcdn.com/w20/kr.png" alt=""> Korean
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('ja')">
-                                <img src="https://flagcdn.com/w20/jp.png" alt=""> Japanese
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('pt')">
-                                <img src="https://flagcdn.com/w20/pt.png" alt=""> Portuguese
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('ru')">
-                                <img src="https://flagcdn.com/w20/ru.png" alt=""> Русски
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('vi')">
-                                <img src="https://flagcdn.com/w20/vn.png" alt=""> Vietnamese
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('zhtw')">
-                                <img src="https://flagcdn.com/w20/tw.png" alt=""> Traditional Chinese
-                            </span>
-                            <span class="dropdown-item" onclick="chooseLang('zhcn')">
-                                <img src="https://flagcdn.com/w20/cn.png" alt=""> Simplified Chinese
-                            </span>
-                        </div>
-                    </div>
-                </li>
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <div id="langselection">
+            <img src="https://flagcdn.com/w40/gb.png" class="position-left" alt="English">
+            <span class="cret-after-nav-item">English</span>
+        </div>
+    </a>
+    <div class="dropdown-menu">
+        <div class="dropdown-body">
+
+            <span class="dropdown-item" data-lang="en">
+                <img src="https://flagcdn.com/w20/gb.png" alt=""> English
+            </span>
+            <span class="dropdown-item" data-lang="tr">
+                <img src="https://flagcdn.com/w20/tr.png" alt=""> Turkish
+            </span>
+            <span class="dropdown-item" data-lang="es">
+                <img src="https://flagcdn.com/w20/es.png" alt=""> Spanish
+            </span>
+            <span class="dropdown-item" data-lang="nl">
+                <img src="https://flagcdn.com/w20/nl.png" alt=""> Dutch
+            </span>
+            <span class="dropdown-item" data-lang="il">
+                <img src="https://flagcdn.com/w20/il.png" alt=""> Hebrew
+            </span>
+            <span class="dropdown-item" data-lang="de">
+                <img src="https://flagcdn.com/w20/de.png" alt=""> German
+            </span>
+            <span class="dropdown-item" data-lang="ko">
+                <img src="https://flagcdn.com/w20/kr.png" alt=""> Korean
+            </span>
+            <span class="dropdown-item" data-lang="ja">
+                <img src="https://flagcdn.com/w20/jp.png" alt=""> Japanese
+            </span>
+            <span class="dropdown-item" data-lang="pt">
+                <img src="https://flagcdn.com/w20/pt.png" alt=""> Portuguese
+            </span>
+            <span class="dropdown-item" data-lang="ru">
+                <img src="https://flagcdn.com/w20/ru.png" alt=""> Russian
+            </span>
+            <span class="dropdown-item" data-lang="vi">
+                <img src="https://flagcdn.com/w20/vn.png" alt=""> Vietnamese
+            </span>
+            <span class="dropdown-item" data-lang="zhtw">
+                <img src="https://flagcdn.com/w20/tw.png" alt=""> Traditional Chinese
+            </span>
+            <span class="dropdown-item" data-lang="zhcn">
+                <img src="https://flagcdn.com/w20/cn.png" alt=""> Simplified Chinese
+            </span>
+
+        </div>
+    </div>
+</li>
+
 
                 @auth
                     <li class="nav-item dropdown userMenu header-custom-icon ml-3">

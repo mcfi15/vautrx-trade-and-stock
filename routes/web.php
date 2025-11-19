@@ -35,11 +35,6 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
 Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->group(function () {
     Route::get('/','index');
     Route::post('/do-trade', 'doTrade')->middleware(['auth', 'verify.email'])->name('do-trade');
@@ -61,24 +56,6 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::get('/article/26', 'article_26');
     Route::get('/article/27', 'article_27');
     Route::get('/dex', 'dex');
-
-    // Route::get('/invest', 'invest');
-
-
-    
-    // Route::get('/worker', 'worker');
-    // Route::get('/hr-services', 'hrservice');
-    // Route::get('/jobs', 'jobs');
-    // Route::get('/view/{slug}', 'jobView');
-    // Route::get('/application/{slug}', 'jobApplication');
-    // Route::post('/application', 'storeApplication');
-
-    // Route::get('/categories', 'product');
-    // Route::get('/product-view/{category_slug}/{product_slug}', 'productView');
-    // Route::get('/place-order/{category_slug}/{product_slug}', 'placeOrder');
-    // Route::post('/place-order', 'storeOrder');
-
-    Route::get('/search', 'searchProducts');
     
 });
 
@@ -110,53 +87,9 @@ Route::prefix('pool')->name('pool.')->group(function () {
     Route::get('/', [PoolController::class, 'index'])->name('index');
     Route::get('/myMachines', [PoolController::class, 'myMachines'])->name('myMachines');
     Route::get('/myRewards', [PoolController::class, 'myRewards'])->name('myRewards');
-    Route::post('/rent/{pool}', [PoolController::class, 'rent'])->name('rent');
-    Route::post('/claim-reward/{reward}', [PoolController::class, 'claimReward'])->name('claimReward');
+    Route::post('/rent/{pool}', [PoolController::class, 'rent'])->middleware(['auth', 'verify.email'])->name('rent');
+    Route::post('/claim-reward/{reward}', [PoolController::class, 'claimReward'])->middleware(['auth', 'verify.email'])->name('claimReward');
 });
-
-Route::prefix('giftcard')->name('giftcard.')->group(function () {
-    Route::get('/', [GiftCardController::class, 'index'])->name('index');
-    Route::get('/create', [GiftCardController::class, 'create'])->name('create');
-    Route::post('/store', [GiftCardController::class, 'store'])->name('store');
-    Route::post('/check-value', [GiftCardController::class, 'checkValue'])->name('checkValue');
-    Route::post('/redeem', [GiftCardController::class, 'redeem'])->name('redeem');
-    Route::get('/view-code/{id}', [GiftCardController::class, 'viewCode'])->name('viewCode');
-    Route::get('/view-consumed/{id}', [GiftCardController::class, 'viewConsumed'])->name('viewConsumed');
-});
-
-// Route::get('/trade/{pairId}/data', [TradingController::class, 'fetchOrderData'])->name('trade.data');
-// Route::get('/orderbook/{pairId}/refresh', [TradingController::class, 'refreshOrderBook']);
-// Route::get('/trading/spot/{pairId}', [TradingController::class, 'show'])->name('trading.pair');
-//     Route::post('/trading/place-order', [TradingController::class, 'placeOrder'])->name('trading.place-order');
-//     Route::post('/trading/orders/{orderId}/cancel', [TradingController::class, 'cancelOrder'])->name('trading.cancel-order');
-    
-    // Default trading page
-    
-
-
-// Route::controller(TradingController::class)->group(function () {
-//     Route::get('/trading/pro', [TradingController::class, 'pro'])->name('pro');
-
-//     // Route::get('/trading/spot', [TradingController::class, 'spot'])->name('spot');
-
-//     Route::get('/easy-convert', [TradingController::class, 'easy'])->name('easy-convert');
-    
-    
-// });
-
-// Route::get('/trading/{pairId}', [TradingController::class, 'show'])->name('show');
-
-// Trading
-    // Route::controller('trading')->name('trading.')->group(function () {
-        
-    //     Route::get('/{pairId}', [TradingController::class, 'show'])->name('show');
-        
-    //     Route::post('/order', [TradingController::class, 'placeOrder'])->name('order.place');
-    //     Route::delete('/order/{order}', [TradingController::class, 'cancelOrder'])->name('order.cancel');
-    //     Route::get('/history/orders', [TradingController::class, 'orderHistory'])->name('orders');
-    //     Route::get('/history/trades', [TradingController::class, 'tradeHistory'])->name('trades');
-    // });
-
 
 
 Route::middleware('guest')->group(function () {
@@ -230,6 +163,16 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::prefix('portfolio')->name('portfolio.')->group(function () {
         Route::get('/', [PortfolioController::class, 'index'])->name('index');
         Route::get('/{portfolio}', [PortfolioController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('giftcard')->name('giftcard.')->group(function () {
+        Route::get('/', [GiftCardController::class, 'index'])->name('index');
+        Route::get('/create', [GiftCardController::class, 'create'])->name('create');
+        Route::post('/store', [GiftCardController::class, 'store'])->name('store');
+        Route::post('/check-value', [GiftCardController::class, 'checkValue'])->name('checkValue');
+        Route::post('/redeem', [GiftCardController::class, 'redeem'])->name('redeem');
+        Route::get('/view-code/{id}', [GiftCardController::class, 'viewCode'])->name('viewCode');
+        Route::get('/view-consumed/{id}', [GiftCardController::class, 'viewConsumed'])->name('viewConsumed');
     });
     
     // Wallet

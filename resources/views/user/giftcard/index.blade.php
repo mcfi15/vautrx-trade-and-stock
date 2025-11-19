@@ -84,7 +84,7 @@
                                     <div class="card">
                                         <div class="card-img-actions">
                                             <img class="card-img-top img-fluid" src="{{ asset('Public/assets/images/gift-card-bg.png') }}" alt="Gift Card">
-                                            <div style="background-color:blue;" class="value-box">
+                                            <div style="background-color:#28BAA7;" class="value-box">
                                                 {{ $card->amount }} {{ $card->cryptocurrency->symbol }}
                                             </div>
                                         </div>
@@ -104,7 +104,7 @@
                         </div>
                         @else
                         <div class="no-data">
-                            <i class="fa fa-gift"></i>
+                            <i style="color:#1e90ff;" class="fa fa-gift"></i>
                             <p>There are no cards. <br/> Create one now!</p>
                         </div>
                         @endif
@@ -119,7 +119,7 @@
                                     <div class="card">
                                         <div class="card-img-actions">
                                             <img class="card-img-top img-fluid" src="/Public/assets/images/gift-card-bg.png" alt="Gift Card">
-                                            <div style="background-color:blue;" class="value-box">
+                                            <div style="background-color:#28BAA7;" class="value-box">
                                                 {{ $card->amount }} {{ $card->cryptocurrency->symbol }}
                                             </div>
                                         </div>
@@ -139,7 +139,7 @@
                         </div>
                         @else
                         <div class="no-data">
-                            <i class="ion ion-ios-gift"></i>
+                            <i style="color:#1e90ff;" class="fa fa-gift"></i>
                             <p>There are no cards. <br/> Create one now!</p>
                         </div>
                         @endif

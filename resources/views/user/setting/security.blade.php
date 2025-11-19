@@ -18,21 +18,21 @@
       <div class="col-12 col-md-6 order-1 order-md-2 float-right">
         <ul class="text-right breadcrumbs list-unstyle">
           <li>
-            <a class="btn btn-warning btn-sm" href="/">Home</a>
+            <a class="btn btn-primary btn-sm" href="/">Home</a>
           </li>
           <li>
-            <a href="{{ url('user-center') }}" class="btn btn-warning btn-sm"
+            <a href="{{ url('user-center') }}" class="btn btn-primary btn-sm"
               >User</a
             >
           </li>
-          <li class="btn btn-warning btn-sm active">Security</li>
+          <li class="btn btn-primary btn-sm active">Security</li>
         </ul>
       </div>
     </div>
     <div class="row">
       <div class="col-12">
-        <div class="alert alert-warning p-t-30 p-b-30" role="alert">
-          <h3>Current account risk level: Medium</h3>
+        <div class="alert alert-primary p-t-30 p-b-30" role="alert">
+          <h3><span style="color:black;">Current account risk level: Medium</span></h3>
           <p class="m-b-0">
             It is recommended that you enable Google Authenticator to protect
             the security of your assets.

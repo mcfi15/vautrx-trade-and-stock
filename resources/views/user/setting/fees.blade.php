@@ -34,12 +34,12 @@
       <div class="col-12 col-md-6 order-1 order-md-2 float-right">
         <ul class="text-right breadcrumbs list-unstyle">
           <li>
-            <a class="btn btn-warning btn-sm" href="/">Home</a>
+            <a class="btn btn-primary btn-sm" href="/">Home</a>
           </li>
           <li>
-            <a href="{{ url('user-center') }}" class="btn btn-warning btn-sm">User</a>
+            <a href="{{ url('user-center') }}" class="btn btn-primary btn-sm">User</a>
           </li>
-          <li class="btn btn-warning btn-sm active">Fees</li>
+          <li class="btn btn-primary btn-sm active">Fees</li>
         </ul>
       </div>
     </div>

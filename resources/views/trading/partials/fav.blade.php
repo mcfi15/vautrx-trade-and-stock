@@ -3,7 +3,7 @@
   <div class="market-pairs " id="CryptoPriceTable">
     <div class="input-group">
       <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm"><i class="icon ion-md-search"></i></span>
+        <span class="input-group-text" id="inputGroup-sizing-sm"><i style="color:#1e90ff" class="fa fa-search"></i></span>
       </div>
       <input aria-describedby="inputGroup-sizing-sm" class="form-control" placeholder="Search" type="text"
         id="searchFilterY" />
@@ -11,7 +11,7 @@
     <ul class="nav nav-pills" role="tablist" id="crypt-tab">
       <li class="nav-item">
         <a aria-selected="true" class="nav-link" data-toggle="pill" href="#STAR" role="tab"><i
-            class="icon ion-md-star"></i> Fav</a>
+            style="color:#1e90ff" class="fa fa-star"></i> Fav</a>
       </li>
       <li class="nav-item">
         <a aria-selected="true" class="nav-link" href="#USDT" data-toggle="pill" id="idusdt"
@@ -51,7 +51,7 @@
             <tr>
                 <td>
                 <span class="coin"
-                    ><i class="icon ion-md-star add-to-favorite"></i> ETH/BTC</span
+                    ><i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> ETH/BTC</span
                 >
                 </td>
                 <td>
@@ -64,7 +64,7 @@
             <tr>
                 <td>
                 <span class="coin"
-                    ><i class="icon ion-md-star add-to-favorite"></i> KCS/BTC</span
+                    ><i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> KCS/BTC</span
                 >
                 </td>
                 <td>
@@ -77,7 +77,7 @@
             <tr>
                 <td>
                 <span class="coin"
-                    ><i class="icon ion-md-star add-to-favorite"></i> ETH/BTC</span
+                    ><i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> ETH/BTC</span
                 >
                 </td>
                 <td>
@@ -90,7 +90,7 @@
             <tr>
                 <td>
                 <span class="coin"
-                    ><i class="icon ion-md-star add-to-favorite"></i> KCS/BTC</span
+                    ><i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> KCS/BTC</span
                 >
                 </td>
                 <td>
@@ -119,7 +119,7 @@
             <tr>
               <td>
                 <span class="coin">
-                  <i class="icon ion-md-star add-to-favorite"></i> 
+                  <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
                   {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
                 </span>
               </td>
@@ -150,7 +150,7 @@
             <tr>
               <td>
                 <span class="coin">
-                  <i class="icon ion-md-star add-to-favorite"></i> 
+                  <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
                   {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
                 </span>
               </td>
@@ -181,7 +181,7 @@
             <tr>
               <td>
                 <span class="coin">
-                  <i class="icon ion-md-star add-to-favorite"></i> 
+                  <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
                   {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
                 </span>
               </td>
@@ -212,7 +212,7 @@
             <tr>
               <td>
                 <span class="coin">
-                  <i class="icon ion-md-star add-to-favorite"></i> 
+                  <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
                   {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
                 </span>
               </td>

@@ -18,14 +18,14 @@
 			<div class="col-12 col-md-6 order-1 order-md-2 float-right">
 			  <ul class="text-right breadcrumbs list-unstyle">
 				<li>
-				  <a class="btn btn-warning btn-sm" href="/">Home</a>
+				  <a class="btn btn-primary btn-sm" href="/">Home</a>
 				</li>
 				<li>
-				  <a href="{{ url('user-center') }}" class="btn btn-warning btn-sm"
+				  <a href="{{ url('user-center') }}" class="btn btn-primary btn-sm"
 					>User</a
 				  >
 				</li>
-				<li class="btn btn-warning btn-sm active">Password</li>
+				<li class="btn btn-primary btn-sm active">Password</li>
 			  </ul>
 			</div>
 		  </div>
@@ -111,7 +111,7 @@
             </div>
 
             <div class="form-group col-lg-5">
-                <button tabindex="4" type="submit" class="btn btn-warning form-control">
+                <button tabindex="4" type="submit" class="btn btn-primary form-control">
                     Submit <i class="icon-arrow-right14 position-right"></i>
                 </button>
             </div>

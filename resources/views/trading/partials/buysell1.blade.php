@@ -1,4 +1,5 @@
 <div class="market-trade">
+    <input type="hidden" id="tradingPairId" value="{{ $tradingPair->id }}">
     <div class="d-flex justify-content-between align-items-center">
         <ul id="orderTypeTabs" class="nav nav-pills mb-3" role="tablist">
         <li class="nav-item">
@@ -12,7 +13,7 @@
         </li>
         </ul>
         <div class="hide-mobile">
-            <button class="btn btn-sm btn-outline-warning">
+            <button class="btn btn-sm btn-outline-primary">
                 <a href="{{ url('wallet') }}">Transfer</a>
             </button>
         </div>

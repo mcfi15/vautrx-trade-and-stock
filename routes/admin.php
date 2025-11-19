@@ -2,17 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\PoolController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\FaucetController;
+use App\Http\Controllers\Admin\AirdropController;
 use App\Http\Controllers\Admin\DepositController;
 use App\Http\Controllers\Admin\AdminKycController;
+use App\Http\Controllers\Admin\GiftCardController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\FaucetLogController;
 use App\Http\Controllers\Admin\StakePlanController;
 use App\Http\Controllers\Admin\UserStakeController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Admin\TradingPairController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\AirdropClaimController;
 use App\Http\Controllers\Admin\LoginHistoryController;
 use App\Http\Controllers\Admin\OAuthSettingsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -196,6 +202,24 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
      ->name('user-stakes.complete');
 
     Route::post('/user-stakes/reject/{id}', [UserStakeController::class, 'reject'])->name('user-stakes.reject');
+
+    Route::resource('airdrops', AirdropController::class)->except(['show']);
+    Route::get('airdrops/claims', [AirdropClaimController::class,'index'])->name('airdrops.claims.index');
+    Route::post('airdrops/claims/{id}/approve', [AirdropClaimController::class,'approve'])->name('airdrops.claims.approve');
+    Route::post('airdrops/claims/{id}/reject', [AirdropClaimController::class,'reject'])->name('airdrops.claims.reject');
+
+    Route::resource('faucets', FaucetController::class)->except(['show']);
+    Route::get('faucet-logs', [FaucetLogController::class,'index'])->name('faucets.logs');
+
+    Route::resource('/pools', PoolController::class)->except(['show']);
+    Route::get('pools/machines', [PoolController::class, 'machines'])->name('pools.machines');
+    Route::get('pools/rewards', [PoolController::class, 'rewards'])->name('pools.rewards');
+
+    Route::get('/giftcards', [GiftCardController::class, 'index'])->name('giftcards.index');
+    Route::get('/giftcards/transactions', [GiftCardController::class, 'transactions'])->name('giftcards.transactions');
+    Route::delete('/giftcards/{giftcard}', [GiftCardController::class, 'destroy'])->name('giftcards.destroy');
+
+    
 
     // Route::resource('stake-plans', App\Http\Controllers\Admin\StakePlanController::class);
 

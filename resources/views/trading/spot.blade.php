@@ -4,6 +4,50 @@
 
 @section('content')
 
+<style>
+body, html{
+    overflow-x: hidden;
+}
+.sm_screen{
+	display: none;
+}
+.order-book tbody tr{
+  flex-shrink: 0;
+}
+@media only screen and (max-width: 768px){
+	.lg_screen{
+		display: none;
+	}.sm_screen{
+		display: flex;
+	}
+	.outflexboxx {
+		display: block !important;
+	}
+}
+</style>
+<script type="text/javascript">
+     let market = "btc_usdt";
+     let market_round = "2";
+
+     let market_round_num="2";
+     let market_type="1";
+     let userid = "0";
+     let trade_moshi = 1;
+     let getDepth_tlme = null;
+     let trans_lock = 0;
+  if(""){
+    const colorshade = "";
+  }
+  else{
+    const colorshade = "Dark";
+  }
+  $(document).ready(function(){
+	if(window.innerWidth <= 768){
+		$('.lg_screen').remove();
+	}
+  });
+</script>
+
 
 <div class="container-fluid mtb15 no-fluid">
   <div class="row sm-gutters lg_screen">
@@ -45,7 +89,7 @@
     <div class="headline-left col-11 p-0">
       <div class="title-big">
         {{ $tradingPair->baseCurrency->symbol }} / {{ $tradingPair->quoteCurrency->symbol }}
-        <i class="icon ion-md-star add-to-favorite default"></i>
+        <i style="color:#1e90ff" class="fa fa-star add-to-favorite default"></i>
       </div>
 
       <div class="headline-item instant-status">
@@ -96,7 +140,7 @@
     </div>
 
     <div class="headline-right col-1 p-0 ml-auto">
-      <a href="#!" class="btn changeThemeLight"><i class="icon ion-md-moon"></i></a>
+      <a href="#!" class="btn changeThemeLight"><i style="color:#1e90ff" class="fa fa-moon-o"></i></a>
     </div>
   </div>
 </div>
@@ -764,204 +808,182 @@ document.addEventListener('DOMContentLoaded', function() {
 
 @push('scripts')
 <script>
-/*
-  Universal Order Form script
-  - Switches order type (limit/market/stop)
-  - Calculates totals live
-  - Percentage quick buttons (uses #base_coin for quote balance and #user_coin for base balance)
-  - Non-destructive: checks existence of elements
-*/
-(function(){
-  if (!document) return;
-  const qs = (s, root=document) => root.querySelector(s);
-  const qsa = (s, root=document) => Array.from(root.querySelectorAll(s));
+(function() {
+    if (!document || !window) return;
 
-  // Elements (inputs/buttons) used in your markup
-  const tabs = qsa('#orderTypeTabs .nav-link');
-  const buyPriceBox = qs('#buypricebox');
-  const sellPriceBox = qs('#sellpricebox');
-  const buyStopBox = qs('#buystop');
-  const sellStopBox = qs('#sellstop');
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    const toFloat = v => {
+        const n = parseFloat(String(v ?? '').replace(/,/g,''));
+        return isNaN(n) ? 0 : n;
+    };
 
-  const limitBuyBtn = qs('#limitbuybutton');
-  const limitSellBtn = qs('#limitsellbutton');
-  const marketBuyBtn = qs('#marketbuybutton');
-  const marketSellBtn = qs('#marketsellbutton');
-  const stopBuyBtn = qs('#stopbuybutton');
-  const stopSellBtn = qs('#stopsellbutton');
+    // IDs
+    const USER_BALANCE_ID = '#user_coin'; // sell balance
+    const BUY_BALANCE_SPAN = '.market-trade-buy p span:first-child'; // buy balance
 
-  const buyPriceInput = qs('#buy_price');
-  const buyQtyInput = qs('#buy_num');
-  const buyTotalEl = qs('#buy_mum');
+    const tabs = $$('#orderTypeTabs .nav-link');
 
-  const sellPriceInput = qs('#sell_price');
-  const sellQtyInput = qs('#sell_num');
-  const sellTotalEl = qs('#sell_mum');
+    const getPriceEl = side => $(`#${side}_price`);
+    const getQtyEl = side => $(`#${side}_num`);
+    const getTotalEl = side => $(`#${side}_mum`);
+    const getStopBox = side => $(`#${side}stop`);
+    const getPriceBox = side => $(`#${side}pricebox`);
+    const getLimitBtn = side => $(`#limit${side}button`);
+    const getMarketBtn = side => $(`#market${side}button`);
+    const getStopBtn = side => $(`#stop${side}button`);
 
-  const feeBuyEl = qs('#buy_fees');
-  const feeSellEl = qs('#sell_fees');
+    const marketPriceEl = $('#market_sell_price');
 
-  const percentLinks = qsa('.market-trade-list a');
+    const computeTotalFor = side => {
+        const qty = toFloat(getQtyEl(side)?.value);
+        let price = toFloat(getPriceEl(side)?.value);
+        if (!price && marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
+        const total = qty * price;
+        const totalEl = getTotalEl(side);
+        if (totalEl) totalEl.textContent = isFinite(total) ? total.toFixed(8).replace(/\.?0+$/,'') : '--';
+    };
 
-  const baseBalanceEl = qs('#base_coin'); // for quote balance (e.g. USDT)
-  const userBaseEl = qs('#user_coin'); // for base balance (e.g. BTC)
+    // Show/hide order types
+    const showOrderType = type => {
+        ['buy','sell'].forEach(side => {
+            const priceBox = getPriceBox(side);
+            const stopBox = getStopBox(side);
+            const limitBtn = getLimitBtn(side);
+            const marketBtn = getMarketBtn(side);
+            const stopBtn = getStopBtn(side);
 
-  // Helper: safe text -> float
-  function toFloat(v){ const n = parseFloat(String(v).replace(/,/g,'')); return isNaN(n)?0:n; }
+            if(priceBox) priceBox.style.display='none';
+            if(stopBox) stopBox.style.display='none';
+            if(limitBtn) limitBtn.style.display='none';
+            if(marketBtn) marketBtn.style.display='none';
+            if(stopBtn) stopBtn.style.display='none';
 
-  // Initialize: hide everything then show 'limit' UI
-  function showOrderType(type){
-    // hide all sections first
-    const hideIfExists = id => { const el = qs('#'+id); if(el) el.style.display = 'none'; };
-    ['buypricebox','sellpricebox','buystop','sellstop',
-     'limitbuybutton','limitsellbutton','marketbuybutton','marketsellbutton','stopbuybutton','stopsellbutton']
-      .forEach(hideIfExists);
+            if(type==='limit'){ if(priceBox) priceBox.style.display=''; if(limitBtn) limitBtn.style.display=''; }
+            if(type==='market'){ if(marketBtn) marketBtn.style.display=''; }
+            if(type==='stop'){ if(stopBox) stopBox.style.display=''; if(stopBtn) stopBtn.style.display=''; }
 
-    // wiring display
-    if (type === 'limit') {
-      if (buyPriceBox) buyPriceBox.style.display = 'flex';
-      if (sellPriceBox) sellPriceBox.style.display = 'flex';
-      if (limitBuyBtn) limitBuyBtn.style.display = 'block';
-      if (limitSellBtn) limitSellBtn.style.display = 'block';
-    } else if (type === 'market') {
-      // hide price inputs (market orders use current best price)
-      if (buyPriceBox) buyPriceBox.style.display = 'none';
-      if (sellPriceBox) sellPriceBox.style.display = 'none';
-      if (marketBuyBtn) marketBuyBtn.style.display = 'block';
-      if (marketSellBtn) marketSellBtn.style.display = 'block';
-    } else if (type === 'stop') {
-      if (buyStopBox) buyStopBox.style.display = 'flex';
-      if (sellStopBox) sellStopBox.style.display = 'flex';
-      if (stopBuyBtn) stopBuyBtn.style.display = 'block';
-      if (stopSellBtn) stopSellBtn.style.display = 'block';
+            computeTotalFor(side);
+        });
+    };
+
+    // Tab clicks
+    if(tabs.length){
+        tabs.forEach(t=>{
+            t.addEventListener('click',function(e){
+                e.preventDefault();
+                tabs.forEach(x=>x.classList.remove('active'));
+                this.classList.add('active');
+                const type = this.dataset.type || 'limit';
+                showOrderType(type);
+            });
+        });
     }
 
-    // update totals after switching
-    computeBuyTotal();
-    computeSellTotal();
-  }
+    // Percentage buttons
+    window.setPercentage = (percent, side) => {
+        percent = toFloat(percent);
+        if(side==='buy'){
+            const baseBalanceEl = $(BUY_BALANCE_SPAN);
+            const baseBalance = toFloat(baseBalanceEl?.textContent || 0);
+            let price = toFloat(getPriceEl('buy')?.value);
+            if(!price && marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
+            if(price <=0) return;
+            const qty = (baseBalance*percent/100)/price;
+            const el = getQtyEl('buy');
+            if(el){ el.value = qty.toFixed(8); computeTotalFor('buy'); }
+        } else {
+            const userBalance = toFloat($(USER_BALANCE_ID)?.textContent || 0);
+            const qty = userBalance*percent/100;
+            const el = getQtyEl('sell');
+            if(el){ el.value = qty.toFixed(8); computeTotalFor('sell'); }
+        }
+    };
 
-  // attach tab click handlers
-  if (tabs.length) {
-    tabs.forEach(tab => {
-      tab.addEventListener('click', function(evt){
-        // prevent default if it's an <a> later
-        evt.preventDefault && evt.preventDefault();
-        tabs.forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        const type = this.dataset.type;
-        showOrderType(type);
-      });
+    // Range sliders
+    window.updateFromRange = (side, value)=>{
+        value = toFloat(value);
+        if(side==='buy'){
+            const baseBalanceEl = $(BUY_BALANCE_SPAN);
+            const baseBalance = toFloat(baseBalanceEl?.textContent || 0);
+            let price = toFloat(getPriceEl('buy')?.value);
+            if(!price && marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
+            if(price <=0) return;
+            const qty = (baseBalance*value/100)/price;
+            const el = getQtyEl('buy');
+            if(el){ el.value = qty.toFixed(8); computeTotalFor('buy'); }
+        } else {
+            const userBalance = toFloat($(USER_BALANCE_ID)?.textContent || 0);
+            const qty = userBalance*value/100;
+            const el = getQtyEl('sell');
+            if(el){ el.value = qty.toFixed(8); computeTotalFor('sell'); }
+        }
+    };
+
+    // Live compute on inputs
+    ['buy','sell'].forEach(side=>{
+        const pEl = getPriceEl(side);
+        const qEl = getQtyEl(side);
+        if(pEl) pEl.addEventListener('input',()=>computeTotalFor(side));
+        if(qEl) qEl.addEventListener('input',()=>computeTotalFor(side));
     });
-  }
 
-  // Live calculations
-  function computeBuyTotal() {
-    if (!buyQtyInput || !buyTotalEl) return;
-    const qty = toFloat(buyQtyInput.value);
-    // price for limit orders comes from buy_price, for market orders we attempt to use market_sell_price element
-    let price = toFloat(buyPriceInput?.value);
-    if (!price) {
-      const marketPriceEl = qs('#market_sell_price');
-      if (marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
-    }
-    const total = qty * price;
-    buyTotalEl.textContent = isFinite(total) ? total.toFixed(8).replace(/\.?0+$/,'') : '--';
-  }
+    // AJAX place order
+    const placeOrderAJAX = (side, type)=>{
+        const qty = toFloat(getQtyEl(side)?.value);
+        const price = toFloat(getPriceEl(side)?.value);
+        const stopPrice = toFloat(getStopBox(side)?.querySelector('input')?.value);
+        if(!qty || (type!=='market' && !price && side==='buy') || (type==='stop' && !stopPrice)){
+            alert('Enter quantity, price and stop (if stop order).');
+            location.reload();
+            return;
+        }
 
-  function computeSellTotal() {
-    if (!sellQtyInput || !sellTotalEl) return;
-    const qty = toFloat(sellQtyInput.value);
-    let price = toFloat(sellPriceInput?.value);
-    if (!price) {
-      const marketPriceEl = qs('#market_sell_price');
-      if (marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
-    }
-    const total = qty * price;
-    sellTotalEl.textContent = isFinite(total) ? total.toFixed(8).replace(/\.?0+$/,'') : '--';
-  }
+        const tradingPairId = $('#tradingPairId')?.value;
+        fetch('{{ url("trade/place-order") }}', {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                trading_pair_id: tradingPairId,
+                type: type==='stop' ? 'stop_limit' : type,
+                side: side,
+                quantity: qty,
+                price: price || null,
+                stop_price: stopPrice || null
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            if(data.success){
+                alert(`${side.toUpperCase()} order placed: ${qty} @ ${price || 'market'} (${type})`);
+                location.reload();
+                computeTotalFor(side);
+            } else {
+                alert(data.message || 'Failed to place order.');
+                location.reload();
+            }
+        })
+        .catch(err=>{
+            console.error(err);
+            alert('Error placing order. Check console.');
+            location.reload();
+        });
+    };
 
-  // Percentage buttons handler: percent (string e.g. '25'), side = 'buy'|'sell'
-  window.Percentage = function(percent, side){
-    percent = toFloat(percent);
-    if (side === 'buy') {
-      // determine quote balance (e.g. USDT) from #base_coin
-      const balance = toFloat(baseBalanceEl?.textContent || baseBalanceEl?.innerText || 0);
-      // choose price
-      let price = toFloat(buyPriceInput?.value);
-      if (!price) {
-        const marketPriceEl = qs('#market_sell_price');
-        price = toFloat(marketPriceEl?.textContent || marketPriceEl?.innerText || 0);
-      }
-      if (price <= 0) {
-        console.warn('Cannot calculate buy quantity: invalid price');
-        return;
-      }
-      const funds = balance * (percent/100);
-      const qty = funds / price;
-      if (buyQtyInput) buyQtyInput.value = qty.toFixed(8);
-      computeBuyTotal();
-    } else {
-      // sell uses base token balance (#user_coin)
-      const balance = toFloat(userBaseEl?.textContent || userBaseEl?.innerText || 0);
-      const qty = balance * (percent/100);
-      if (sellQtyInput) sellQtyInput.value = qty.toFixed(8);
-      computeSellTotal();
-    }
-  };
+    // Map buttons to AJAX
+    window.placeOrder = (side,type)=>placeOrderAJAX(side,type);
 
-  // Wire live compute events
-  [buyPriceInput, buyQtyInput].forEach(el => el && el.addEventListener('input', computeBuyTotal));
-  [sellPriceInput, sellQtyInput].forEach(el => el && el.addEventListener('input', computeSellTotal));
-
-  // Also recompute when market price element changes (if you update it via JS)
-  (function watchMarketPrice(){
-    const marketPriceEl = qs('#market_sell_price');
-    if (!marketPriceEl) return;
-    let last = marketPriceEl.textContent;
-    setInterval(() => {
-      const cur = marketPriceEl.textContent;
-      if (cur !== last) {
-        last = cur;
-        computeBuyTotal();
-        computeSellTotal();
-      }
-    }, 700);
-  })();
-
-  // Simple trade functions (stubs) — replace with AJAX / form submission
-  window.tradeadd_buy = function(type) {
-    const qty = toFloat(buyQtyInput?.value);
-    const price = toFloat(buyPriceInput?.value) || toFloat(qs('#market_sell_price')?.textContent || 0);
-    if (!qty || !price) { alert('Enter quantity and price (or ensure market price is available).'); return; }
-    // Example: POST to server via fetch (replace URL and payload as needed)
-    console.log('tradeadd_buy', { type, qty, price });
-    alert(`BUY order: ${qty} @ ${price} (${type}) — integrate with backend.`);
-  };
-
-  window.tradeadd_sell = function(type) {
-    const qty = toFloat(sellQtyInput?.value);
-    const price = toFloat(sellPriceInput?.value) || toFloat(qs('#market_sell_price')?.textContent || 0);
-    if (!qty || !price) { alert('Enter quantity and price (or ensure market price is available).'); return; }
-    console.log('tradeadd_sell', { type, qty, price });
-    alert(`SELL order: ${qty} @ ${price} (${type}) — integrate with backend.`);
-  };
-
-  window.stopadd_buy = function() {
-    alert('STOP BUY clicked — integrate stop-limit logic.');
-  };
-  window.stopadd_sell = function() {
-    alert('STOP SELL clicked — integrate stop-limit logic.');
-  };
-
-  // Initialize UI to Limit
-  showOrderType('limit');
-
-  // Expose compute functions for debugging
-  window.__orderForm = { computeBuyTotal, computeSellTotal, showOrderType };
+    showOrderType('limit');
 
 })();
 </script>
+
+
+
+
 @endpush
 
 @push('scripts')

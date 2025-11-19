@@ -2,17 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\User\PoolController;
 use App\Http\Controllers\User\StakeController;
 use App\Http\Controllers\User\StockController;
+use App\Http\Controllers\User\FaucetController;
 use App\Http\Controllers\User\WalletController;
+use App\Http\Controllers\User\AirdropController;
 use App\Http\Controllers\User\SettingController;
-use App\Http\Controllers\User\TradingController;
 use App\Http\Controllers\User\StakingController;
+use App\Http\Controllers\User\TradingController;
+use App\Http\Controllers\User\GiftCardController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\EasyTradeController;
 use App\Http\Controllers\User\PortfolioController;
 use App\Http\Controllers\User\WatchlistController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\User\MiningPoolController;
+use App\Http\Controllers\User\UserAirdropController;
 use App\Http\Controllers\User\StockTradingController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\EmailVerificationController;
@@ -32,6 +38,7 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
 
 Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->group(function () {
     Route::get('/','index');
@@ -92,6 +99,30 @@ Route::get('/staking', [StakingController::class, 'staking'])->name('staking');
 Route::post('/staking/invest', [StakingController::class, 'invest'])
     ->middleware(['auth', 'verify.email'])->name('staking.invest');
 
+Route::get('/airdrops', [UserAirdropController::class, 'index'])->name('airdrops.index');
+Route::get('/airdrops/{airdrop}', [UserAirdropController::class, 'show'])->name('airdrops.show');
+Route::post('/airdrops/{airdrop}/claim', [UserAirdropController::class, 'claim'])->name('airdrops.claim')->middleware(['auth', 'verify.email']);
+
+Route::get('/faucets', [FaucetController::class, 'index'])->name('faucets.index');
+Route::post('/faucets/claim/{id}', [FaucetController::class, 'claim'])->name('faucets.claim')->middleware(['auth', 'verify.email']);
+
+Route::prefix('pool')->name('pool.')->group(function () {
+    Route::get('/', [PoolController::class, 'index'])->name('index');
+    Route::get('/myMachines', [PoolController::class, 'myMachines'])->name('myMachines');
+    Route::get('/myRewards', [PoolController::class, 'myRewards'])->name('myRewards');
+    Route::post('/rent/{pool}', [PoolController::class, 'rent'])->name('rent');
+    Route::post('/claim-reward/{reward}', [PoolController::class, 'claimReward'])->name('claimReward');
+});
+
+Route::prefix('giftcard')->name('giftcard.')->group(function () {
+    Route::get('/', [GiftCardController::class, 'index'])->name('index');
+    Route::get('/create', [GiftCardController::class, 'create'])->name('create');
+    Route::post('/store', [GiftCardController::class, 'store'])->name('store');
+    Route::post('/check-value', [GiftCardController::class, 'checkValue'])->name('checkValue');
+    Route::post('/redeem', [GiftCardController::class, 'redeem'])->name('redeem');
+    Route::get('/view-code/{id}', [GiftCardController::class, 'viewCode'])->name('viewCode');
+    Route::get('/view-consumed/{id}', [GiftCardController::class, 'viewConsumed'])->name('viewConsumed');
+});
 
 // Route::get('/trade/{pairId}/data', [TradingController::class, 'fetchOrderData'])->name('trade.data');
 // Route::get('/orderbook/{pairId}/refresh', [TradingController::class, 'refreshOrderBook']);

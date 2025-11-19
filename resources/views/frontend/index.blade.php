@@ -9,7 +9,7 @@
         <div class="banner-inner-section">
             <div class="banner-left-section">
                 <div class="index_banner-title__Ueyv2" data-wow-delay="0.2s">
-                    <h1 class="Main-heading">Empowering the Future of Crypto Trading</h1>
+                    <h1 class="Main-heading" data-translate="welcome-title">Empowering the Future of Crypto Trading</h1>
                     <p>Seamlessly Buy, Sell, Trade, and Hold Cryptocurrencies on
                         {{ \App\Models\Setting::get('site_name', 'Website Name') }}.com
                     </p>

@@ -121,6 +121,104 @@
             </a>
         </li>
 
+        <!-- Airdrop -->
+        <li x-data="{ open: false }">
+            <button @click="open = !open"
+                class="flex items-center justify-between w-full px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <div class="flex items-center">
+                    <i class="fas fa-layer-group w-5"></i>
+                    <span class="ml-3">Airdrops</span>
+                </div>
+                <i class="fas fa-chevron-down transition" :class="{ 'rotate-180': open }"></i>
+            </button>
+
+            <div x-show="open" x-transition class="ml-10 mt-1 space-y-1">
+                <a href="{{ url('admin/airdrops') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Manage Airdrops
+                </a>
+                <a href="{{ url('admin/airdrops/claims') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Manage Claims
+                </a>
+            </div>
+        </li>
+
+        <!-- Faucet -->
+        <li x-data="{ open: false }">
+            <button @click="open = !open"
+                class="flex items-center justify-between w-full px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <div class="flex items-center">
+                    <i class="fas fa-layer-group w-5"></i>
+                    <span class="ml-3">Faucet</span>
+                </div>
+                <i class="fas fa-chevron-down transition" :class="{ 'rotate-180': open }"></i>
+            </button>
+
+            <div x-show="open" x-transition class="ml-10 mt-1 space-y-1">
+                <a href="{{ url('admin/faucets') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Manage Faucet
+                </a>
+                <a href="{{ url('admin/faucet-logs') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    View Logs
+                </a>
+            </div>
+        </li>
+
+        <!-- Mining -->
+        <li x-data="{ open: false }">
+            <button @click="open = !open"
+                class="flex items-center justify-between w-full px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <div class="flex items-center">
+                    <i class="fas fa-layer-group w-5"></i>
+                    <span class="ml-3">Mining</span>
+                </div>
+                <i class="fas fa-chevron-down transition" :class="{ 'rotate-180': open }"></i>
+            </button>
+
+            <div x-show="open" x-transition class="ml-10 mt-1 space-y-1">
+                <a href="{{ url('admin/pools') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Manage Pool
+                </a>
+                <a href="{{ url('admin/pools/machines') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Machines
+                </a>
+                <a href="{{ url('admin/pools/rewards') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Rewards
+                </a>
+            </div>
+        </li>
+
+
+        <!-- Gift Card -->
+        <li x-data="{ open: false }">
+            <button @click="open = !open"
+                class="flex items-center justify-between w-full px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <div class="flex items-center">
+                    <i class="fas fa-layer-group w-5"></i>
+                    <span class="ml-3">Gift Card</span>
+                </div>
+                <i class="fas fa-chevron-down transition" :class="{ 'rotate-180': open }"></i>
+            </button>
+
+            <div x-show="open" x-transition class="ml-10 mt-1 space-y-1">
+                <a href="{{ url('admin/giftcards') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    View Gift Cards
+                </a>
+                <a href="{{ url('admin/giftcards/transactions') }}"
+                   class="block px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition">
+                    Transactions
+                </a>
+                
+            </div>
+        </li>
+
         <!-- Users -->
         <li>
             <a href="{{ route('admin.users.index') }}"

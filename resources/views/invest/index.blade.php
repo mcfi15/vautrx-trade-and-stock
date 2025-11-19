@@ -34,14 +34,14 @@
 			  <ul class="text-right breadcrumbs list-unstyle">
 				<li>
 				  <a
-					class="btn btn-warning btn-sm"
+					class="btn btn-primary btn-sm"
 					href="/"
 					>Home</a
 				  >
 				</li>
 				<li>
 				  <a
-					class="btn btn-warning btn-sm active"
+					class="btn btn-primary btn-sm active"
 					href="{{ url('invest') }}"
 					>Invest</a
 				  >
@@ -49,7 +49,7 @@
 				<li >
 				 
                   <a
-                  class="btn btn-warning btn-sm"
+                  class="btn btn-primary btn-sm"
                   
                   > Invest Log</a
                 >

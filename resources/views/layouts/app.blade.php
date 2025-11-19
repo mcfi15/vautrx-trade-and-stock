@@ -1423,25 +1423,7 @@
 
 @yield('content')
 
-<script>
-    function easytrade() {
-        var coin = $("select#easycoin").find("option:selected").attr("data-value");
-        var amount = $("input#easyamount").val();
-        var url = '{{ url('easy-convert') }}';
-        if (!coin) {
-            layer.tips('Please select coin!', "#easycoin", { tips: 3 });
-            return false;
-        }
-        if (!amount) {
-            layer.tips('Please enter amount', "#easyamount", { tips: 3 });
-            return false;
-        }
-        coin = coin.toUpperCase();
-        url = url + "?coin=" + coin + "&amount=" + amount;
-        console.log(url);
-        window.location = url;
-    }
-</script>
+
 
 <!-- Footer -->
 <footer class="cex-ui-footer">
@@ -1463,10 +1445,10 @@
                         Trade</h2>
 
                     <div class="cex-ui-services">
-                        <a href="{{ url('trade/spot') }}" class="cex-ui-text cex-ui-text-small" id="">Spot</a>
+                        <a href="{{ url('/trade/spot') }}" class="cex-ui-text cex-ui-text-small" id="">Spot</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="{{ url('easy-convert') }}" class="cex-ui-text cex-ui-text-small" id="">Easy Convert</a>
+                        <a href="{{ url('/easy-trade') }}" class="cex-ui-text cex-ui-text-small" id="">Easy Convert</a>
                     </div>
                 </div>
                 <div class="cex-ui-footer-content-menu-column">
@@ -1474,13 +1456,13 @@
                         Earn</h2>
 
                     <div class="cex-ui-services">
-                        <a href="{{ url('staking') }}" class="cex-ui-text cex-ui-text-small" id="">Staking</a>
+                        <a href="{{ url('/staking') }}" class="cex-ui-text cex-ui-text-small" id="">Staking</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="{{ url('airdrop') }}" class="cex-ui-text cex-ui-text-small" id="">Airdrop</a>
+                        <a href="{{ url('/airdrops') }}" class="cex-ui-text cex-ui-text-small" id="">Airdrop</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="{{ url('faucet') }}" class="cex-ui-text cex-ui-text-small" id="">Faucet</a>
+                        <a href="{{ url('/faucets') }}" class="cex-ui-text cex-ui-text-small" id="">Faucet</a>
                     </div>
                 </div>
                 <div class="cex-ui-footer-content-menu-column">
@@ -1488,16 +1470,16 @@
                         Platform</h2>
 
                     <div class="cex-ui-services">
-                        <a href="{{ url('about') }}" class="cex-ui-text cex-ui-text-small" id="">About Us</a>
+                        <a href="{{ url('/about') }}" class="cex-ui-text cex-ui-text-small" id="">About Us</a>
                     </div>
-                    <div class="cex-ui-services">
+                    {{-- <div class="cex-ui-services">
                         <a href="{{ url('dex') }}" class="cex-ui-text cex-ui-text-small" id="">Decentralized</a>
+                    </div> --}}
+                    <div class="cex-ui-services">
+                        <a href="{{ url('/markets') }}" class="cex-ui-text cex-ui-text-small" id="">Market</a>
                     </div>
                     <div class="cex-ui-services">
-                        <a href="{{ url('markets') }}" class="cex-ui-text cex-ui-text-small" id="">Market</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('mining') }}" class="cex-ui-text cex-ui-text-small" id="">Mining</a>
+                        <a href="{{ url('/pool') }}" class="cex-ui-text cex-ui-text-small" id="">Mining</a>
                     </div>
                 </div>
                 <div class="cex-ui-footer-content-menu-column">
@@ -1638,6 +1620,66 @@
     </div>
 </footer>
 
+<script>
+var LANGS = {
+    en: { flag: "gb", name: "English" },
+    tr: { flag: "tr", name: "Turkish" },
+    es: { flag: "es", name: "Spanish" },
+    nl: { flag: "nl", name: "Dutch" },
+    il: { flag: "il", name: "Hebrew" },
+    de: { flag: "de", name: "German" },
+    ko: { flag: "kr", name: "Korean" },
+    ja: { flag: "jp", name: "Japanese" },
+    pt: { flag: "pt", name: "Portuguese" },
+    ru: { flag: "ru", name: "Russian" },
+    vi: { flag: "vn", name: "Vietnamese" },
+    zhtw: { flag: "tw", name: "Traditional Chinese" },
+    zhcn: { flag: "cn", name: "Simplified Chinese" }
+};
+
+// Update UI when language changes
+function updateLangUI(lang) {
+    var sel = LANGS[lang] || LANGS['en'];
+
+    $("#langselection img").attr("src", "https://flagcdn.com/w40/" + sel.flag + ".png");
+    $("#langselection span").text(sel.name);
+}
+
+// Save + reload page with locale prefix
+function changeLanguage(lang) {
+    localStorage.setItem("site_lang", lang);
+
+    updateLangUI(lang);
+
+    // Redirect to /lang/current-path
+    var path = window.location.pathname.split("/").filter(Boolean);
+    var supported = Object.keys(LANGS);
+
+    if (path.length && supported.includes(path[0])) {
+        path[0] = lang;
+    } else {
+        path.unshift(lang);
+    }
+
+    window.location.href = "/" + path.join("/");
+}
+
+$(document).ready(function () {
+
+    // Restore selected language
+    var saved = localStorage.getItem("site_lang") || "en";
+    updateLangUI(saved);
+
+    // When clicking on an item
+    $(".dropdown-item").on("click", function () {
+        var lang = $(this).data("lang");
+        changeLanguage(lang);
+    });
+});
+</script>
+
+
+
 <style>
     footer {
         display: block !important;
@@ -1745,6 +1787,7 @@
         window.location.reload();
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <!-- Chart.js -->
 <script src="{{ asset('js/chart.js') }}"></script>
 <script src="{{ asset('Public/template/epsilon/js/popper.min.js') }}"></script>

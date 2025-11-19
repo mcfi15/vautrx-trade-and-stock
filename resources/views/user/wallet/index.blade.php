@@ -18,7 +18,7 @@
                         <div class="col-md-9 col-sm-6 text-right hide-mobile">
                             <a href="{{ url('wallet/deposit') }}" class="btn-2"><i class="fa fa-download"></i> Deposit</a>
                             <a href="{{ url('wallet/withdraw') }}" class="btn-1"><i class="fa fa-upload"></i> Withdraw</a>
-                            <a href="/gift/" class="btn-1"><i class="fa fa-gift"></i> Gift Cards</a>
+                            <a href="{{ url('/giftcard') }}" class="btn-1"><i class="fa fa-gift"></i> Gift Cards</a>
                             <a href="{{ url('stocks') }}" class="btn-2"><i class="fa fa-line-chart"></i> Stocks</a>
 
                         </div>
@@ -37,7 +37,7 @@
                             </div>
                             <div class="row w-100 mt-2">
                                 <div class="col-12">
-                                    <a href="/gift/" class="btn-1 btn-block"><i class="fa fa-gift"></i> Gift
+                                    <a href="{{ url('/giftcard') }}" class="btn-1 btn-block"><i class="fa fa-gift"></i> Gift
                                         Cards</a>
                                 </div>
                             </div>

@@ -29,6 +29,8 @@ class Kernel extends ConsoleKernel
                  ->weekly()
                  ->sundays()
                  ->at('02:00');
+
+        $schedule->command('mining:process-rewards')->dailyAt('00:00');
     }
 
     protected function commands()

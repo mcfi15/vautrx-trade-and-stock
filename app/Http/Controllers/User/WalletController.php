@@ -67,9 +67,17 @@ class WalletController extends Controller
         return view('user.wallet.index', compact('wallets', 'cryptocurrencies', 'totalValue', 'recentTransactions'));
     }
 
-    public function showDeposit($cryptoId)
+    public function showDeposit($cryptoId = null)
     {
         $user = Auth::user();
+        
+        $cryptocurrencies = Cryptocurrency::active()->get();
+
+            // If no cryptocurrency ID provided, show selection page
+        if (!$cryptoId) {
+            return view('user.wallet.deposit-select', compact('cryptocurrencies'));
+        }
+
         $crypto = Cryptocurrency::findOrFail($cryptoId);
 
         $paymentMethods = PaymentMethod::where('cryptocurrency_id', $cryptoId)->get();
@@ -118,7 +126,7 @@ class WalletController extends Controller
 
         // ✅ Send email notification to user
         try {
-            Mail::to($user->email)->send(new \App\Mail\DepositSubmittedMail($deposit));
+            Mail::to($user->email)->send(new DepositSubmittedMail($deposit));
         } catch (\Exception $mailError) {
             \Log::error('Deposit submission email failed', [
                 'deposit_id' => $deposit->id,

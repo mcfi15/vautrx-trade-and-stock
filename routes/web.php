@@ -180,7 +180,7 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::get('/', [WalletController::class, 'index'])->name('index');
         Route::get('/deposit', [WalletController::class, 'showDeposit'])->name('deposit'); // General deposit page
         Route::get('/deposit/{cryptoId}', [WalletController::class, 'showDeposit'])->name('deposit.specific'); // Specific crypto deposit
-        Route::post('/deposit/{cryptoId}/submit', [WalletController::class, 'submit'])->name('deposit.submit');
+        Route::post('/deposit/{cryptoId}/submit', [WalletController::class, 'submitDeposit'])->name('deposit.submit');
         Route::get('/withdraw', [WalletController::class, 'showWithdraw'])->name('withdraw'); // General withdraw page
         Route::get('/withdraw/{cryptoId}', [WalletController::class, 'showWithdraw'])->name('withdraw.specific'); // Specific crypto withdraw
         Route::post('/withdraw', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');

@@ -39,6 +39,7 @@
             <div class="absolute right-0 top-full w-48 bg-white text-gray-800 border rounded shadow-lg hidden group-hover:block z-50">
                 <a href="{{ route('dashboard') }}" class="block px-4 py-2 hover:bg-gray-100">User Dashboard</a>
                 <a href="{{ url('admin/login-history') }}" class="block px-4 py-2 hover:bg-gray-100">Login Activities</a>
+                <a href="{{ url('admin/change-password') }}" class="block px-4 py-2 hover:bg-gray-100">Change Password</a>
                 <form action="{{ route('admin.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>

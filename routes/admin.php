@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\UserStakeController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Admin\TradingPairController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AirdropClaimController;
 use App\Http\Controllers\Admin\LoginHistoryController;
 use App\Http\Controllers\Admin\OAuthSettingsController;
@@ -78,19 +79,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::post('/cryptocurrencies/sync-from-binance', [CryptocurrencyController::class, 'syncFromBinance'])
         ->name('cryptocurrencies.sync-from-binance');
 
-    // Cryptocurrency Management
-    // Route::resource('cryptocurrencies', CryptocurrencyController::class);
-    // Route::post('cryptocurrencies/{cryptocurrency}/toggle-status', [CryptocurrencyController::class, 'toggleStatus'])
-    //     ->name('cryptocurrencies.toggle-status');
-    // Route::post('cryptocurrencies/{cryptocurrency}/toggle-realtime', [CryptocurrencyController::class, 'toggleRealtime'])
-    //     ->name('cryptocurrencies.toggle-realtime');
-    // Route::post('cryptocurrencies/sync-from-binance', [CryptocurrencyController::class, 'syncFromBinance'])
-    //     ->name('cryptocurrencies.sync-from-binance');
-    // Route::post('cryptocurrencies/sync-prices', [CryptocurrencyController::class, 'syncPrices'])
-    //     ->name('cryptocurrencies.sync-prices');
-    // Route::post('cryptocurrencies/update-prices', [CryptocurrencyController::class, 'updatePrices'])
-    //     ->name('cryptocurrencies.update-prices');
-
+    
     // Trading Pair Management
     Route::resource('trading-pairs', TradingPairController::class);
     Route::post('trading-pairs/{pair}/toggle-status', [TradingPairController::class, 'toggleStatus'])
@@ -234,6 +223,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
         ->except(['show']); // show can be added if needed
 
     Route::get('trades/{trade}', [TradeController::class, 'show'])->name('trades.show');
+
+    Route::get('/change-password', [AdminProfileController::class, 'changePasswordForm'])
+        ->name('admin.password.form');
+
+    Route::post('/change-password', [AdminProfileController::class, 'updatePassword'])->name('password.update');
 
 
 });

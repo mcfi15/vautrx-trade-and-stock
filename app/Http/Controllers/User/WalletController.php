@@ -94,7 +94,7 @@ class WalletController extends Controller
         ]);
     }
 
-    public function submit(Request $request, $cryptoId)
+    public function submitDeposit(Request $request, $cryptoId)
 {
     $user = Auth::user();
 

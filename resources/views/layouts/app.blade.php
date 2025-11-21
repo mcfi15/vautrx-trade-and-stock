@@ -1516,8 +1516,7 @@
                             <path fill="#fff"
                                 d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
                         </svg>
-                        <span class="__cf_email__"
-                            data-cfemail="b8cbcdc8c8d7caccf8dcdddbcccac096dbd7d5">[email&#160;protected]</span> </a>
+                        <span >support@vautrx.com</span> </a>
 
                     <a href="mailto:info@vautrx.com"
                         class="cex-ui-text cex-ui-text-small" style="white-space: nowrap; margin-bottom: 5px;">
@@ -1525,8 +1524,7 @@
                             <path fill="#fff"
                                 d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
                         </svg>
-                        <span class="__cf_email__"
-                            data-cfemail="adc4c3cbc2edc9c8ced9dfd583cec2c0">[email&#160;protected]</span> </a>
+                        <span>info@vautrx.com</span> </a>
                 </div>
             </div>
             <!--            <div class="cex-ui-footer-content-menu-column">-->

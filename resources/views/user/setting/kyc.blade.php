@@ -72,7 +72,7 @@
                 @if($user->kyc_status === 'approved')
                     <div class="alert alert-success">Your KYC is approved.</div>
                 @elseif($user->kyc_status === 'pending')
-                    <div class="alert alert-warning">Your KYC is pending. Please wait for admin verification.</div>
+                    <div class="alert alert-warning">Your KYC is pending. Please wait for verification.</div>
                 @elseif($user->kyc_status === 'rejected')
                     <div class="alert alert-danger">
                         Your KYC was rejected.<br>

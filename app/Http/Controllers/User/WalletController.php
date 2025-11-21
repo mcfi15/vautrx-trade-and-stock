@@ -168,7 +168,7 @@ class WalletController extends Controller
 
             return redirect()
                 ->route('wallet.deposit', $cryptoId)
-                ->with('success', 'Deposit submitted successfully and awaiting admin approval.');
+                ->with('success', 'Deposit submitted successfully and awaiting approval.');
 
         } catch (\Exception $e) {
             \Log::error('Deposit submission failed', [

@@ -981,6 +981,86 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 
+<script>
+// =======================
+// EXTRA FUNCTIONS ADDED
+// FROM SECOND SCRIPT
+// =======================
+
+// Cancel order function
+async function cancelOrder(orderId) {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+
+    try {
+        const response = await fetch(`/trade/orders/${orderId}/cancel`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showNotification('Order cancelled successfully!', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification(result.message, 'error');
+        }
+    } catch (error) {
+        console.error('Order cancellation error:', error);
+        showNotification('Failed to cancel order. Please try again.', 'error');
+    }
+}
+
+
+// Notification popup
+function showNotification(message, type) {
+    // Remove existing notifications
+    document.querySelectorAll('.trade-notification').forEach(n => n.remove());
+
+    const alertType = type === 'success' ? 'alert-success' : 'alert-danger';
+
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${alertType} alert-dismissible fade show trade-notification position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    `;
+
+    document.body.appendChild(alertDiv);
+
+    setTimeout(() => {
+        if (alertDiv.parentNode) alertDiv.remove();
+    }, 5000);
+}
+
+</script>
+
+<script>
+function incrementValue(inputId, step) {
+    const input = document.getElementById(inputId);
+
+    if (!input) return;
+
+    // If input is empty, treat as zero
+    let current = parseFloat(input.value);
+    if (isNaN(current)) current = 0;
+
+    // Increase the value
+    let newValue = current + step;
+
+    // Format to 8 decimal places (since you use step="0.00000001")
+    newValue = parseFloat(newValue).toFixed(8);
+
+    input.value = newValue;
+
+    // Trigger input events so totals update
+    input.dispatchEvent(new Event('input'));
+}
+</script>
 
 
 

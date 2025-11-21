@@ -706,11 +706,11 @@
 
                         </a>
                         <div class="dropdown-menu">
-                            <div class="dropdown-header d-flex align-items-center justify-content-between">
+                            {{-- <div class="dropdown-header d-flex align-items-center justify-content-between">
                                 <p class="font-weight-medium"><a href="mailto:{{ auth()->user()->email }}"
                                         class="__cf_email__"
                                         data-cfemail="5526203c2c3934213d153d3c677b3c3b">[email&#160;protected]</a></p>
-                            </div>
+                            </div> --}}
                             <div class="dropdown-body">
                                 <a class="dropdown-item" href="{{ url('user-center') }}">
                                     <span>User Center</span></a>

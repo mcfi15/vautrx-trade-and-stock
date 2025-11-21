@@ -18,7 +18,7 @@
           </ul>
           <ul class="list-inline m-r-15 f-s-12 filterMenu">
 
-            <li class="list-inline-item active all-orders"><a href="Login/login-2.html">All</a></li>
+            <li class="list-inline-item active all-orders"><a href="">All</a></li>
           </ul>
         </div>
         <div class="tab-content">
@@ -124,7 +124,7 @@
                             @empty
                             <tr>
                                 <td colspan="9" class="text-center text-muted py-3">
-                                    <i class="icon ion-md-document"></i>
+                                    <i style="color:#1e90ff;" class="fa fa-file"></i>
                                     No active orders found
                                 </td>
                             </tr>
@@ -132,7 +132,7 @@
                         @else
                             <tr>
                                 <td colspan="9" class="text-center text-muted py-3">
-                                    <i class="icon ion-md-person"></i>
+                                    <i style="color:#1e90ff;" class="fa fa-user"></i>
                                     <span class="login-menu">
                                         <a class="cd-signin" href="{{ route('login') }}">Login</a> or 
                                         <a class="cd-signup" href="{{ route('register') }}">Signup</a> to view your orders
@@ -188,7 +188,7 @@
                             @empty
                             <tr>
                                 <td colspan="6" class="text-center text-muted py-3">
-                                    <i class="icon ion-md-document"></i>
+                                    <i style="color:#1e90ff;" class="fa fa-file"></i>
                                     No order history found
                                 </td>
                             </tr>
@@ -196,7 +196,7 @@
                         @else
                             <tr>
                                 <td colspan="6" class="text-center text-muted py-3">
-                                    <i class="icon ion-md-person"></i>
+                                    <i style="color:#1e90ff;" class="fa fa-user"></i>
                                     <span class="login-menu">
                                         <a class="cd-signin" href="{{ route('login') }}">Login</a> or 
                                         <a class="cd-signup" href="{{ route('register') }}">Signup</a> to view your order history

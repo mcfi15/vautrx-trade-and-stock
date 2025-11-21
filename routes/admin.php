@@ -153,8 +153,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('deposits/{deposit}/payment-proof', [DepositController::class, 'viewPaymentProof'])->name('deposits.payment-proof');
     Route::get('deposits/{deposit}/payment-proof/download', [DepositController::class, 'downloadPaymentProof'])->name('deposits.payment-proof.download');
     Route::delete('deposits/{deposit}/payment-proof', [DepositController::class, 'deletePaymentProof'])->name('deposits.payment-proof.delete');
-    Route::post('deposits/{deposit}/approve', [DepositController::class, 'approve'])->name('deposits.approve');
-    Route::post('deposits/{deposit}/reject', [DepositController::class, 'reject'])->name('deposits.reject');
+    Route::put('deposits/{deposit}/approve', [DepositController::class, 'approve'])->name('deposits.approve');
+    Route::put('deposits/{deposit}/reject', [DepositController::class, 'reject'])->name('deposits.reject');
     
     // Withdrawal Management
     Route::get('withdrawals', [WithdrawalController::class, 'index'])->name('withdrawals.index');

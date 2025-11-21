@@ -5,6 +5,22 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
+    {{-- Success --}}
+    @if(session('success'))
+    <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-check-circle"></i> {{ session('success') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-green-800">&times;</button>
+    </div>
+    @endif
+
+    {{-- Error --}}
+    @if(session('error'))
+    <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-red-800">&times;</button>
+    </div>
+    @endif
+    
     <div class="mb-8">
         <div class="flex justify-between items-center">
             <div>
@@ -227,7 +243,19 @@
 
 <script>
 function showApprovalModal(depositId) {
-    document.getElementById('approvalForm').action = '/admin/deposits/' + depositId + '/approve';
+    const form = document.getElementById('approvalForm');
+    form.action = '/admin/deposits/' + depositId + '/approve';
+    
+    // Ensure the form uses PUT method
+    let methodInput = form.querySelector('input[name="_method"]');
+    if (!methodInput) {
+        methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        form.appendChild(methodInput);
+    }
+    methodInput.value = 'PUT';
+
     document.getElementById('approvalModal').classList.remove('hidden');
 }
 
@@ -236,7 +264,25 @@ function hideApprovalModal() {
 }
 
 function showRejectionModal(depositId) {
-    document.getElementById('rejectionForm').action = '/admin/deposits/' + depositId + '/reject';
+
+    const form = document.getElementById('rejectionForm');
+
+    // Set the correct PUT action
+    form.action = '/admin/deposits/' + depositId + '/reject';
+
+    // Ensure method spoofing is present
+    let methodField = document.getElementById('rejectionMethodField');
+    if (!methodField) {
+        methodField = document.createElement('input');
+        methodField.type = 'hidden';
+        methodField.name = '_method';
+        methodField.id = 'rejectionMethodField';
+        form.appendChild(methodField);
+    }
+
+    methodField.value = 'PUT';
+
+    // Show modal
     document.getElementById('rejectionModal').classList.remove('hidden');
 }
 

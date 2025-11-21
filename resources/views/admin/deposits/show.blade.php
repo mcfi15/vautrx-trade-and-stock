@@ -5,6 +5,21 @@
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
+    {{-- Success --}}
+    @if(session('success'))
+    <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-check-circle"></i> {{ session('success') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-green-800">&times;</button>
+    </div>
+    @endif
+
+    {{-- Error --}}
+    @if(session('error'))
+    <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-red-800">&times;</button>
+    </div>
+    @endif
     <div class="mb-8">
         <a href="{{ route('admin.deposits.index') }}" class="text-blue-600 hover:text-blue-800 mb-4 inline-flex items-center">
             <i class="fas fa-arrow-left mr-2"></i> Back to Deposits
@@ -268,28 +283,35 @@
     <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Approve Deposit</h3>
+
             <form method="POST" action="{{ route('admin.deposits.approve', $deposit) }}">
                 @csrf
+                @method('PUT')
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <select name="status" class="w-full px-3 py-2 border rounded-md" required>
                         <option value="confirmed">Confirmed</option>
                         <option value="completed">Completed</option>
                     </select>
                 </div>
+
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Admin Notes (Optional)</label>
-                    <textarea name="admin_notes" rows="3" 
-                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              placeholder="Add any notes about this approval..."></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Admin Notes (Optional)
+                    </label>
+                    <textarea name="admin_notes" rows="3"
+                        class="w-full px-3 py-2 border rounded-md"
+                        placeholder="Add any notes..."></textarea>
                 </div>
+
                 <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="hideApprovalModal()" 
-                            class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">
+                    <button type="button" onclick="hideApprovalModal()"
+                        class="px-4 py-2 bg-gray-200 text-gray-600 rounded-md">
                         Cancel
                     </button>
-                    <button type="submit" 
-                            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+
+                    <button type="submit"
+                        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
                         Approve
                     </button>
                 </div>
@@ -298,6 +320,7 @@
     </div>
 </div>
 
+
 <!-- Rejection Modal -->
 <div id="rejectionModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
     <div class="flex items-center justify-center min-h-screen">
@@ -305,6 +328,7 @@
             <h3 class="text-lg font-medium text-gray-900 mb-4">Reject Deposit</h3>
             <form method="POST" action="{{ route('admin.deposits.reject', $deposit) }}">
                 @csrf
+                @method('PUT')
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Admin Notes</label>
                     <textarea name="admin_notes" rows="3" 

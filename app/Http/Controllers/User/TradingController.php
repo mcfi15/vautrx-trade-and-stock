@@ -8,10 +8,12 @@ use App\Models\Wallet;
 use App\Models\TradingPair;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Mail\OrderPlacedMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Services\TradingEngineService;
 
 class TradingController extends Controller
@@ -242,6 +244,12 @@ class TradingController extends Controller
                 'quantity' => $request->quantity,
                 'total_amount' => $totalAmount
             ]);
+
+            try {
+                Mail::to($user->email)->send(new OrderPlacedMail($order));
+            } catch (\Exception $e) {
+                Log::error('Email notification failed: '.$e->getMessage());
+            }   
 
             // Process market orders immediately
             if ($request->type === 'market') {

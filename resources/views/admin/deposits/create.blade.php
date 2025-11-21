@@ -3,207 +3,205 @@
 @section('title', 'Create Manual Deposit')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Create Manual Deposit</h4>
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.deposits.index') }}">Deposits</a></li>
-                        <li class="breadcrumb-item active">Create</li>
+<div class="container-fluid mx-auto px-4">
+    <div class="flex flex-wrap -mx-4">
+        <div class="w-full px-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4">
+                <h4 class="text-lg font-semibold text-gray-900 mb-2 sm:mb-0">Create Manual Deposit</h4>
+                <div class="text-sm">
+                    <ol class="flex items-center space-x-2">
+                        <li class="flex items-center">
+                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">Dashboard</a>
+                            <svg class="w-4 h-4 mx-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </li>
+                        <li class="flex items-center">
+                            <a href="{{ route('admin.deposits.index') }}" class="text-blue-600 hover:text-blue-800 transition-colors">Deposits</a>
+                            <svg class="w-4 h-4 mx-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </li>
+                        <li class="text-gray-500">Create</li>
                     </ol>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xl-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Deposit Information</h4>
+    <div class="flex flex-wrap -mx-4">
+        <div class="w-full lg:w-8/12 px-4 mb-6">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-900">Deposit Information</h4>
                 </div>
-                <div class="card-body">
+                <div class="p-6">
                     <form action="{{ route('admin.deposits.store') }}" method="POST">
                         @csrf
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="user_id" class="form-label">User *</label>
-                                    <select class="form-select @error('user_id') is-invalid @enderror" 
-                                            id="user_id" name="user_id" required>
-                                        <option value="">Select User</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}" 
-                                                    {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                                {{ $user->email }} ({{ $user->name }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('user_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                                <label for="user_id" class="block text-sm font-medium text-gray-700 mb-2">User *</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('user_id') border-red-500 @enderror" 
+                                        id="user_id" name="user_id" required>
+                                    <option value="">Select User</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}" 
+                                                {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->email }} ({{ $user->name }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('user_id')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                             
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="cryptocurrency_id" class="form-label">Cryptocurrency *</label>
-                                    <select class="form-select @error('cryptocurrency_id') is-invalid @enderror" 
-                                            id="cryptocurrency_id" name="cryptocurrency_id" required>
-                                        <option value="">Select Cryptocurrency</option>
-                                        @foreach($cryptocurrencies as $crypto)
-                                            <option value="{{ $crypto->id }}" 
-                                                    data-symbol="{{ $crypto->symbol }}"
-                                                    data-decimals="{{ $crypto->decimals }}"
-                                                    {{ old('cryptocurrency_id') == $crypto->id ? 'selected' : '' }}>
-                                                {{ $crypto->name }} ({{ $crypto->symbol }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('cryptocurrency_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="w-full md:w-1/2 px-3">
+                                <label for="cryptocurrency_id" class="block text-sm font-medium text-gray-700 mb-2">Cryptocurrency *</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('cryptocurrency_id') border-red-500 @enderror" 
+                                        id="cryptocurrency_id" name="cryptocurrency_id" required>
+                                    <option value="">Select Cryptocurrency</option>
+                                    @foreach($cryptocurrencies as $crypto)
+                                        <option value="{{ $crypto->id }}" 
+                                                data-symbol="{{ $crypto->symbol }}"
+                                                data-decimals="{{ $crypto->decimals }}"
+                                                {{ old('cryptocurrency_id') == $crypto->id ? 'selected' : '' }}>
+                                            {{ $crypto->name }} ({{ $crypto->symbol }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('cryptocurrency_id')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="amount" class="form-label">Amount *</label>
-                                    <input type="number" 
-                                           class="form-control @error('amount') is-invalid @enderror" 
-                                           id="amount" name="amount" 
-                                           value="{{ old('amount') }}" 
-                                           step="0.00000001" 
-                                           min="0.00000001" 
-                                           required>
-                                    @error('amount')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                                <label for="amount" class="block text-sm font-medium text-gray-700 mb-2">Amount *</label>
+                                <input type="number" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('amount') border-red-500 @enderror" 
+                                       id="amount" name="amount" 
+                                       value="{{ old('amount') }}" 
+                                       step="0.00000001" 
+                                       min="0.00000001" 
+                                       required>
+                                @error('amount')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                             
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="fee" class="form-label">Fee</label>
-                                    <input type="number" 
-                                           class="form-control @error('fee') is-invalid @enderror" 
-                                           id="fee" name="fee" 
-                                           value="{{ old('fee', 0) }}" 
-                                           step="0.00000001" 
-                                           min="0">
-                                    <div class="form-text">Network fee (optional)</div>
-                                    @error('fee')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="w-full md:w-1/2 px-3">
+                                <label for="fee" class="block text-sm font-medium text-gray-700 mb-2">Fee</label>
+                                <input type="number" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('fee') border-red-500 @enderror" 
+                                       id="fee" name="fee" 
+                                       value="{{ old('fee', 0) }}" 
+                                       step="0.00000001" 
+                                       min="0">
+                                <p class="mt-1 text-sm text-gray-500">Network fee (optional)</p>
+                                @error('fee')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="transaction_hash" class="form-label">Transaction Hash *</label>
-                                    <input type="text" 
-                                           class="form-control @error('transaction_hash') is-invalid @enderror" 
-                                           id="transaction_hash" name="transaction_hash" 
-                                           value="{{ old('transaction_hash') }}" 
-                                           required>
-                                    @error('transaction_hash')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                                <label for="transaction_hash" class="block text-sm font-medium text-gray-700 mb-2">Transaction Hash *</label>
+                                <input type="text" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('transaction_hash') border-red-500 @enderror" 
+                                       id="transaction_hash" name="transaction_hash" 
+                                       value="{{ old('transaction_hash') }}" 
+                                       required>
+                                @error('transaction_hash')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                             
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="status" class="form-label">Status *</label>
-                                    <select class="form-select @error('status') is-invalid @enderror" 
-                                            id="status" name="status" required>
-                                        <option value="">Select Status</option>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="confirmed" {{ old('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
-                                        <option value="failed" {{ old('status') == 'failed' ? 'selected' : '' }}>Failed</option>
-                                    </select>
-                                    @error('status')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="w-full md:w-1/2 px-3">
+                                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('status') border-red-500 @enderror" 
+                                        id="status" name="status" required>
+                                    <option value="">Select Status</option>
+                                    <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="confirmed" {{ old('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                    <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="failed" {{ old('status') == 'failed' ? 'selected' : '' }}>Failed</option>
+                                </select>
+                                @error('status')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="confirmations" class="form-label">Confirmations</label>
-                                    <input type="number" 
-                                           class="form-control @error('confirmations') is-invalid @enderror" 
-                                           id="confirmations" name="confirmations" 
-                                           value="{{ old('confirmations', 0) }}" 
-                                           min="0">
-                                    <div class="form-text">Number of blockchain confirmations</div>
-                                    @error('confirmations')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                                <label for="confirmations" class="block text-sm font-medium text-gray-700 mb-2">Confirmations</label>
+                                <input type="number" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('confirmations') border-red-500 @enderror" 
+                                       id="confirmations" name="confirmations" 
+                                       value="{{ old('confirmations', 0) }}" 
+                                       min="0">
+                                <p class="mt-1 text-sm text-gray-500">Number of blockchain confirmations</p>
+                                @error('confirmations')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                             
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="required_confirmations" class="form-label">Required Confirmations</label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           value="3" 
-                                           disabled>
-                                    <div class="form-text">Default required confirmations</div>
-                                </div>
+                            <div class="w-full md:w-1/2 px-3">
+                                <label for="required_confirmations" class="block text-sm font-medium text-gray-700 mb-2">Required Confirmations</label>
+                                <input type="number" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 cursor-not-allowed" 
+                                       value="3" 
+                                       disabled>
+                                <p class="mt-1 text-sm text-gray-500">Default required confirmations</p>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="notes" class="form-label">Admin Notes</label>
-                            <textarea class="form-control @error('notes') is-invalid @enderror" 
+                        <div class="mb-6">
+                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Admin Notes</label>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('notes') border-red-500 @enderror" 
                                       id="notes" name="notes" rows="3">{{ old('notes') }}</textarea>
-                            <div class="form-text">Internal notes about this deposit</div>
+                            <p class="mt-1 text-sm text-gray-500">Internal notes about this deposit</p>
                             @error('notes')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <div class="hstack gap-2 justify-content-end">
-                            <a href="{{ route('admin.deposits.index') }}" class="btn btn-light">Cancel</a>
-                            <button class="btn btn-success" type="submit">Create Deposit</button>
+                        <div class="flex flex-wrap gap-3 justify-end">
+                            <a href="{{ route('admin.deposits.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                Cancel
+                            </a>
+                            <button class="px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors" type="submit">
+                                Create Deposit
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-4">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Wallet Balance</h4>
+        <div class="w-full lg:w-4/12 px-4 space-y-6">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-900">Wallet Balance</h4>
                 </div>
-                <div class="card-body">
+                <div class="p-6">
                     <div id="wallet-balance">
-                        <p class="text-muted">Select a user and cryptocurrency to view wallet balance</p>
+                        <p class="text-gray-500">Select a user and cryptocurrency to view wallet balance</p>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Recent Deposits</h4>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-900">Recent Deposits</h4>
                 </div>
-                <div class="card-body">
+                <div class="p-6">
                     <div id="recent-deposits">
-                        <p class="text-muted">Select a user to view recent deposits</p>
+                        <p class="text-gray-500">Select a user to view recent deposits</p>
                     </div>
                 </div>
             </div>
@@ -234,8 +232,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         const balance = user?.wallet_balance || 0;
                         
                         walletBalanceDiv.innerHTML = `
-                            <h5>Current Balance</h5>
-                            <p class="mb-0"><strong>${balance} ${document.querySelector(`#cryptocurrency_id option[value="${cryptoId}"]`)?.dataset.symbol || ''}</strong></p>
+                            <h5 class="font-semibold text-gray-900 mb-2">Current Balance</h5>
+                            <p class="text-gray-900"><strong>${balance} ${document.querySelector(`#cryptocurrency_id option[value="${cryptoId}"]`)?.dataset.symbol || ''}</strong></p>
                         `;
                     }
                 })
@@ -246,36 +244,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success && data.deposits.length > 0) {
-                        let depositsHtml = '<ul class="list-unstyled mb-0">';
+                        let depositsHtml = '<ul class="space-y-3">';
                         data.deposits.forEach(deposit => {
                             depositsHtml += `
-                                <li class="d-flex justify-content-between align-items-center mb-2">
-                                    <span>${deposit.amount} ${deposit.cryptocurrency.symbol}</span>
-                                    <span class="badge bg-${getStatusColor(deposit.status)}">${deposit.status}</span>
+                                <li class="flex justify-between items-center">
+                                    <span class="text-gray-700">${deposit.amount} ${deposit.cryptocurrency.symbol}</span>
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full ${getStatusClasses(deposit.status)}">${deposit.status}</span>
                                 </li>
                             `;
                         });
                         depositsHtml += '</ul>';
                         recentDepositsDiv.innerHTML = depositsHtml;
                     } else {
-                        recentDepositsDiv.innerHTML = '<p class="text-muted mb-0">No recent deposits found</p>';
+                        recentDepositsDiv.innerHTML = '<p class="text-gray-500">No recent deposits found</p>';
                     }
                 })
                 .catch(error => console.error('Error:', error));
         } else {
-            walletBalanceDiv.innerHTML = '<p class="text-muted">Select a user and cryptocurrency to view wallet balance</p>';
-            recentDepositsDiv.innerHTML = '<p class="text-muted">Select a user to view recent deposits</p>';
+            walletBalanceDiv.innerHTML = '<p class="text-gray-500">Select a user and cryptocurrency to view wallet balance</p>';
+            recentDepositsDiv.innerHTML = '<p class="text-gray-500">Select a user to view recent deposits</p>';
         }
     }
 
-    function getStatusColor(status) {
-        const colors = {
-            'pending': 'warning',
-            'confirmed': 'info',
-            'completed': 'success',
-            'failed': 'danger'
+    function getStatusClasses(status) {
+        const classes = {
+            'pending': 'bg-yellow-100 text-yellow-800',
+            'confirmed': 'bg-blue-100 text-blue-800',
+            'completed': 'bg-green-100 text-green-800',
+            'failed': 'bg-red-100 text-red-800'
         };
-        return colors[status] || 'secondary';
+        return classes[status] || 'bg-gray-100 text-gray-800';
     }
 
     userSelect.addEventListener('change', updateWalletInfo);

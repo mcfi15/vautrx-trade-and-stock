@@ -120,7 +120,9 @@
               <td>
                 <span class="coin">
                   <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
-                  {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  <a href="{{ url('trade/'.$pair->id) }}">
+                    {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  </a>
                 </span>
               </td>
               <td>
@@ -151,7 +153,9 @@
               <td>
                 <span class="coin">
                   <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
-                  {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  <a href="{{ url('trade/'.$pair->id) }}">
+                    {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  </a>
                 </span>
               </td>
               <td>
@@ -182,7 +186,9 @@
               <td>
                 <span class="coin">
                   <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
-                  {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  <a href="{{ url('trade/'.$pair->id) }}">
+                    {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  </a>
                 </span>
               </td>
               <td>
@@ -213,7 +219,9 @@
               <td>
                 <span class="coin">
                   <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i> 
-                  {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  <a href="{{ url('trade/'.$pair->id) }}">
+                    {{ $pair->baseCurrency->symbol }}/{{ $pair->quoteCurrency->symbol }}
+                  </a>
                 </span>
               </td>
               <td>

@@ -460,99 +460,205 @@ class DepositController extends Controller
     /**
      * Approve deposit with admin notes
      */
+
     public function approve(Request $request, Deposit $deposit)
-    {
-        $validator = Validator::make($request->all(), [
-            'admin_notes' => 'nullable|string|max:1000',
-            'status' => 'required|in:confirmed,completed',
+{
+    $validator = Validator::make($request->all(), [
+        'amount' => 'required|numeric|min:0.00000001',
+        'admin_notes' => 'nullable|string|max:1000',
+        'status' => 'required|in:confirmed,completed',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    try {
+        DB::beginTransaction();
+
+        $oldStatus = $deposit->status;
+        $creditedAmount = $request->amount;   // ⭐ ADMIN DECIDES AMOUNT ⭐
+
+        $deposit->update([
+            'status' => $request->status,
+            'admin_notes' => $request->admin_notes,
+            'reviewed_at' => now(),
+            'reviewed_by_admin' => Auth::guard('admin')->id(),
+            'amount' => $creditedAmount, // save new amount admin entered
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+        if ($oldStatus === 'pending' && in_array($request->status, ['confirmed','completed'])) {
 
-        try {
-            DB::beginTransaction();
+            $wallet = $deposit->user->getOrCreateWallet($deposit->cryptocurrency_id);
 
-            $oldStatus = $deposit->status;
-            
-            $deposit->update([
-                'status' => $request->status,
-                'admin_notes' => $request->admin_notes,
-                'reviewed_at' => now(),
-                'reviewed_by_admin' => Auth::guard('admin')->id(),
-            ]);
+            $balanceBefore = $wallet->balance;
 
-            if (in_array($oldStatus, ['pending']) && in_array($request->status, ['confirmed', 'completed'])) {
-                $wallet = $deposit->user->getOrCreateWallet($deposit->cryptocurrency_id);
-                $wallet->balance = bcadd($wallet->balance, $deposit->amount, 18);
-                $wallet->save();
+            // ⭐ CREDIT WALLET USING ADMIN ENTERED VALUE ⭐
+            $wallet->balance = bcadd($wallet->balance, $creditedAmount, 18);
+            $wallet->save();
 
-                if (!$deposit->transaction) {
-                    $transaction = \App\Models\Transaction::create([
-                        'user_id' => $deposit->user_id,
-                        'cryptocurrency_id' => $deposit->cryptocurrency_id,
-                        'type' => 'deposit',
-                        'amount' => $deposit->amount,
-                        'fee' => $deposit->fee ?? 0,
-                        'balance_before' => bcsub($wallet->balance, $deposit->amount, 18),
-                        'balance_after' => $wallet->balance,
-                        'transaction_hash' => $deposit->transaction_hash,
-                        'status' => $request->status,
-                        'description' => "Deposit approved by admin - {$request->admin_notes}",
-                    ]);
-
-                    $deposit->transaction_id = $transaction->id;
-                    $deposit->save();
-                } else {
-                    $deposit->transaction->update([
-                        'status' => $request->status,
-                        'balance_after' => $wallet->balance,
-                    ]);
-                }
-            }
-
-            DB::commit();
-
-            // ✅ Send email to user
-            try {
-                Mail::to($deposit->user->email)->send(
-                    new DepositStatusMail($deposit->load('user', 'cryptocurrency'), $request->status, $request->admin_notes)
-                );
-            } catch (\Exception $mailError) {
-                Log::error('Deposit email sending failed', [
-                    'deposit_id' => $deposit->id,
+            if (!$deposit->transaction) {
+                $transaction = \App\Models\Transaction::create([
                     'user_id' => $deposit->user_id,
-                    'error' => $mailError->getMessage(),
+                    'cryptocurrency_id' => $deposit->cryptocurrency_id,
+                    'type' => 'deposit',
+                    'amount' => $creditedAmount, // ⭐ use admin amount
+                    'fee' => $deposit->fee ?? 0,
+                    'balance_before' => $balanceBefore,
+                    'balance_after' => $wallet->balance,
+                    'transaction_hash' => $deposit->transaction_hash,
+                    'status' => $request->status,
+                    'description' => "Deposit approved by admin - {$request->admin_notes}",
+                ]);
+
+                $deposit->transaction_id = $transaction->id;
+                $deposit->save();
+            } else {
+                $deposit->transaction->update([
+                    'amount' => $creditedAmount,
+                    'status' => $request->status,
+                    'balance_after' => $wallet->balance,
                 ]);
             }
+        }
 
-            Log::channel('admin')->info('Deposit approved', [
-                'admin_id' => Auth::guard('admin')->id(),
+        DB::commit();
+
+        // KEEP YOUR EXACT EMAIL CODE
+        try {
+            Mail::to($deposit->user->email)->send(
+                new DepositStatusMail($deposit->load('user','cryptocurrency'), $request->status, $request->admin_notes)
+            );
+        } catch (\Exception $mailError) {
+            Log::error('Deposit email sending failed', [
                 'deposit_id' => $deposit->id,
                 'user_id' => $deposit->user_id,
-                'status' => $request->status,
-                'admin_notes' => $request->admin_notes,
+                'error' => $mailError->getMessage(),
             ]);
-
-            return redirect()->route('admin.deposits.show', $deposit)
-                ->with('success', 'Deposit approved & user notified');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error approving deposit', [
-                'admin_id' => Auth::guard('admin')->id(),
-                'deposit_id' => $deposit->id,
-                'error' => $e->getMessage(),
-            ]);
-
-            return redirect()->back()
-                ->with('error', 'Error approving deposit: ' . $e->getMessage())
-                ->withInput();
         }
+
+        Log::channel('admin')->info('Deposit approved', [
+            'admin_id' => Auth::guard('admin')->id(),
+            'deposit_id' => $deposit->id,
+            'user_id' => $deposit->user_id,
+            'status' => $request->status,
+            'admin_notes' => $request->admin_notes,
+        ]);
+
+        return redirect()->route('admin.deposits.show', $deposit)
+            ->with('success', 'Deposit approved & user notified');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        Log::error('Error approving deposit', [
+            'admin_id' => Auth::guard('admin')->id(),
+            'deposit_id' => $deposit->id,
+            'error' => $e->getMessage(),
+        ]);
+
+        return redirect()->back()
+            ->with('error', 'Error approving deposit: ' . $e->getMessage())
+            ->withInput();
     }
+}
+
+
+    // public function approve(Request $request, Deposit $deposit)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'admin_notes' => 'nullable|string|max:1000',
+    //         'status' => 'required|in:confirmed,completed',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()
+    //             ->withErrors($validator)
+    //             ->withInput();
+    //     }
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         $oldStatus = $deposit->status;
+            
+    //         $deposit->update([
+    //             'status' => $request->status,
+    //             'admin_notes' => $request->admin_notes,
+    //             'reviewed_at' => now(),
+    //             'reviewed_by_admin' => Auth::guard('admin')->id(),
+    //         ]);
+
+    //         if (in_array($oldStatus, ['pending']) && in_array($request->status, ['confirmed', 'completed'])) {
+    //             $wallet = $deposit->user->getOrCreateWallet($deposit->cryptocurrency_id);
+    //             $wallet->balance = bcadd($wallet->balance, $deposit->amount, 18);
+    //             $wallet->save();
+
+    //             if (!$deposit->transaction) {
+    //                 $transaction = \App\Models\Transaction::create([
+    //                     'user_id' => $deposit->user_id,
+    //                     'cryptocurrency_id' => $deposit->cryptocurrency_id,
+    //                     'type' => 'deposit',
+    //                     'amount' => $deposit->amount,
+    //                     'fee' => $deposit->fee ?? 0,
+    //                     'balance_before' => bcsub($wallet->balance, $deposit->amount, 18),
+    //                     'balance_after' => $wallet->balance,
+    //                     'transaction_hash' => $deposit->transaction_hash,
+    //                     'status' => $request->status,
+    //                     'description' => "Deposit approved by admin - {$request->admin_notes}",
+    //                 ]);
+
+    //                 $deposit->transaction_id = $transaction->id;
+    //                 $deposit->save();
+    //             } else {
+    //                 $deposit->transaction->update([
+    //                     'status' => $request->status,
+    //                     'balance_after' => $wallet->balance,
+    //                 ]);
+    //             }
+    //         }
+
+    //         DB::commit();
+
+    //         // ✅ Send email to user
+    //         try {
+    //             Mail::to($deposit->user->email)->send(
+    //                 new DepositStatusMail($deposit->load('user', 'cryptocurrency'), $request->status, $request->admin_notes)
+    //             );
+    //         } catch (\Exception $mailError) {
+    //             Log::error('Deposit email sending failed', [
+    //                 'deposit_id' => $deposit->id,
+    //                 'user_id' => $deposit->user_id,
+    //                 'error' => $mailError->getMessage(),
+    //             ]);
+    //         }
+
+    //         Log::channel('admin')->info('Deposit approved', [
+    //             'admin_id' => Auth::guard('admin')->id(),
+    //             'deposit_id' => $deposit->id,
+    //             'user_id' => $deposit->user_id,
+    //             'status' => $request->status,
+    //             'admin_notes' => $request->admin_notes,
+    //         ]);
+
+    //         return redirect()->route('admin.deposits.show', $deposit)
+    //             ->with('success', 'Deposit approved & user notified');
+
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         Log::error('Error approving deposit', [
+    //             'admin_id' => Auth::guard('admin')->id(),
+    //             'deposit_id' => $deposit->id,
+    //             'error' => $e->getMessage(),
+    //         ]);
+
+    //         return redirect()->back()
+    //             ->with('error', 'Error approving deposit: ' . $e->getMessage())
+    //             ->withInput();
+    //     }
+    // }
 
     /**
      * Reject deposit with admin notes

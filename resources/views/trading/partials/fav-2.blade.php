@@ -182,7 +182,7 @@
           <tbody id="coinleftmenu-eth">
             @foreach($markets['ETH'] as $pair)
             <tr>
-              <td>
+              <td> 
                 <span class="coin">
                   <i style="color:#1e90ff" class="fa fa-star add-to-favorite"></i>
                   <a href="{{ url('trade/'.$pair->id) }}">

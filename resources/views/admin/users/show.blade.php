@@ -14,6 +14,21 @@
     </div>
 </div>
 
+@if(session('success'))
+    <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-check-circle"></i> {{ session('success') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-green-800">&times;</button>
+    </div>
+    @endif
+
+    {{-- Error --}}
+    @if(session('error'))
+    <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-red-800">&times;</button>
+    </div>
+    @endif
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- User Profile Card -->
     <div class="lg:col-span-1">
@@ -113,7 +128,7 @@
             <div class="bg-white shadow rounded-lg p-4">
                 <div class="text-center">
                     <i class="fas fa-dollar-sign text-yellow-500 text-2xl mb-2"></i>
-                    <div class="text-2xl font-bold text-gray-900">
+                    <div class="text-1xl font-bold text-gray-900">
                         ${{ number_format($user->wallets->sum('balance') * 100, 2) }}
                     </div>
                     <div class="text-xs text-gray-500">Total Balance</div>
@@ -123,45 +138,51 @@
 
         <!-- Wallets -->
         <div class="bg-white shadow rounded-lg overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">
-                    <i class="fas fa-wallet"></i> Wallets
-                </h3>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cryptocurrency</th>
-                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Balance</th>
-                            <th class="hidden sm:table-cell px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">USD Value</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($user->wallets as $wallet)
-                            <tr>
-                                <td class="px-4 py-3">
-                                    <div class="flex items-center">
-                                        @if($wallet->cryptocurrency->logo_url)
-                                            <img src="{{ $wallet->cryptocurrency->logo_url }}" alt="{{ $wallet->cryptocurrency->symbol }}" class="h-6 w-6 mr-2">
-                                        @endif
-                                        <span class="font-medium">{{ $wallet->cryptocurrency->symbol }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 text-right font-mono">{{ number_format($wallet->balance, 8) }}</td>
-                                <td class="hidden sm:table-cell px-4 py-3 text-right text-gray-500">
-                                    ${{ number_format($wallet->balance * $wallet->cryptocurrency->current_price, 2) }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="px-4 py-8 text-center text-gray-500">No wallets found</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">
+                <i class="fas fa-wallet"></i> Wallets
+            </h3>
         </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cryptocurrency</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Balance</th>
+                        <th class="hidden sm:table-cell px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">USD Value</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($user->wallets as $wallet)
+                        <tr>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center">
+                                    @if($wallet->cryptocurrency->logo_url)
+                                        <img src="{{ $wallet->cryptocurrency->logo_url }}" alt="{{ $wallet->cryptocurrency->symbol }}" class="h-6 w-6 mr-2">
+                                    @endif
+                                    <span class="font-medium">{{ $wallet->cryptocurrency->symbol }}</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 text-right font-mono">{{ number_format($wallet->balance, 8) }}</td>
+                            <td class="hidden sm:table-cell px-4 py-3 text-right text-gray-500">
+                                ${{ number_format($wallet->balance * $wallet->cryptocurrency->current_price, 2) }}
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <a href="{{ route('admin.users.wallets.edit', [$user->id, $wallet->id]) }}" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                    Credit/Debit
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-4 py-8 text-center text-gray-500">No wallets found</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 
         <!-- Recent Orders -->
         <div class="bg-white shadow rounded-lg overflow-hidden">

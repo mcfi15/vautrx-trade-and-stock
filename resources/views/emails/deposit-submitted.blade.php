@@ -2,7 +2,7 @@
 # Deposit Submitted Successfully ✅
 
 Hello **{{ $user->name }}**,  
-Your deposit request has been received and is pending admin approval.
+Your deposit request has been received and is pending approval.
 
 ---
 

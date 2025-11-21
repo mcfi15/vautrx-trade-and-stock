@@ -6,10 +6,12 @@ use App\Models\Deposit;
 use App\Models\Withdrawal;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
 use App\Models\Cryptocurrency;
 use App\Mail\DepositSubmittedMail;
 use Illuminate\Support\Facades\DB;
 use App\Services\BlockchainService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -65,123 +67,202 @@ class WalletController extends Controller
         return view('user.wallet.index', compact('wallets', 'cryptocurrencies', 'totalValue', 'recentTransactions'));
     }
 
-    public function showDeposit($cryptoId = null)
+    public function showDeposit($cryptoId)
     {
         $user = Auth::user();
-        $cryptocurrencies = Cryptocurrency::active()->get();
-        
-        // If no cryptocurrency ID provided, show selection page
-        if (!$cryptoId) {
-            return view('user.wallet.deposit-select', compact('cryptocurrencies'));
-        }
-        
-        // If cryptocurrency ID provided, show specific deposit page
-        $cryptocurrency = Cryptocurrency::findOrFail($cryptoId);
-        $wallet = $user->getOrCreateWallet($cryptoId);
-        
-        // Generate deposit address if not exists
-        if (!$wallet->address) {
-            try {
-                $addressData = $this->blockchainService->generateDepositAddress($cryptocurrency->symbol);
-                if ($addressData && isset($addressData['address'])) {
-                    $wallet->address = $addressData['address'];
-                    $wallet->save();
-                }
-            } catch (\Exception $e) {
-                // Log error but continue - wallet will work without address
-                \Log::error('Failed to generate deposit address', [
-                    'user_id' => $user->id,
-                    'crypto_id' => $cryptoId,
-                    'error' => $e->getMessage()
-                ]);
-            }
-        }
-        
-        // Get deposit history
-        $deposits = $user->deposits()
+        $crypto = Cryptocurrency::findOrFail($cryptoId);
+
+        $paymentMethods = PaymentMethod::where('cryptocurrency_id', $cryptoId)->get();
+
+        $deposits = Deposit::where('user_id', $user->id)
             ->where('cryptocurrency_id', $cryptoId)
             ->latest()
-            ->take(10)
             ->get();
-        
-        return view('user.wallet.deposit', compact('cryptocurrency', 'wallet', 'deposits', 'cryptocurrencies'));
+
+        return view('user.wallet.deposit', [
+            'cryptocurrency' => $crypto,
+            'paymentMethods' => $paymentMethods,
+            'deposits' => $deposits
+        ]);
     }
 
-    public function submitDeposit(Request $request, $cryptoId)
-    {
-        $user = Auth::user();
-        $cryptocurrency = Cryptocurrency::findOrFail($cryptoId);
-        $wallet = $user->getOrCreateWallet($cryptoId);
+    public function submit(Request $request, $cryptoId)
+{
+    $user = Auth::user();
 
-        // ✅ Validate input
-        $request->validate([
-            'amount' => ['required', 'numeric', 'min:0.0001'],
-            'payment_proof' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
+    $request->validate([
+        'amount' => 'required|numeric|min:0.000001',
+        'method_id' => 'required|exists:payment_methods,id',
+        'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+    ]);
+
+    $proofPath = null;
+
+    if ($request->hasFile('payment_proof')) {
+        $file = $request->file('payment_proof');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('uploads/deposits'), $filename);
+        $proofPath = "uploads/deposits/$filename";
+    }
+
+    try {
+        // Create deposit record
+        $deposit = Deposit::create([
+            'user_id' => $user->id,
+            'cryptocurrency_id' => $cryptoId,
+            'payment_method_id' => $request->method_id,
+            'amount' => $request->amount,
+            'status' => 'pending',
+            'payment_proof_path' => $proofPath
         ]);
 
+        // ✅ Send email notification to user
         try {
-            $proofPath = null;
-            $proofFilename = null;
-
-            // ✅ Handle file upload (your required format)
-            if ($request->hasFile('payment_proof')) {
-                $file = $request->file('payment_proof');
-                $originalName = $file->getClientOriginalName(); // ✅ Store original filename
-                $ext = $file->getClientOriginalExtension();
-                $filename = time() . '.' . $ext;
-
-                // ✅ Move file to public/uploads/deposits
-                $file->move(public_path('uploads/deposits'), $filename);
-
-                $proofPath = "uploads/deposits/$filename";
-                $proofFilename = $originalName;
-            }
-
-            // ✅ Create pending deposit
-            $deposit = Deposit::create([
-                'user_id' => $user->id,
-                'cryptocurrency_id' => $cryptocurrency->id,
-                'amount' => $request->amount,
-                'status' => 'pending',
-                'payment_proof_path' => $proofPath,
-                'payment_proof_filename' => $proofFilename,
-            ]);
-
-            // ✅ Send confirmation email to user
-            try {
-                Mail::to($user->email)->send(new \App\Mail\DepositSubmittedMail($deposit));
-            } catch (\Exception $mailException) {
-                \Log::error('Deposit email sending failed', [
-                    'user_id' => $user->id,
-                    'deposit_id' => $deposit->id,
-                    'error' => $mailException->getMessage(),
-                ]);
-            }
-
-            // ✅ Log success
-            \Log::info('New deposit submitted', [
-                'user_id' => $user->id,
-                'crypto_id' => $cryptocurrency->id,
-                'amount' => $request->amount,
+            Mail::to($user->email)->send(new \App\Mail\DepositSubmittedMail($deposit));
+        } catch (\Exception $mailError) {
+            \Log::error('Deposit submission email failed', [
                 'deposit_id' => $deposit->id,
-            ]);
-
-            return redirect()
-                ->route('wallet.deposit', $cryptoId)
-                ->with('success', 'Deposit submitted successfully and awaiting approval.');
-
-        } catch (\Exception $e) {
-            \Log::error('Deposit submission failed', [
                 'user_id' => $user->id,
-                'crypto_id' => $cryptoId,
-                'error' => $e->getMessage(),
+                'error' => $mailError->getMessage(),
             ]);
-
-            return back()
-                ->with('error', 'Something went wrong. Please try again.')
-                ->withInput();
         }
+
+        Log::info('Deposit submitted', [
+            'deposit_id' => $deposit->id,
+            'user_id' => $user->id,
+        ]);
+
+        return back()->with('success', 'Deposit submitted and awaiting approval');
+
+    } catch (\Exception $e) {
+        Log::error('Deposit submission failed', [
+            'user_id' => $user->id,
+            'crypto_id' => $cryptoId,
+            'error' => $e->getMessage(),
+        ]);
+
+        return back()->with('error', 'Something went wrong. Please try again.')->withInput();
     }
+}
+
+
+    // public function showDeposit($cryptoId = null)
+    // {
+    //     $user = Auth::user();
+    //     $cryptocurrencies = Cryptocurrency::active()->get();
+        
+    //     // If no cryptocurrency ID provided, show selection page
+    //     if (!$cryptoId) {
+    //         return view('user.wallet.deposit-select', compact('cryptocurrencies'));
+    //     }
+        
+    //     // If cryptocurrency ID provided, show specific deposit page
+    //     $cryptocurrency = Cryptocurrency::findOrFail($cryptoId);
+    //     $wallet = $user->getOrCreateWallet($cryptoId);
+        
+    //     // Generate deposit address if not exists
+    //     if (!$wallet->address) {
+    //         try {
+    //             $addressData = $this->blockchainService->generateDepositAddress($cryptocurrency->symbol);
+    //             if ($addressData && isset($addressData['address'])) {
+    //                 $wallet->address = $addressData['address'];
+    //                 $wallet->save();
+    //             }
+    //         } catch (\Exception $e) {
+    //             // Log error but continue - wallet will work without address
+    //             \Log::error('Failed to generate deposit address', [
+    //                 'user_id' => $user->id,
+    //                 'crypto_id' => $cryptoId,
+    //                 'error' => $e->getMessage()
+    //             ]);
+    //         }
+    //     }
+        
+    //     // Get deposit history
+    //     $deposits = $user->deposits()
+    //         ->where('cryptocurrency_id', $cryptoId)
+    //         ->latest()
+    //         ->take(10)
+    //         ->get();
+        
+    //     return view('user.wallet.deposit', compact('cryptocurrency', 'wallet', 'deposits', 'cryptocurrencies'));
+    // }
+
+    // public function submitDeposit(Request $request, $cryptoId)
+    // {
+    //     $user = Auth::user();
+    //     $cryptocurrency = Cryptocurrency::findOrFail($cryptoId);
+    //     $wallet = $user->getOrCreateWallet($cryptoId);
+
+    //     // ✅ Validate input
+    //     $request->validate([
+    //         'amount' => ['required', 'numeric', 'min:0.0001'],
+    //         'payment_proof' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
+    //     ]);
+
+    //     try {
+    //         $proofPath = null;
+    //         $proofFilename = null;
+
+    //         // ✅ Handle file upload (your required format)
+    //         if ($request->hasFile('payment_proof')) {
+    //             $file = $request->file('payment_proof');
+    //             $originalName = $file->getClientOriginalName(); // ✅ Store original filename
+    //             $ext = $file->getClientOriginalExtension();
+    //             $filename = time() . '.' . $ext;
+
+    //             // ✅ Move file to public/uploads/deposits
+    //             $file->move(public_path('uploads/deposits'), $filename);
+
+    //             $proofPath = "uploads/deposits/$filename";
+    //             $proofFilename = $originalName;
+    //         }
+
+    //         // ✅ Create pending deposit
+    //         $deposit = Deposit::create([
+    //             'user_id' => $user->id,
+    //             'cryptocurrency_id' => $cryptocurrency->id,
+    //             'amount' => $request->amount,
+    //             'status' => 'pending',
+    //             'payment_proof_path' => $proofPath,
+    //             'payment_proof_filename' => $proofFilename,
+    //         ]);
+
+    //         // ✅ Send confirmation email to user
+    //         try {
+    //             Mail::to($user->email)->send(new \App\Mail\DepositSubmittedMail($deposit));
+    //         } catch (\Exception $mailException) {
+    //             \Log::error('Deposit email sending failed', [
+    //                 'user_id' => $user->id,
+    //                 'deposit_id' => $deposit->id,
+    //                 'error' => $mailException->getMessage(),
+    //             ]);
+    //         }
+
+    //         // ✅ Log success
+    //         \Log::info('New deposit submitted', [
+    //             'user_id' => $user->id,
+    //             'crypto_id' => $cryptocurrency->id,
+    //             'amount' => $request->amount,
+    //             'deposit_id' => $deposit->id,
+    //         ]);
+
+    //         return redirect()
+    //             ->route('wallet.deposit', $cryptoId)
+    //             ->with('success', 'Deposit submitted successfully and awaiting approval.');
+
+    //     } catch (\Exception $e) {
+    //         \Log::error('Deposit submission failed', [
+    //             'user_id' => $user->id,
+    //             'crypto_id' => $cryptoId,
+    //             'error' => $e->getMessage(),
+    //         ]);
+
+    //         return back()
+    //             ->with('error', 'Something went wrong. Please try again.')
+    //             ->withInput();
+    //     }
+    // }
 
 
 

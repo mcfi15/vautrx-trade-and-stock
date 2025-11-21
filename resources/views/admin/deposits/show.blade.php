@@ -279,14 +279,23 @@
 </div>
 
 <!-- Approval Modal -->
+<!-- Approval Modal -->
 <div id="approvalModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
     <div class="flex items-center justify-center min-h-screen">
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Approve Deposit</h3>
 
-            <form method="POST" action="{{ route('admin.deposits.approve', $deposit) }}">
+            <form action="{{ route('admin.deposits.approve', $deposit) }}" method="POST">
                 @csrf
                 @method('PUT')
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Amount Received</label>
+                    <input type="number" step="0.00000001" name="amount"
+                           class="w-full px-3 py-2 border rounded-md"
+                           placeholder="Enter amount credited" required>
+                </div>
+
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                     <select name="status" class="w-full px-3 py-2 border rounded-md" required>
@@ -319,6 +328,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!-- Rejection Modal -->

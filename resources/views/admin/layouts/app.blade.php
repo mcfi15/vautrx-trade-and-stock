@@ -112,12 +112,30 @@
             </a>
         </li>
 
+        <!-- Payment method -->
+        <li>
+            <a href="{{ url('admin/payment-methods') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-wallet w-5"></i>
+                <span class="ml-3">Payment Method</span>
+            </a>
+        </li>
+
         <!-- Stock -->
         <li>
             <a href="{{ url('admin/stocks') }}"
                 class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
                 <i class="fas fa-chart-line w-5"></i>
                 <span class="ml-3">Stock</span>
+            </a>
+        </li>
+
+        <!-- Trades -->
+        <li>
+            <a href="{{ url('admin/trades') }}"
+                class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
+                <i class="fas fa-balance-scale w-5"></i>
+                <span class="ml-3">Trades</span>
             </a>
         </li>
 

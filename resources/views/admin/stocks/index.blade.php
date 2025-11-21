@@ -20,6 +20,20 @@
         <span class="inline-block w-2 h-2 bg-green-500 rounded-full ml-2 animate-pulse" title="Live updates active"></span>
     </p>
 </div>
+@if(session('success'))
+    <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-check-circle"></i> {{ session('success') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-green-800">&times;</button>
+    </div>
+    @endif
+
+    {{-- Error --}}
+    @if(session('error'))
+    <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-4 flex justify-between">
+        <span><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</span>
+        <button onclick="this.parentNode.remove()" class="text-red-800">&times;</button>
+    </div>
+    @endif
 
 <!-- Search and Filters -->
 <div class="bg-white rounded-xl shadow-sm mb-6">

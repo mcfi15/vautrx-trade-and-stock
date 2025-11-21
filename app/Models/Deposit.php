@@ -51,6 +51,11 @@ class Deposit extends Model
         return $this->belongsTo(Transaction::class);
     }
 
+    public function paymentMethod()
+{
+    return $this->belongsTo(PaymentMethod::class);
+}
+
     public function wallet()
     {
         return $this->belongsTo(Wallet::class, 'cryptocurrency_id', 'cryptocurrency_id')

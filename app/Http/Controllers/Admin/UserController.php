@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -68,5 +71,66 @@ class UserController extends Controller
         $wallets = $user->wallets()->with('cryptocurrency')->get();
 
         return view('admin.users.wallets', compact('user', 'wallets'));
+    }
+
+    public function updateWalletForm(User $user, $walletId)
+    {
+        $wallet = Wallet::with('cryptocurrency')->findOrFail($walletId);
+
+        return view('admin.users.wallet-edit', compact('user', 'wallet'));
+    }
+
+    public function updateWalletBalance(Request $request, User $user, $walletId)
+    {
+        $wallet = Wallet::with('cryptocurrency')->findOrFail($walletId);
+
+        $request->validate([
+            'type' => 'required|in:credit,debit',
+            'amount' => 'required|numeric|min:0.00000001',
+            'note' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $oldBalance = $wallet->balance;
+
+            if ($request->type === 'credit') {
+                $wallet->balance = bcadd($wallet->balance, $request->amount, 18);
+            } else { // debit
+                if (bccomp($wallet->balance, $request->amount, 18) < 0) {
+                    return back()->with('error', 'Insufficient balance for debit.');
+                }
+                $wallet->balance = bcsub($wallet->balance, $request->amount, 18);
+            }
+
+            $wallet->save();
+
+            // Log transaction
+            // Transaction::create([
+            //     'user_id' => $user->id,
+            //     'cryptocurrency_id' => $wallet->cryptocurrency_id,
+            //     'type' => $request->type,
+            //     'amount' => $request->amount,
+            //     'balance_before' => $oldBalance,
+            //     'balance_after' => $wallet->balance,
+            //     'description' => $request->note ?? "Admin {$request->type} operation",
+            //     'status' => 'completed',
+            // ]);
+
+            DB::commit();
+
+            return back()->with('success', "Wallet successfully {$request->type}ed.");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Wallet update failed', [
+                'user_id' => $user->id,
+                'wallet_id' => $wallet->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Failed to update wallet.');
+        }
     }
 }

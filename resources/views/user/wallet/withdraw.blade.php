@@ -100,7 +100,7 @@
                                 <div class="form-group">
                                     <label for="usdout_paypassword">Fund Password</label> 
                                     <input type="password" id="usdout_paypassword" name="fund_password" class="form-control" placeholder="Enter Funding Password" required>
-                                    <a href="/findpwd/findpwd" class="yellow m-t-5 d-inline-block">I forgot my password?</a>
+                                    <a href="{{ url('/fund-password') }}" class="yellow m-t-5 d-inline-block">I forgot my password?</a>
                                 </div>
 
                                 <div class="not0">

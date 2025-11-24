@@ -133,4 +133,46 @@ class UserController extends Controller
             return back()->with('error', 'Failed to update wallet.');
         }
     }
+
+
+    public function updateWithdrawalPermission(Request $request, User $user)
+    {
+        $request->validate([
+            'withdrawal_permission' => 'required|in:active,suspended,exceed_limit'
+        ]);
+
+        try {
+            $user->updateWithdrawalPermission($request->withdrawal_permission);
+            
+            return redirect()->back()->with('success', 'Withdrawal permission updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update withdrawal permission.');
+        }
+    }
+
+    /**
+     * Suspend user withdrawals
+     */
+    public function suspendWithdrawals(User $user)
+    {
+        try {
+            $user->suspendWithdrawals();
+            return redirect()->back()->with('success', 'User withdrawals suspended successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to suspend withdrawals.');
+        }
+    }
+
+    /**
+     * Activate user withdrawals
+     */
+    public function activateWithdrawals(User $user)
+    {
+        try {
+            $user->activateWithdrawals();
+            return redirect()->back()->with('success', 'User withdrawals activated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to activate withdrawals.');
+        }
+    }
 }

@@ -39,6 +39,11 @@ class User extends Authenticatable
         'kyc_proof',
         'kyc_status',
         'kyc_rejection_reason',
+        'fund_password',
+        'fund_password_otp',
+        'fund_password_otp_expires_at',
+        'withdrawal_permission', // Add this line
+        'withdrawal_limit', // Optional: if you want to set custom limits
 
     ];
 
@@ -58,6 +63,8 @@ class User extends Authenticatable
         'kyc_verified' => 'boolean',
         'two_factor_enabled' => 'boolean',
         'email_notifications' => 'boolean',
+        'fund_password_otp_expires_at' => 'datetime',
+        'withdrawal_limit' => 'decimal:2', // Optional
     ];
 
     public function watchlists()
@@ -121,6 +128,133 @@ class User extends Authenticatable
     public function getWallet($cryptocurrencyId)
     {
         return $this->wallets()->where('cryptocurrency_id', $cryptocurrencyId)->first();
+    }
+
+     const WITHDRAWAL_ACTIVE = 'active';
+    const WITHDRAWAL_SUSPENDED = 'suspended';
+    const WITHDRAWAL_EXCEED_LIMIT = 'exceed_limit';
+
+    /**
+     * Get withdrawal permission status
+     */
+    public function getWithdrawalPermissionAttribute($value)
+    {
+        return $value ?? self::WITHDRAWAL_ACTIVE;
+    }
+
+    /**
+     * Check if user can withdraw
+     */
+    public function canWithdraw()
+    {
+        return $this->withdrawal_permission === self::WITHDRAWAL_ACTIVE;
+    }
+
+    /**
+     * Check if withdrawal is suspended
+     */
+    public function isWithdrawalSuspended()
+    {
+        return $this->withdrawal_permission === self::WITHDRAWAL_SUSPENDED;
+    }
+
+    /**
+     * Check if withdrawal limit exceeded
+     */
+    public function hasExceededWithdrawalLimit()
+    {
+        return $this->withdrawal_permission === self::WITHDRAWAL_EXCEED_LIMIT;
+    }
+
+    /**
+     * Update withdrawal permission
+     */
+    public function updateWithdrawalPermission($status)
+    {
+        $allowedStatuses = [self::WITHDRAWAL_ACTIVE, self::WITHDRAWAL_SUSPENDED, self::WITHDRAWAL_EXCEED_LIMIT];
+        
+        if (!in_array($status, $allowedStatuses)) {
+            throw new \InvalidArgumentException('Invalid withdrawal permission status');
+        }
+
+        $this->update(['withdrawal_permission' => $status]);
+        
+        return $this;
+    }
+
+    /**
+     * Suspend withdrawals for user
+     */
+    public function suspendWithdrawals()
+    {
+        return $this->updateWithdrawalPermission(self::WITHDRAWAL_SUSPENDED);
+    }
+
+    /**
+     * Activate withdrawals for user
+     */
+    public function activateWithdrawals()
+    {
+        return $this->updateWithdrawalPermission(self::WITHDRAWAL_ACTIVE);
+    }
+
+    /**
+     * Mark as exceeded withdrawal limit
+     */
+    public function markExceededWithdrawalLimit()
+    {
+        return $this->updateWithdrawalPermission(self::WITHDRAWAL_EXCEED_LIMIT);
+    }
+
+    /**
+     * Get withdrawal permission badge color
+     */
+    public function getWithdrawalPermissionBadgeAttribute()
+    {
+        switch ($this->withdrawal_permission) {
+            case self::WITHDRAWAL_ACTIVE:
+                return 'bg-green-100 text-green-800';
+            case self::WITHDRAWAL_SUSPENDED:
+                return 'bg-red-100 text-red-800';
+            case self::WITHDRAWAL_EXCEED_LIMIT:
+                return 'bg-yellow-100 text-yellow-800';
+            default:
+                return 'bg-gray-100 text-gray-800';
+        }
+    }
+
+    /**
+     * Get withdrawal permission label
+     */
+    public function getWithdrawalPermissionLabelAttribute()
+    {
+        switch ($this->withdrawal_permission) {
+            case self::WITHDRAWAL_ACTIVE:
+                return 'Active';
+            case self::WITHDRAWAL_SUSPENDED:
+                return 'Suspended';
+            case self::WITHDRAWAL_EXCEED_LIMIT:
+                return 'Exceed Limit';
+            default:
+                return 'Unknown';
+        }
+    }
+
+    /**
+     * Get withdrawal permission icon
+     */
+    public function getWithdrawalPermissionIconAttribute()
+    {
+        switch ($this->withdrawal_permission) {
+            case self::WITHDRAWAL_ACTIVE:
+                return 'fas fa-check-circle';
+            case self::WITHDRAWAL_SUSPENDED:
+                return 'fas fa-ban';
+            case self::WITHDRAWAL_EXCEED_LIMIT:
+                return 'fas fa-exclamation-triangle';
+            default:
+                return 'fas fa-question-circle';
+        }
     }
 
     public function getOrCreateWallet($cryptocurrencyId)

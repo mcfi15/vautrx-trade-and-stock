@@ -93,6 +93,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('users/{user}/wallets/{wallet}/edit', [UserController::class, 'updateWalletForm'])->name('users.wallets.edit');
     Route::put('users/{user}/wallets/{wallet}', [UserController::class, 'updateWalletBalance'])->name('users.wallets.update');
 
+    Route::post('/users/{user}/withdrawal-permission', [UserController::class, 'updateWithdrawalPermission'])->name('users.update-withdrawal-permission');
+    Route::post('/users/{user}/suspend-withdrawals', [UserController::class, 'suspendWithdrawals'])->name('users.suspend-withdrawals');
+    Route::post('/users/{user}/activate-withdrawals', [UserController::class, 'activateWithdrawals'])->name('users.activate-withdrawals');
+
     // Real-Time Stock Management Routes
     Route::prefix('stocks-management')->name('stocks-management.')->group(function () {
         Route::get('/', [StockManagementController::class, 'index'])->name('index');
@@ -161,6 +165,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::post('withdrawals/{withdrawal}/complete', [WithdrawalController::class, 'complete'])->name('withdrawals.complete');
     Route::post('withdrawals/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->name('withdrawals.reject');
     Route::get('withdrawals/user/{user}', [WithdrawalController::class, 'getUserWithdrawals'])->name('withdrawals.user');
+
 
     // Settings
     Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');

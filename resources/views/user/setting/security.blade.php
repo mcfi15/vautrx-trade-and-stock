@@ -57,7 +57,7 @@
                   </div>
                   <a href="{{ url('change-password') }}" class="btn-2">Change</a>
                 </li>
-                {{-- <li>
+                 <li>
                   <div class="security-info">
                     <p>Fund Password</p>
                     <span
@@ -65,8 +65,9 @@
                       confirmation</span
                     >
                   </div>
-                  <a href="/User/paypassword" class="btn-2">Change</a>
+                  <a href="{{ url('fund-password') }}" class="btn-2">Change</a>
                 </li>
+                {{--
                 <li>
                   <div class="security-info">
                     <p>Cell phone verification</p>

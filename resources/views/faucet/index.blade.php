@@ -15,12 +15,12 @@
       <ul class="text-right breadcrumbs list-unstyle">
         <li class="btn btn-primary btn-sm active">Faucet Home</li>
         <li>
-          <a class="btn btn-primary btn-sm" href="/faucet/log"
+          <a class="btn btn-primary btn-sm" 
             >Faucet Logs</a
           >
         </li>
         <li>
-          <a class="btn btn-primary btn-sm" href="/Faucet/faucetlogs"
+          <a class="btn btn-primary btn-sm" 
             >Faucet All Logs</a
           >
         </li>

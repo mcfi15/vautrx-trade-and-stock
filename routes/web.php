@@ -8,6 +8,7 @@ use App\Http\Controllers\User\StockController;
 use App\Http\Controllers\User\FaucetController;
 use App\Http\Controllers\User\WalletController;
 use App\Http\Controllers\User\AirdropController;
+use App\Http\Controllers\User\CaptchaController;
 use App\Http\Controllers\User\SettingController;
 use App\Http\Controllers\User\StakingController;
 use App\Http\Controllers\User\TradingController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\User\WatchlistController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\User\MiningPoolController;
 use App\Http\Controllers\User\UserAirdropController;
+use App\Http\Controllers\User\FundPasswordController;
 use App\Http\Controllers\User\StockTradingController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\EmailVerificationController;
@@ -181,28 +183,19 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::get('/deposit', [WalletController::class, 'showDeposit'])->name('deposit'); // General deposit page
         Route::get('/deposit/{cryptoId}', [WalletController::class, 'showDeposit'])->name('deposit.specific'); // Specific crypto deposit
         Route::post('/deposit/{cryptoId}/submit', [WalletController::class, 'submitDeposit'])->name('deposit.submit');
-        Route::get('/withdraw', [WalletController::class, 'showWithdraw'])->name('withdraw'); // General withdraw page
-        Route::get('/withdraw/{cryptoId}', [WalletController::class, 'showWithdraw'])->name('withdraw.specific'); // Specific crypto withdraw
-        Route::post('/withdraw', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');
+        Route::get('/withdraw', [WalletController::class, 'showWithdrawForm'])->name('withdraw');
+
+        // AJAX / POST routes
+        Route::post('/withdraw/send-otp', [WalletController::class, 'sendOtp'])->name('withdraw.sendOtp');
+        Route::post('/withdraw/add-address', [WalletController::class, 'addAddress'])->name('withdraw.addAddress');
+        Route::post('/withdraw/process', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');
+
+        // Route::get('/withdraw', [WalletController::class, 'showWithdraw'])->name('withdraw'); // General withdraw page
+        // Route::get('/withdraw/{cryptoId}', [WalletController::class, 'showWithdraw'])->name('withdraw.specific'); // Specific crypto withdraw
+        // Route::post('/withdraw', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');
         Route::get('/transactions', [WalletController::class, 'transactions'])->name('transactions');
         Route::get('/transaction/{id}', [WalletController::class, 'transactionDetail'])->name('wallet.transaction.detail');
 
-
-        // Manual Deposit Management
-        Route::get('/deposits', [WalletController::class, 'deposits'])->name('deposits');
-        Route::get('/deposits/manual', function() {
-            $cryptocurrencies = \App\Models\Cryptocurrency::active()->get();
-            return view('wallet.manual-deposit', compact('cryptocurrencies'));
-        })->name('deposits.manual');
-        Route::post('/deposits/manual', [WalletController::class, 'processManualDeposit'])->name('deposits.manual');
-        Route::get('/deposits/{deposit}', [WalletController::class, 'showDeposit'])->name('deposit');
-        Route::post('/deposits/{deposit}/payment-proof', [WalletController::class, 'uploadPaymentProof'])->name('deposit.payment-proof');
-        
-        // Login History
-        // Route::get('/login-history', function() {
-        //     $loginHistories = Auth::user()->loginHistories()->paginate(20);
-        //     return view('wallet.login-history', compact('loginHistories'));
-        // })->name('login-history');
 
     });
 
@@ -215,6 +208,13 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
     Route::get('/security', [SettingController::class, 'security'])->name('security');
     Route::get('/change-password', [SettingController::class, 'changePassword'])->name('change-password');
     Route::post('/change-password', [SettingController::class, 'changePasswordUpdate'])->name('user.password.update');
+
+
+    Route::get('/fund-password', [FundPasswordController::class, 'index'])->name('fund.password');
+    Route::post('/fund-password/send-otp', [FundPasswordController::class, 'sendOtp'])->name('fund.password.otp');
+    Route::post('/fund-password/update', [FundPasswordController::class, 'update'])->name('fund.password.update');
+    
+    Route::get('/Verify/code', [CaptchaController::class, 'generate']);
 
     
 });

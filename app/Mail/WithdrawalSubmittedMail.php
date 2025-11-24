@@ -2,10 +2,10 @@
 
 namespace App\Mail;
 
-use App\Models\Withdrawal;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Withdrawal;
 
 class WithdrawalSubmittedMail extends Mailable
 {
@@ -21,6 +21,7 @@ class WithdrawalSubmittedMail extends Mailable
     public function build()
     {
         return $this->subject('Withdrawal Request Submitted')
-            ->markdown('emails.submitted');
+            ->view('emails.withdrawal_submitted')
+            ->with(['withdrawal' => $this->withdrawal]);
     }
 }

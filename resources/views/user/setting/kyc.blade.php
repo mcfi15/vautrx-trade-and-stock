@@ -133,10 +133,10 @@
                                 <input type="file" name="kyc_back" class="form-control" required>
                             </div>
 
-                            <div class="form-group mb-3">
+                            {{-- <div class="form-group mb-3">
                                 <label>Selfie with Document</label>
                                 <input type="file" name="kyc_selfie" class="form-control" required>
-                            </div>
+                            </div> --}}
 
                             <div class="form-group mb-4">
                                 <label>Proof of Address</label>

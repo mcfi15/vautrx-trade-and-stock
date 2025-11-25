@@ -14,7 +14,7 @@
                         <h2>Send cryptocurrency as a gift to your friends and family</h2>
                     </div>
                     <div class="col-8 col-sm-6 col-md-4 col-lg-4 col-xl-5">
-                        <img src="/Public/template/epsilon/img/launchpad-banner-img.png" alt="" class="img-fluid" />
+                        <img src="{{ asset('Public/template/epsilon/img/launchpad-banner-img.png') }}" alt="" class="img-fluid" />
                     </div>
                 </div>
             </div>

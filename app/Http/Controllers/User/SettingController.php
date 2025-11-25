@@ -31,7 +31,7 @@ class SettingController extends Controller
 
             'kyc_front'  => 'required|mimes:jpg,png,jpeg,pdf|max:4096',
             'kyc_back'   => 'required|mimes:jpg,png,jpeg,pdf|max:4096',
-            'kyc_selfie' => 'required|mimes:jpg,png,jpeg,pdf|max:4096',
+            // 'kyc_selfie' => 'required|mimes:jpg,png,jpeg,pdf|max:4096',
             'kyc_proof'  => 'required|mimes:jpg,png,jpeg,pdf|max:4096',
         ]);
 
@@ -57,12 +57,12 @@ class SettingController extends Controller
         }
 
         // SELFIE
-        if ($request->hasFile('kyc_selfie')) {
-            $file = $request->file('kyc_selfie');
-            $ext = $file->getClientOriginalExtension();
-            $filename_selfie = time().'_selfie.'.$ext;
-            $file->move($uploadPath, $filename_selfie);
-        }
+        // if ($request->hasFile('kyc_selfie')) {
+        //     $file = $request->file('kyc_selfie');
+        //     $ext = $file->getClientOriginalExtension();
+        //     $filename_selfie = time().'_selfie.'.$ext;
+        //     $file->move($uploadPath, $filename_selfie);
+        // }
 
         // PROOF OF RESIDENCE
         if ($request->hasFile('kyc_proof')) {
@@ -81,7 +81,7 @@ class SettingController extends Controller
 
             'kyc_front'  => $uploadPath . $filename_front,
             'kyc_back'   => $uploadPath . $filename_back,
-            'kyc_selfie' => $uploadPath . $filename_selfie,
+            // 'kyc_selfie' => $uploadPath . $filename_selfie,
             'kyc_proof'  => $uploadPath . $filename_proof,
         ]);
 

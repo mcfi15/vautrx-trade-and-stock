@@ -15,7 +15,7 @@
         <div class="col-12 col-md-6 order-1 order-md-2 float-right">
             <ul class="text-right breadcrumbs list-unstyle">
                 <li>
-                    <a class="btn btn-primary btn-sm" href="/Finance/index">Wallet</a>
+                    <a class="btn btn-primary btn-sm" href="{{ url('/wallet') }}">Wallet</a>
                 </li>
                 <li class="btn btn-primary btn-sm active">Giftcard Home</li>
                 <li>

@@ -26,11 +26,11 @@
                             <div class="row w-100">
                                 <div class="col-6"><a href="{{ url('wallet/deposit') }}" class="btn-2 btn-block"><i
                                             class="fa fa-download"></i> Deposit</a></div>
-                                <div class="col-6 text"><a href="{{ url('wallet/wallet') }}"
+                                <div class="col-6 text"><a href="{{ url('wallet/withdraw') }}"
                                         class="btn-2 btn-block"><i class="fa fa-upload"></i> Withdraw</a></div>
                             </div>
                             <div class="row w-100 mt-2">
-                                <div class="col-6"><a href="#" class="btn-1 btn-block"><i
+                                <div class="col-6"><a href="{{ url('/wallet') }}" class="btn-1 btn-block"><i
                                             class="fa fa-exchange"></i> Transfer</a></div>
                                 <div class="col-6 text"><a href="{{ url('stocks') }}" class="btn-1 btn-block"><i
                                             class="fa fa-line-chart"></i> Stocks</a></div>
@@ -61,11 +61,11 @@
               </div>
             </div>
             <div class="col-md-4 text-center">
-              <a href="/account/dust" style="background-color:#1e90ff;border-color:#1e90ff;" class="btn btn-warning btn-sm">
+              {{-- <a href="/account/dust" style="background-color:#1e90ff;border-color:#1e90ff;" class="btn btn-warning btn-sm">
                 Convert low balance to BNB
-              </a>
+              </a> --}}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 text-right">
               <input class="form-control" placeholder="Search" id="searchFilterDesktop">
             </div>
           </div>
@@ -86,13 +86,13 @@
                     <input class="form-control" placeholder="Search" id="searchFilterMobile">
                     </div>
                 </div>
-                <div class="row text-center mt-3">
+                {{-- <div class="row text-center mt-3">
                     <div class="col-12">
                     <a href="/account/dust" style="background-color:#1e90ff;border-color:#1e90ff;" class="btn btn-warning btn-sm">
                         Convert low balance to BNB
                     </a>
                     </div>
-                </div>
+                </div> --}}
                 </div>
                 <!-- </div> -->
                 <div class="card-body">

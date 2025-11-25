@@ -1,4 +1,4 @@
-{{-- <style>
+<style>
 /* Mobile First Approach */
 .trade-panels-container {
     display: block;
@@ -46,7 +46,7 @@
 .btn-success:hover, .btn-danger:hover {
     opacity: 0.9;
 }
-</style> --}}
+</style>
 
 <!-- Trading Panel -->
 <div class="col-md-12 buysell_s4">
@@ -54,6 +54,18 @@
         <input type="hidden" id="tradingPairId" value="{{ $tradingPair->id }}">
     <div class="d-flex justify-content-between align-items-center">
         <ul id="orderTypeTabs" class="nav nav-pills mb-3" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" href="javascript:void(0)" data-type="limit">Limit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0)" data-type="market">Market</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0)" data-type="stop">Stop-Limit</a>
+            </li>
+        </ul>
+
+        {{-- <ul id="orderTypeTabs" class="nav nav-pills mb-3" role="tablist">
         <li class="nav-item">
             <span class="nav-link active" data-type="limit">Limit</span>
         </li>
@@ -63,7 +75,7 @@
         <li class="nav-item">
             <span class="nav-link" data-type="stop">Stop-Limit</span>
         </li>
-        </ul>
+        </ul> --}}
         <div class="hide-mobile">
             <button class="btn btn-sm btn-outline-primary">
                 <a href="{{ url('wallet') }}">Transfer</a>

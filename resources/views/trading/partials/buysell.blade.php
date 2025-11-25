@@ -277,7 +277,7 @@
 </div>
     </div>
 
-<script>
+{{-- <script>
     // The JavaScript function that displays an alert message
     function promptLogin() {
         alert("Please login before you can continue.");
@@ -285,7 +285,7 @@
         // such as redirecting the user to a login page:
         // window.location.href = "login.html"; 
     }
-</script>
+</script> --}}
 
 
 

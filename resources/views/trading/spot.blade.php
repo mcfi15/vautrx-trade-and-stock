@@ -1062,7 +1062,32 @@ function incrementValue(inputId, step) {
 }
 </script>
 
+<script>
+document.querySelectorAll('#orderTypeTabs .nav-link').forEach(tab => {
+    tab.addEventListener('touchstart', function(e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+    }, {passive:false});
 
+    tab.addEventListener('click', function(e) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+    });
+});
+</script>
+
+
+<script>
+document.querySelectorAll('.buy-trade, .sell').forEach(btn => {
+    btn.addEventListener('touchstart', function(e) {
+        e.stopImmediatePropagation();
+    }, {passive:false});
+
+    btn.addEventListener('click', function(e) {
+        e.stopImmediatePropagation();
+    });
+});
+</script>
 
 @endpush
 

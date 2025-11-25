@@ -65,17 +65,6 @@
             </li>
         </ul>
 
-        {{-- <ul id="orderTypeTabs" class="nav nav-pills mb-3" role="tablist">
-        <li class="nav-item">
-            <span class="nav-link active" data-type="limit">Limit</span>
-        </li>
-        <li class="nav-item">
-            <span class="nav-link" data-type="market">Market</span>
-        </li>
-        <li class="nav-item">
-            <span class="nav-link" data-type="stop">Stop-Limit</span>
-        </li>
-        </ul> --}}
         <div class="hide-mobile">
             <button class="btn btn-sm btn-outline-primary">
                 <a href="{{ url('wallet') }}">Transfer</a>

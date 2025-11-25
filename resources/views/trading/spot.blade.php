@@ -808,7 +808,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 @push('scripts')
 <script>
-// Trading interface functionality with iOS compatibility - FIXED VERSION
+// Trading interface functionality with iOS compatibility - COMPLETE FIXED VERSION
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Trading interface initializing...');
     
@@ -1065,9 +1065,9 @@ function incrementValue(inputId, increment) {
     }
 }
 
-// Order placement function with iOS protection
-function placeOrder(side, type) {
-    console.log('Place order called INTENTIONALLY:', side, type);
+// Order placement function that actually calls your Laravel controller
+async function placeOrder(side, type) {
+    console.log('Place order called:', side, type);
     
     // Immediate feedback that function was called intentionally
     if (window.placeOrderBlocked) {
@@ -1083,8 +1083,10 @@ function placeOrder(side, type) {
     
     // Get values based on order type
     let price, quantity, stopPrice;
+    const tradingPairId = document.getElementById('tradingPairId').value;
     
     try {
+        // Validate and get order values
         if (type === 'limit') {
             price = side === 'buy' ? 
                 document.getElementById('buy_price').value : 
@@ -1096,6 +1098,7 @@ function placeOrder(side, type) {
             quantity = side === 'buy' ? 
                 document.getElementById('buy_num').value : 
                 document.getElementById('sell_num').value;
+            price = null; // Market orders don't need price
         } else if (type === 'stop') {
             price = side === 'buy' ? 
                 document.getElementById('buy_price').value : 
@@ -1108,7 +1111,7 @@ function placeOrder(side, type) {
                 document.getElementById('sell_stop').value;
         }
         
-        console.log('Order details:', { side, type, price, quantity, stopPrice });
+        console.log('Order details:', { side, type, price, quantity, stopPrice, tradingPairId });
         
         // Validate inputs
         if (!quantity || parseFloat(quantity) <= 0) {
@@ -1126,52 +1129,246 @@ function placeOrder(side, type) {
             return;
         }
         
-        // Here you would typically make an API call
-        console.log('Proceeding with INTENTIONAL order placement...');
+        // Show loading state
+        const button = document.querySelector(`.${side === 'buy' ? 'buy-trade' : 'sell'}`);
+        const originalText = button.textContent;
+        button.textContent = 'Placing...';
+        button.disabled = true;
         
-        // Simulate API call
-        simulateOrderPlacement(side, type, price, quantity, stopPrice);
+        // Prepare data for API call
+        const formData = new FormData();
+        formData.append('trading_pair_id', tradingPairId);
+        formData.append('side', side);
+        formData.append('type', type === 'stop' ? 'stop_limit' : type); // Map 'stop' to 'stop_limit'
+        formData.append('quantity', quantity);
         
-    } catch (error) {
-        console.error('Error placing order:', error);
-        alert('Error placing order: ' + error.message);
-    }
-}
-
-// Simulate order placement (replace with actual API call)
-function simulateOrderPlacement(side, type, price, quantity, stopPrice) {
-    // Show loading state
-    const button = document.querySelector(`.${side === 'buy' ? 'buy-trade' : 'sell'}`);
-    const originalText = button.textContent;
-    button.textContent = 'Placing...';
-    button.disabled = true;
-    
-    // Simulate API delay
-    setTimeout(() => {
+        if (price) {
+            formData.append('price', price);
+        }
+        
+        if (stopPrice) {
+            formData.append('stop_price', stopPrice);
+        }
+        
+        // Add CSRF token for Laravel
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (csrfToken) {
+            formData.append('_token', csrfToken);
+        }
+        
+        console.log('Sending order data to server...');
+        
+        // Make actual API call to your Laravel backend
+        const response = await fetch('/trade/place-order', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken || ''
+            },
+            body: formData
+        });
+        
+        const result = await response.json();
+        
         // Reset button
         button.textContent = originalText;
         button.disabled = false;
         
-        // Show success message (replace with actual response handling)
-        alert(`Order placed successfully!\nSide: ${side}\nType: ${type}\nQuantity: ${quantity}\nPrice: ${price || 'Market'}\nStop: ${stopPrice || 'N/A'}`);
-        
-        // Reset form
-        if (side === 'buy') {
-            document.getElementById('buy_num').value = '';
-            document.getElementById('buy_range').value = 0;
-            calculateBuyTotal();
+        if (result.success) {
+            console.log('Order placed successfully:', result);
+            alert(`Order placed successfully!`);
+            
+            // Reset form
+            if (side === 'buy') {
+                document.getElementById('buy_num').value = '';
+                document.getElementById('buy_range').value = 0;
+                calculateBuyTotal();
+            } else {
+                document.getElementById('sell_num').value = '';
+                document.getElementById('sell_range').value = 0;
+                calculateSellTotal();
+            }
+            
+            // Refresh balances if needed
+            refreshBalances();
+            
         } else {
-            document.getElementById('sell_num').value = '';
-            document.getElementById('sell_range').value = 0;
-            calculateSellTotal();
+            console.error('Order failed:', result);
+            alert(`Order failed: ${result.message}`);
         }
+        
+    } catch (error) {
+        console.error('Error placing order:', error);
+        
+        // Reset button in case of error
+        const button = document.querySelector(`.${side === 'buy' ? 'buy-trade' : 'sell'}`);
+        if (button) {
+            button.textContent = side === 'buy' ? 'Buy' : 'Sell';
+            button.disabled = false;
+        }
+        
+        alert('Error placing order: ' + error.message);
+    }
+}
+
+// Function to refresh user balances after order placement
+function refreshBalances() {
+    console.log('Refresh balances after order placement');
+    
+    // Option 1: Reload the page to get updated balances
+    setTimeout(() => {
+        window.location.reload();
     }, 1000);
+    
+    // Option 2: Make an API call to update balances without reloading
+    // updateWalletBalances();
+}
+
+// Optional: Function to update wallet balances via AJAX
+async function updateWalletBalances() {
+    try {
+        const response = await fetch('/api/user/wallets');
+        const wallets = await response.json();
+        
+        // Update buy side balance (quote currency)
+        const quoteBalanceElement = document.querySelector('.market-trade-buy .w-full span');
+        if (quoteBalanceElement && wallets.quote) {
+            quoteBalanceElement.textContent = parseFloat(wallets.quote.available_balance).toFixed(8);
+        }
+        
+        // Update sell side balance (base currency)
+        const baseBalanceElement = document.getElementById('user_coin');
+        if (baseBalanceElement && wallets.base) {
+            baseBalanceElement.textContent = parseFloat(wallets.base.available_balance).toFixed(8);
+        }
+    } catch (error) {
+        console.error('Failed to update balances:', error);
+    }
 }
 
 // Login prompt function
 function promptLogin() {
     alert('Please log in to place orders');
+    // You can redirect to login page if needed
+    // window.location.href = '/login';
 }
+
+// Global market search functionality
+(function(){
+    // Defensive startup
+    if (!document) return;
+    const START_LABEL = '[GLOBAL-MARKET-SEARCH]';
+    console.clear();
+    console.log(START_LABEL, 'init');
+
+    const searchInput = document.getElementById('searchFilter');
+    if (!searchInput) {
+        console.error(START_LABEL, 'search input #searchFilter not found');
+        return;
+    }
+
+    // Collect all tbody elements we expect to filter:
+    function getAllTBodies() {
+        const tbodies = [];
+        // specific STAR id
+        const star = document.getElementById('STAR-DATA');
+        if (star) tbodies.push(star);
+        // any coinleftmenu-* matches
+        document.querySelectorAll('[id^="coinleftmenu-"]').forEach(el => tbodies.push(el));
+        // fallback: any tab-pane tbody (avoid duplicates)
+        document.querySelectorAll('.tab-content .tab-pane tbody').forEach(tb => {
+            if (!tbodies.includes(tb)) tbodies.push(tb);
+        });
+        return tbodies;
+    }
+
+    function safeRemoveNoResults(tbody) {
+        const existing = tbody.querySelector('tr.__no_search_results');
+        if (existing) existing.remove();
+    }
+
+    function safeAppendNoResults(tbody, cols) {
+        safeRemoveNoResults(tbody);
+        const tr = document.createElement('tr');
+        tr.className = '__no_search_results';
+        const td = document.createElement('td');
+        td.setAttribute('colspan', cols);
+        td.style.textAlign = 'center';
+        td.style.color = '#999';
+        td.style.padding = '8px 0';
+        td.textContent = 'No matching results';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+    }
+
+    function filterAllTabs() {
+        const term = (searchInput.value || '').toLowerCase().trim();
+        const tbodies = getAllTBodies();
+
+        console.log(START_LABEL, 'running filter', { term, tbodiesCount: tbodies.length });
+
+        if (tbodies.length === 0) {
+            console.warn(START_LABEL, 'no tbodies found to filter - check your markup');
+            return;
+        }
+
+        tbodies.forEach(tbody => {
+            // find rows directly under tbody
+            const rows = Array.from(tbody.querySelectorAll('tr')).filter(r => !r.classList.contains('__no_search_results'));
+            let visible = 0;
+
+            rows.forEach(row => {
+                // if row has no text (or is a nested header), still handle gracefully
+                const text = (row.textContent || '').toLowerCase();
+                const match = term === '' || text.includes(term);
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+
+            // handle no-results marker
+            if (term !== '' && visible === 0) {
+                // compute columns (table header count) fallback 3
+                let cols = 1;
+                const table = tbody.closest('table');
+                if (table) {
+                    const ths = table.querySelectorAll('thead th');
+                    cols = Math.max(ths.length, 1);
+                }
+                safeAppendNoResults(tbody, cols);
+            } else {
+                safeRemoveNoResults(tbody);
+            }
+        });
+
+        console.log(START_LABEL, 'filter complete');
+    }
+
+    // debounce helper to avoid excessive runs while typing quickly
+    function debounce(fn, wait){
+        let t;
+        return function(...args){
+            clearTimeout(t);
+            t = setTimeout(() => fn.apply(this, args), wait);
+        }
+    }
+
+    // bind input (debounced)
+    const debouncedFilter = debounce(filterAllTabs, 120);
+    searchInput.addEventListener('input', debouncedFilter);
+
+    // run once initially to set state
+    filterAllTabs();
+
+    // Expose for debugging in console
+    window.__globalMarketSearch = {
+        run: filterAllTabs,
+        getTbodies: getAllTBodies,
+        startLabel: START_LABEL
+    };
+
+    console.log(START_LABEL, 'ready - use __globalMarketSearch.run() to invoke manually');
+})();
 
 // Add iOS-specific CSS improvements
 const iosStyle = document.createElement('style');
@@ -1230,7 +1427,7 @@ iosStyle.textContent = `
 `;
 document.head.appendChild(iosStyle);
 
-console.log('Trading interface JavaScript loaded successfully - iOS FIXED VERSION');
+console.log('Trading interface JavaScript loaded successfully - COMPLETE FIXED VERSION');
 </script>
 
 <script>

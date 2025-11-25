@@ -771,7 +771,7 @@
             </a>
         </span>
         <div class="">
-            <div class="nav__item">
+            {{-- <div class="nav__item">
                 <i class="fa fa-language" aria-hidden="true"></i>
                 <a class="nav-link dropdown-toggle pl0" aria-expanded="false" aria-haspopup="true"
                     data-toggle="dropdown" href="#" role="button">
@@ -783,7 +783,7 @@
                         <a class="dropdown-item" href="#">Turkish</a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             @auth
 

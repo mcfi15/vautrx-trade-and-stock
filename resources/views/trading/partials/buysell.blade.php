@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
 /* Mobile First Approach */
 .trade-panels-container {
     display: block;
@@ -46,7 +46,7 @@
 .btn-success:hover, .btn-danger:hover {
     opacity: 0.9;
 }
-</style>
+</style> --}}
 
 <!-- Trading Panel -->
 <div class="col-md-12 buysell_s4">

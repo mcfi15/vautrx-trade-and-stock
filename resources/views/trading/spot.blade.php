@@ -808,177 +808,469 @@ document.addEventListener('DOMContentLoaded', function() {
 
 @push('scripts')
 <script>
-(function() {
-    if (!document || !window) return;
-
-    const $ = sel => document.querySelector(sel);
-    const $$ = sel => Array.from(document.querySelectorAll(sel));
-    const toFloat = v => {
-        const n = parseFloat(String(v ?? '').replace(/,/g,''));
-        return isNaN(n) ? 0 : n;
-    };
-
-    // IDs
-    const USER_BALANCE_ID = '#user_coin'; // sell balance
-    const BUY_BALANCE_SPAN = '.market-trade-buy p span:first-child'; // buy balance
-
-    const tabs = $$('#orderTypeTabs .nav-link');
-
-    const getPriceEl = side => $(`#${side}_price`);
-    const getQtyEl = side => $(`#${side}_num`);
-    const getTotalEl = side => $(`#${side}_mum`);
-    const getStopBox = side => $(`#${side}stop`);
-    const getPriceBox = side => $(`#${side}pricebox`);
-    const getLimitBtn = side => $(`#limit${side}button`);
-    const getMarketBtn = side => $(`#market${side}button`);
-    const getStopBtn = side => $(`#stop${side}button`);
-
-    const marketPriceEl = $('#market_sell_price');
-
-    const computeTotalFor = side => {
-        const qty = toFloat(getQtyEl(side)?.value);
-        let price = toFloat(getPriceEl(side)?.value);
-        if (!price && marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
-        const total = qty * price;
-        const totalEl = getTotalEl(side);
-        if (totalEl) totalEl.textContent = isFinite(total) ? total.toFixed(8).replace(/\.?0+$/,'') : '--';
-    };
-
-    // Show/hide order types
-    const showOrderType = type => {
-        ['buy','sell'].forEach(side => {
-            const priceBox = getPriceBox(side);
-            const stopBox = getStopBox(side);
-            const limitBtn = getLimitBtn(side);
-            const marketBtn = getMarketBtn(side);
-            const stopBtn = getStopBtn(side);
-
-            if(priceBox) priceBox.style.display='none';
-            if(stopBox) stopBox.style.display='none';
-            if(limitBtn) limitBtn.style.display='none';
-            if(marketBtn) marketBtn.style.display='none';
-            if(stopBtn) stopBtn.style.display='none';
-
-            if(type==='limit'){ if(priceBox) priceBox.style.display=''; if(limitBtn) limitBtn.style.display=''; }
-            if(type==='market'){ if(marketBtn) marketBtn.style.display=''; }
-            if(type==='stop'){ if(stopBox) stopBox.style.display=''; if(stopBtn) stopBtn.style.display=''; }
-
-            computeTotalFor(side);
+// Trading interface functionality with iOS compatibility
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Trading interface initializing...');
+    
+    // Tab switching functionality
+    const orderTypeTabs = document.querySelectorAll('#orderTypeTabs .nav-link');
+    const tradingPairId = document.getElementById('tradingPairId').value;
+    
+    // Function to switch tabs
+    function switchOrderType(type, element) {
+        console.log('Switching to order type:', type);
+        
+        // Update active tab
+        orderTypeTabs.forEach(tab => {
+            tab.classList.remove('active');
         });
-    };
-
-    // Tab clicks
-    if(tabs.length){
-        tabs.forEach(t=>{
-            t.addEventListener('click',function(e){
-                e.preventDefault();
-                tabs.forEach(x=>x.classList.remove('active'));
-                this.classList.add('active');
-                const type = this.dataset.type || 'limit';
-                showOrderType(type);
-            });
-        });
+        element.classList.add('active');
+        
+        // Show/hide appropriate elements based on order type
+        switch(type) {
+            case 'limit':
+                // Limit order - show price inputs, hide stop inputs
+                document.getElementById('buypricebox').style.display = 'flex';
+                document.getElementById('sellpricebox').style.display = 'flex';
+                document.getElementById('buystop').style.display = 'none';
+                document.getElementById('sellstop').style.display = 'none';
+                
+                // Show limit buttons, hide others
+                document.getElementById('limitbuybutton').style.display = 'block';
+                document.getElementById('limitsellbutton').style.display = 'block';
+                document.getElementById('marketbuybutton').style.display = 'none';
+                document.getElementById('marketsellbutton').style.display = 'none';
+                document.getElementById('stopbuybutton').style.display = 'none';
+                document.getElementById('stopsellbutton').style.display = 'none';
+                break;
+                
+            case 'market':
+                // Market order - hide price and stop inputs
+                document.getElementById('buypricebox').style.display = 'none';
+                document.getElementById('sellpricebox').style.display = 'none';
+                document.getElementById('buystop').style.display = 'none';
+                document.getElementById('sellstop').style.display = 'none';
+                
+                // Show market buttons, hide others
+                document.getElementById('marketbuybutton').style.display = 'block';
+                document.getElementById('marketsellbutton').style.display = 'block';
+                document.getElementById('limitbuybutton').style.display = 'none';
+                document.getElementById('limitsellbutton').style.display = 'none';
+                document.getElementById('stopbuybutton').style.display = 'none';
+                document.getElementById('stopsellbutton').style.display = 'none';
+                break;
+                
+            case 'stop':
+                // Stop-limit order - show both price and stop inputs
+                document.getElementById('buypricebox').style.display = 'flex';
+                document.getElementById('sellpricebox').style.display = 'flex';
+                document.getElementById('buystop').style.display = 'flex';
+                document.getElementById('sellstop').style.display = 'flex';
+                
+                // Show stop buttons, hide others
+                document.getElementById('stopbuybutton').style.display = 'block';
+                document.getElementById('stopsellbutton').style.display = 'block';
+                document.getElementById('limitbuybutton').style.display = 'none';
+                document.getElementById('limitsellbutton').style.display = 'none';
+                document.getElementById('marketbuybutton').style.display = 'none';
+                document.getElementById('marketsellbutton').style.display = 'none';
+                break;
+        }
     }
-
-    // Percentage buttons
-    window.setPercentage = (percent, side) => {
-        percent = toFloat(percent);
-        if(side==='buy'){
-            const baseBalanceEl = $(BUY_BALANCE_SPAN);
-            const baseBalance = toFloat(baseBalanceEl?.textContent || 0);
-            let price = toFloat(getPriceEl('buy')?.value);
-            if(!price && marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
-            if(price <=0) return;
-            const qty = (baseBalance*percent/100)/price;
-            const el = getQtyEl('buy');
-            if(el){ el.value = qty.toFixed(8); computeTotalFor('buy'); }
-        } else {
-            const userBalance = toFloat($(USER_BALANCE_ID)?.textContent || 0);
-            const qty = userBalance*percent/100;
-            const el = getQtyEl('sell');
-            if(el){ el.value = qty.toFixed(8); computeTotalFor('sell'); }
-        }
-    };
-
-    // Range sliders
-    window.updateFromRange = (side, value)=>{
-        value = toFloat(value);
-        if(side==='buy'){
-            const baseBalanceEl = $(BUY_BALANCE_SPAN);
-            const baseBalance = toFloat(baseBalanceEl?.textContent || 0);
-            let price = toFloat(getPriceEl('buy')?.value);
-            if(!price && marketPriceEl) price = toFloat(marketPriceEl.textContent || marketPriceEl.innerText);
-            if(price <=0) return;
-            const qty = (baseBalance*value/100)/price;
-            const el = getQtyEl('buy');
-            if(el){ el.value = qty.toFixed(8); computeTotalFor('buy'); }
-        } else {
-            const userBalance = toFloat($(USER_BALANCE_ID)?.textContent || 0);
-            const qty = userBalance*value/100;
-            const el = getQtyEl('sell');
-            if(el){ el.value = qty.toFixed(8); computeTotalFor('sell'); }
-        }
-    };
-
-    // Live compute on inputs
-    ['buy','sell'].forEach(side=>{
-        const pEl = getPriceEl(side);
-        const qEl = getQtyEl(side);
-        if(pEl) pEl.addEventListener('input',()=>computeTotalFor(side));
-        if(qEl) qEl.addEventListener('input',()=>computeTotalFor(side));
+    
+    // Add event listeners with iOS compatibility
+    orderTypeTabs.forEach(tab => {
+        // Use click event with proper prevention
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            const type = this.getAttribute('data-type');
+            switchOrderType(type, this);
+        });
+        
+        // Add touch event for iOS with passive false to allow preventDefault
+        tab.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            const type = this.getAttribute('data-type');
+            switchOrderType(type, this);
+        }, { passive: false });
+        
+        // Additional touch event prevention
+        tab.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        }, { passive: false });
+        
+        tab.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        }, { passive: false });
     });
 
-    // AJAX place order
-    const placeOrderAJAX = (side, type)=>{
-        const qty = toFloat(getQtyEl(side)?.value);
-        const price = toFloat(getPriceEl(side)?.value);
-        const stopPrice = toFloat(getStopBox(side)?.querySelector('input')?.value);
-        if(!qty || (type!=='market' && !price && side==='buy') || (type==='stop' && !stopPrice)){
-            alert('Enter quantity, price and stop (if stop order).');
-            
+    // Initialize calculation events
+    initializeCalculationEvents();
+});
+
+// Input calculation functions
+function initializeCalculationEvents() {
+    // Buy side calculations
+    const buyPrice = document.getElementById('buy_price');
+    const buyNum = document.getElementById('buy_num');
+    const buyMum = document.getElementById('buy_mum');
+    
+    if (buyPrice && buyNum) {
+        buyPrice.addEventListener('input', calculateBuyTotal);
+        buyNum.addEventListener('input', calculateBuyTotal);
+    }
+    
+    // Sell side calculations
+    const sellPrice = document.getElementById('sell_price');
+    const sellNum = document.getElementById('sell_num');
+    const sellMum = document.getElementById('sell_mum');
+    
+    if (sellPrice && sellNum) {
+        sellPrice.addEventListener('input', calculateSellTotal);
+        sellNum.addEventListener('input', calculateSellTotal);
+    }
+}
+
+function calculateBuyTotal() {
+    const price = parseFloat(document.getElementById('buy_price').value) || 0;
+    const quantity = parseFloat(document.getElementById('buy_num').value) || 0;
+    const total = price * quantity;
+    const buyMum = document.getElementById('buy_mum');
+    
+    if (buyMum) {
+        buyMum.textContent = total > 0 ? total.toFixed(8) : '--';
+    }
+}
+
+function calculateSellTotal() {
+    const price = parseFloat(document.getElementById('sell_price').value) || 0;
+    const quantity = parseFloat(document.getElementById('sell_num').value) || 0;
+    const total = price * quantity;
+    const sellMum = document.getElementById('sell_mum');
+    
+    if (sellMum) {
+        sellMum.textContent = total > 0 ? total.toFixed(8) : '--';
+    }
+}
+
+// Percentage functions
+function setPercentage(percent, side) {
+    console.log('Setting percentage:', percent, side);
+    
+    const balance = side === 'buy' ? 
+        parseFloat('{{ number_format($quoteWallet->available_balance ?? (($quoteWallet->balance ?? 0) - ($quoteWallet->locked_balance ?? 0)), 8) }}'.replace(/,/g, '')) :
+        parseFloat('{{ number_format($baseWallet->available_balance ?? (($baseWallet->balance ?? 0) - ($baseWallet->locked_balance ?? 0)), 8) }}'.replace(/,/g, ''));
+    
+    const percentage = parseFloat(percent) / 100;
+    const amount = balance * percentage;
+    
+    if (side === 'buy') {
+        const buyPrice = parseFloat(document.getElementById('buy_price').value) || 1;
+        const quantity = amount / buyPrice;
+        document.getElementById('buy_num').value = quantity > 0 ? quantity.toFixed(8) : '';
+        document.getElementById('buy_range').value = percent;
+        calculateBuyTotal();
+    } else {
+        document.getElementById('sell_num').value = amount > 0 ? amount.toFixed(8) : '';
+        document.getElementById('sell_range').value = percent;
+        calculateSellTotal();
+    }
+}
+
+// Range update functions
+function updateFromRange(side, value) {
+    console.log('Updating range:', side, value);
+    setPercentage(value, side);
+}
+
+// Increment functions
+function incrementValue(inputId, increment) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        const currentValue = parseFloat(input.value) || 0;
+        const newValue = currentValue + increment;
+        input.value = newValue.toFixed(8);
+        
+        // Trigger calculations
+        if (inputId.includes('buy')) {
+            calculateBuyTotal();
+        } else if (inputId.includes('sell')) {
+            calculateSellTotal();
+        }
+    }
+}
+
+// Order placement function with iOS protection
+function placeOrder(side, type) {
+    console.log('Place order called:', side, type);
+    
+    // Immediate feedback that function was called
+    if (window.placeOrderBlocked) {
+        console.log('Order placement blocked - too frequent');
+        return;
+    }
+    
+    // Block multiple rapid calls
+    window.placeOrderBlocked = true;
+    setTimeout(() => {
+        window.placeOrderBlocked = false;
+    }, 1000);
+    
+    // Get values based on order type
+    let price, quantity, stopPrice;
+    const tradingPairId = document.getElementById('tradingPairId').value;
+    
+    try {
+        if (type === 'limit') {
+            price = side === 'buy' ? 
+                document.getElementById('buy_price').value : 
+                document.getElementById('sell_price').value;
+            quantity = side === 'buy' ? 
+                document.getElementById('buy_num').value : 
+                document.getElementById('sell_num').value;
+        } else if (type === 'market') {
+            quantity = side === 'buy' ? 
+                document.getElementById('buy_num').value : 
+                document.getElementById('sell_num').value;
+        } else if (type === 'stop') {
+            price = side === 'buy' ? 
+                document.getElementById('buy_price').value : 
+                document.getElementById('sell_price').value;
+            quantity = side === 'buy' ? 
+                document.getElementById('buy_num').value : 
+                document.getElementById('sell_num').value;
+            stopPrice = side === 'buy' ? 
+                document.getElementById('buy_stop').value : 
+                document.getElementById('sell_stop').value;
+        }
+        
+        console.log('Order details:', { side, type, price, quantity, stopPrice });
+        
+        // Validate inputs
+        if (!quantity || parseFloat(quantity) <= 0) {
+            alert('Please enter a valid quantity');
+            return;
+        }
+        
+        if ((type === 'limit' || type === 'stop') && (!price || parseFloat(price) <= 0)) {
+            alert('Please enter a valid price');
+            return;
+        }
+        
+        if (type === 'stop' && (!stopPrice || parseFloat(stopPrice) <= 0)) {
+            alert('Please enter a valid stop price');
+            return;
+        }
+        
+        // Here you would typically make an API call
+        console.log('Proceeding with order placement...');
+        
+        // Simulate API call
+        simulateOrderPlacement(side, type, price, quantity, stopPrice);
+        
+    } catch (error) {
+        console.error('Error placing order:', error);
+        alert('Error placing order: ' + error.message);
+    }
+}
+
+// Simulate order placement (replace with actual API call)
+function simulateOrderPlacement(side, type, price, quantity, stopPrice) {
+    // Show loading state
+    const button = document.querySelector(`.${side === 'buy' ? 'buy-trade' : 'sell'}`);
+    const originalText = button.textContent;
+    button.textContent = 'Placing...';
+    button.disabled = true;
+    
+    // Simulate API delay
+    setTimeout(() => {
+        // Reset button
+        button.textContent = originalText;
+        button.disabled = false;
+        
+        // Show success message (replace with actual response handling)
+        alert(`Order placed successfully!\nSide: ${side}\nType: ${type}\nQuantity: ${quantity}\nPrice: ${price || 'Market'}\nStop: ${stopPrice || 'N/A'}`);
+        
+        // Reset form
+        if (side === 'buy') {
+            document.getElementById('buy_num').value = '';
+            document.getElementById('buy_range').value = 0;
+            calculateBuyTotal();
+        } else {
+            document.getElementById('sell_num').value = '';
+            document.getElementById('sell_range').value = 0;
+            calculateSellTotal();
+        }
+    }, 1000);
+}
+
+// Login prompt function
+function promptLogin() {
+    alert('Please log in to place orders');
+    // You can redirect to login page if needed
+    // window.location.href = '/login';
+}
+
+// Global market search functionality (your existing code with minor improvements)
+(function(){
+    // Defensive startup
+    if (!document) return;
+    const START_LABEL = '[GLOBAL-MARKET-SEARCH]';
+    console.clear();
+    console.log(START_LABEL, 'init');
+
+    const searchInput = document.getElementById('searchFilter');
+    if (!searchInput) {
+        console.error(START_LABEL, 'search input #searchFilter not found');
+        return;
+    }
+
+    // Collect all tbody elements we expect to filter:
+    function getAllTBodies() {
+        const tbodies = [];
+        // specific STAR id
+        const star = document.getElementById('STAR-DATA');
+        if (star) tbodies.push(star);
+        // any coinleftmenu-* matches
+        document.querySelectorAll('[id^="coinleftmenu-"]').forEach(el => tbodies.push(el));
+        // fallback: any tab-pane tbody (avoid duplicates)
+        document.querySelectorAll('.tab-content .tab-pane tbody').forEach(tb => {
+            if (!tbodies.includes(tb)) tbodies.push(tb);
+        });
+        return tbodies;
+    }
+
+    function safeRemoveNoResults(tbody) {
+        const existing = tbody.querySelector('tr.__no_search_results');
+        if (existing) existing.remove();
+    }
+
+    function safeAppendNoResults(tbody, cols) {
+        safeRemoveNoResults(tbody);
+        const tr = document.createElement('tr');
+        tr.className = '__no_search_results';
+        const td = document.createElement('td');
+        td.setAttribute('colspan', cols);
+        td.style.textAlign = 'center';
+        td.style.color = '#999';
+        td.style.padding = '8px 0';
+        td.textContent = 'No matching results';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+    }
+
+    function filterAllTabs() {
+        const term = (searchInput.value || '').toLowerCase().trim();
+        const tbodies = getAllTBodies();
+
+        console.log(START_LABEL, 'running filter', { term, tbodiesCount: tbodies.length });
+
+        if (tbodies.length === 0) {
+            console.warn(START_LABEL, 'no tbodies found to filter - check your markup');
             return;
         }
 
-        const tradingPairId = $('#tradingPairId')?.value;
-        fetch('{{ url("trade/place-order") }}', {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({
-                trading_pair_id: tradingPairId,
-                type: type==='stop' ? 'stop_limit' : type,
-                side: side,
-                quantity: qty,
-                price: price || null,
-                stop_price: stopPrice || null
-            })
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            if(data.success){
-                alert(`${side.toUpperCase()} order placed: ${qty} @ ${price || 'market'} (${type})`);
-                
-                computeTotalFor(side);
+        tbodies.forEach(tbody => {
+            // find rows directly under tbody
+            const rows = Array.from(tbody.querySelectorAll('tr')).filter(r => !r.classList.contains('__no_search_results'));
+            let visible = 0;
+
+            rows.forEach(row => {
+                // if row has no text (or is a nested header), still handle gracefully
+                const text = (row.textContent || '').toLowerCase();
+                const match = term === '' || text.includes(term);
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+
+            // handle no-results marker
+            if (term !== '' && visible === 0) {
+                // compute columns (table header count) fallback 3
+                let cols = 1;
+                const table = tbody.closest('table');
+                if (table) {
+                    const ths = table.querySelectorAll('thead th');
+                    cols = Math.max(ths.length, 1);
+                }
+                safeAppendNoResults(tbody, cols);
             } else {
-                alert(data.message || 'Failed to place order.');
-                
+                safeRemoveNoResults(tbody);
             }
-        })
-        .catch(err=>{
-            console.error(err);
-            alert('Error placing order. Check console.');
-            
         });
+
+        console.log(START_LABEL, 'filter complete');
+    }
+
+    // debounce helper to avoid excessive runs while typing quickly
+    function debounce(fn, wait){
+        let t;
+        return function(...args){
+            clearTimeout(t);
+            t = setTimeout(() => fn.apply(this, args), wait);
+        }
+    }
+
+    // bind input (debounced)
+    const debouncedFilter = debounce(filterAllTabs, 120);
+    searchInput.addEventListener('input', debouncedFilter);
+
+    // run once initially to set state
+    filterAllTabs();
+
+    // Expose for debugging in console
+    window.__globalMarketSearch = {
+        run: filterAllTabs,
+        getTbodies: getAllTBodies,
+        startLabel: START_LABEL
     };
 
-    // Map buttons to AJAX
-    window.placeOrder = (side,type)=>placeOrderAJAX(side,type);
-
-    showOrderType('limit');
-
+    console.log(START_LABEL, 'ready - use __globalMarketSearch.run() to invoke manually');
 })();
+
+// Add iOS-specific CSS improvements
+const iosStyle = document.createElement('style');
+iosStyle.textContent = `
+    #orderTypeTabs .nav-link {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        touch-action: manipulation;
+    }
+    
+    .btn {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+    
+    /* Prevent zoom on input focus in iOS */
+    @media screen and (max-width: 768px) {
+        input[type="number"] {
+            font-size: 16px !important;
+        }
+        
+        .market-trade input {
+            touch-action: manipulation;
+        }
+    }
+    
+    /* Improve touch targets for mobile */
+    @media (max-width: 768px) {
+        .nav-link {
+            padding: 12px 16px !important;
+        }
+        
+        .btn {
+            padding: 12px 16px !important;
+        }
+    }
+`;
+document.head.appendChild(iosStyle);
+
+console.log('Trading interface JavaScript loaded successfully');
 </script>
 
 <script>
@@ -1062,32 +1354,7 @@ function incrementValue(inputId, step) {
 }
 </script>
 
-<script>
-document.querySelectorAll('#orderTypeTabs .nav-link').forEach(tab => {
-    tab.addEventListener('touchstart', function(e) {
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-    }, {passive:false});
 
-    tab.addEventListener('click', function(e) {
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-    });
-});
-</script>
-
-
-<script>
-document.querySelectorAll('.buy-trade, .sell').forEach(btn => {
-    btn.addEventListener('touchstart', function(e) {
-        e.stopImmediatePropagation();
-    }, {passive:false});
-
-    btn.addEventListener('click', function(e) {
-        e.stopImmediatePropagation();
-    });
-});
-</script>
 
 @endpush
 

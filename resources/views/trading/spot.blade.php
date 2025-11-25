@@ -935,7 +935,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const stopPrice = toFloat(getStopBox(side)?.querySelector('input')?.value);
         if(!qty || (type!=='market' && !price && side==='buy') || (type==='stop' && !stopPrice)){
             alert('Enter quantity, price and stop (if stop order).');
-            location.reload();
+            
             return;
         }
 
@@ -959,17 +959,17 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data=>{
             if(data.success){
                 alert(`${side.toUpperCase()} order placed: ${qty} @ ${price || 'market'} (${type})`);
-                location.reload();
+                
                 computeTotalFor(side);
             } else {
                 alert(data.message || 'Failed to place order.');
-                location.reload();
+                
             }
         })
         .catch(err=>{
             console.error(err);
             alert('Error placing order. Check console.');
-            location.reload();
+            
         });
     };
 

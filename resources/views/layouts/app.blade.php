@@ -1617,6 +1617,7 @@
             Software</span>
     </div>
 </footer>
+<div class="gtranslate_wrapper" id="gt-wrapper-16411826"></div>
 
 {{-- <script>
 var LANGS = {
@@ -1769,6 +1770,8 @@ $(document).ready(function () {
     }
 </style>
 
+
+
 <script>
     function choose_lang(lang) {
         $.cookies.set("lang", lang);
@@ -1804,6 +1807,15 @@ $(document).ready(function () {
 
 </script>
 <!-- Scripts End -->
+
+<script type="text/javascript" id="gt_widget_script_16411826-js-before">
+		/* <![CDATA[ */
+		window.gtranslateSettings = /* document.write */ window.gtranslateSettings || {}; window.gtranslateSettings['16411826'] = { "default_language": "en", "languages": ["af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "ceb", "ny", "zh-CN", "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "tl", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "iw", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tg", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "cy", "xh", "yi", "yo", "zu"], "url_structure": "none", "flag_style": "3d", "flag_size": 16, "wrapper_selector": "#gt-wrapper-16411826", "alt_flags": [], "switcher_open_direction": "top", "switcher_horizontal_position": "left", "switcher_vertical_position": "bottom", "switcher_text_color": "#666", "switcher_arrow_color": "#666", "switcher_border_color": "#ccc", "switcher_background_color": "#fff", "switcher_background_shadow_color": "#efefef", "switcher_background_hover_color": "#fff", "dropdown_text_color": "#000", "dropdown_hover_color": "#fff", "dropdown_background_color": "#eee", "flags_location": "https://cdn.gtranslate.net/flags/" };
+		/* ]]> */
+	</script>
+	<script src="{{ asset('Public/gtranslate/js/dwf84fc.js?ver=6.4.3') }}" data-no-optimize="1" data-no-minify="1"
+		data-gt-orig-url="/" data-gt-orig-domain="http://127.0.0.1:8000/" data-gt-widget-id="16411826"
+		defer></script>
 
 @stack('scripts')
 </body>

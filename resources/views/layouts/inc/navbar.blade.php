@@ -640,10 +640,36 @@
 
                 @endauth
 
+                {{-- <li class="nav-item dropdown header-custom-icon langMenu ml-3">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <div id="langselection">
+      <img src="/Public/assets/images/flags/en.png" class="position-left" alt="">
+            <span class="cret-after-nav-item"></span>
+    </div>
+  </a>
+  <div class="dropdown-menu">
+    <div class="dropdown-body">
+      <span class="dropdown-item" onclick="choose_lang('en')"> English</span>
+      <span class="dropdown-item" onclick="choose_lang('tr')"> Turkish</span>
+      <span class="dropdown-item" onclick="choose_lang('es')"> Spanish</span>
+      <span class="dropdown-item" onclick="choose_lang('nl')"> Dutch</span>
+      <span class="dropdown-item" onclick="choose_lang('il')"> Hebrew</span>
+      <span class="dropdown-item" onclick="choose_lang('de')"> German</span>
+      <span class="dropdown-item" onclick="choose_lang('ko')"> Korean</span>
+      <span class="dropdown-item" onclick="choose_lang('ja')"> Japanese</span>
+      <span class="dropdown-item" onclick="choose_lang('pt')"> Portuguese</span>
+      <span class="dropdown-item" onclick="choose_lang('ru')"> Русски</span>
+      <span class="dropdown-item" onclick="choose_lang('vi')"> Vietnamese</span>
+      <span class="dropdown-item" onclick="choose_lang('zhtw')"> Traditional</span>
+      <span class="dropdown-item" onclick="choose_lang('zhcn')"> Traditional</span>
+    </div>
+  </div>
+</li> --}}
 
 
 
-                <li class="nav-item dropdown header-custom-icon langMenu ml-3">
+
+                {{-- <li class="nav-item dropdown header-custom-icon langMenu ml-3">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
         <div id="langselection">
             <img src="https://flagcdn.com/w40/gb.png" class="position-left" alt="English">
@@ -695,7 +721,7 @@
 
         </div>
     </div>
-</li>
+</li> --}}
 
 
                 @auth

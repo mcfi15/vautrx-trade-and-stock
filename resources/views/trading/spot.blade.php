@@ -808,17 +808,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 @push('scripts')
 <script>
-// Trading interface functionality with iOS compatibility
+// Trading interface functionality with iOS compatibility - FIXED VERSION
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Trading interface initializing...');
     
-    // Tab switching functionality
+    // Tab switching functionality with complete iOS isolation
     const orderTypeTabs = document.querySelectorAll('#orderTypeTabs .nav-link');
-    const tradingPairId = document.getElementById('tradingPairId').value;
     
-    // Function to switch tabs
+    // Function to switch tabs - completely isolated from buy/sell events
     function switchOrderType(type, element) {
-        console.log('Switching to order type:', type);
+        console.log('Switching to order type:', type, ' - element:', element);
         
         // Update active tab
         orderTypeTabs.forEach(tab => {
@@ -878,46 +877,109 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Add event listeners with iOS compatibility
+    // COMPLETE ISOLATION: Add event listeners that completely prevent any event propagation
     orderTypeTabs.forEach(tab => {
-        // Use click event with proper prevention
-        tab.addEventListener('click', function(e) {
+        // Remove any existing event listeners first
+        const newTab = tab.cloneNode(true);
+        tab.parentNode.replaceChild(newTab, tab);
+    });
+
+    // Re-select tabs after cloning
+    const newOrderTypeTabs = document.querySelectorAll('#orderTypeTabs .nav-link');
+    
+    newOrderTypeTabs.forEach(tab => {
+        // Primary click handler - completely isolated
+        const handleTabClick = function(e) {
+            console.log('Tab click intercepted - preventing all propagation');
+            
+            // COMPLETE EVENT ISOLATION
             e.preventDefault();
+            e.stopPropagation();
             e.stopImmediatePropagation();
+            
+            // Force the event to die here
+            if (e.cancelable) e.preventDefault();
+            
             const type = this.getAttribute('data-type');
+            console.log('Switching to:', type);
             switchOrderType(type, this);
-        });
+            
+            return false;
+        };
         
-        // Add touch event for iOS with passive false to allow preventDefault
+        // Add multiple event listeners with complete isolation
+        tab.addEventListener('click', handleTabClick, true); // Use capture phase
+        
         tab.addEventListener('touchstart', function(e) {
+            console.log('Touch start on tab - preventing all');
             e.preventDefault();
+            e.stopPropagation();
             e.stopImmediatePropagation();
-            const type = this.getAttribute('data-type');
-            switchOrderType(type, this);
-        }, { passive: false });
+            handleTabClick.call(this, e);
+        }, { passive: false, capture: true });
         
-        // Additional touch event prevention
         tab.addEventListener('touchend', function(e) {
+            console.log('Touch end on tab - preventing all');
             e.preventDefault();
+            e.stopPropagation();
             e.stopImmediatePropagation();
-        }, { passive: false });
+        }, { passive: false, capture: true });
         
-        tab.addEventListener('touchmove', function(e) {
+        // Prevent any context menu or long press
+        tab.addEventListener('contextmenu', function(e) {
             e.preventDefault();
-            e.stopImmediatePropagation();
-        }, { passive: false });
+            e.stopPropagation();
+            return false;
+        });
     });
 
     // Initialize calculation events
     initializeCalculationEvents();
+    
+    // Add protection to buy/sell buttons to ensure they're only called intentionally
+    protectOrderButtons();
 });
+
+// Protect buy/sell buttons from accidental triggers
+function protectOrderButtons() {
+    const buyButtons = document.querySelectorAll('[onclick*="placeOrder(\'buy\'"]');
+    const sellButtons = document.querySelectorAll('[onclick*="placeOrder(\'sell\'"]');
+    
+    // Remove existing onclick handlers and replace with protected versions
+    buyButtons.forEach(button => {
+        const originalOnClick = button.getAttribute('onclick');
+        button.removeAttribute('onclick');
+        button.addEventListener('click', function(e) {
+            console.log('Buy button clicked intentionally');
+            e.stopPropagation();
+            // Extract the type from the original onclick
+            const match = originalOnClick.match(/placeOrder\('buy', '([^']+)'\)/);
+            if (match) {
+                placeOrder('buy', match[1]);
+            }
+        });
+    });
+    
+    sellButtons.forEach(button => {
+        const originalOnClick = button.getAttribute('onclick');
+        button.removeAttribute('onclick');
+        button.addEventListener('click', function(e) {
+            console.log('Sell button clicked intentionally');
+            e.stopPropagation();
+            // Extract the type from the original onclick
+            const match = originalOnClick.match(/placeOrder\('sell', '([^']+)'\)/);
+            if (match) {
+                placeOrder('sell', match[1]);
+            }
+        });
+    });
+}
 
 // Input calculation functions
 function initializeCalculationEvents() {
     // Buy side calculations
     const buyPrice = document.getElementById('buy_price');
     const buyNum = document.getElementById('buy_num');
-    const buyMum = document.getElementById('buy_mum');
     
     if (buyPrice && buyNum) {
         buyPrice.addEventListener('input', calculateBuyTotal);
@@ -927,7 +989,6 @@ function initializeCalculationEvents() {
     // Sell side calculations
     const sellPrice = document.getElementById('sell_price');
     const sellNum = document.getElementById('sell_num');
-    const sellMum = document.getElementById('sell_mum');
     
     if (sellPrice && sellNum) {
         sellPrice.addEventListener('input', calculateSellTotal);
@@ -1006,9 +1067,9 @@ function incrementValue(inputId, increment) {
 
 // Order placement function with iOS protection
 function placeOrder(side, type) {
-    console.log('Place order called:', side, type);
+    console.log('Place order called INTENTIONALLY:', side, type);
     
-    // Immediate feedback that function was called
+    // Immediate feedback that function was called intentionally
     if (window.placeOrderBlocked) {
         console.log('Order placement blocked - too frequent');
         return;
@@ -1022,7 +1083,6 @@ function placeOrder(side, type) {
     
     // Get values based on order type
     let price, quantity, stopPrice;
-    const tradingPairId = document.getElementById('tradingPairId').value;
     
     try {
         if (type === 'limit') {
@@ -1067,7 +1127,7 @@ function placeOrder(side, type) {
         }
         
         // Here you would typically make an API call
-        console.log('Proceeding with order placement...');
+        console.log('Proceeding with INTENTIONAL order placement...');
         
         // Simulate API call
         simulateOrderPlacement(side, type, price, quantity, stopPrice);
@@ -1111,125 +1171,7 @@ function simulateOrderPlacement(side, type, price, quantity, stopPrice) {
 // Login prompt function
 function promptLogin() {
     alert('Please log in to place orders');
-    // You can redirect to login page if needed
-    // window.location.href = '/login';
 }
-
-// Global market search functionality (your existing code with minor improvements)
-(function(){
-    // Defensive startup
-    if (!document) return;
-    const START_LABEL = '[GLOBAL-MARKET-SEARCH]';
-    console.clear();
-    console.log(START_LABEL, 'init');
-
-    const searchInput = document.getElementById('searchFilter');
-    if (!searchInput) {
-        console.error(START_LABEL, 'search input #searchFilter not found');
-        return;
-    }
-
-    // Collect all tbody elements we expect to filter:
-    function getAllTBodies() {
-        const tbodies = [];
-        // specific STAR id
-        const star = document.getElementById('STAR-DATA');
-        if (star) tbodies.push(star);
-        // any coinleftmenu-* matches
-        document.querySelectorAll('[id^="coinleftmenu-"]').forEach(el => tbodies.push(el));
-        // fallback: any tab-pane tbody (avoid duplicates)
-        document.querySelectorAll('.tab-content .tab-pane tbody').forEach(tb => {
-            if (!tbodies.includes(tb)) tbodies.push(tb);
-        });
-        return tbodies;
-    }
-
-    function safeRemoveNoResults(tbody) {
-        const existing = tbody.querySelector('tr.__no_search_results');
-        if (existing) existing.remove();
-    }
-
-    function safeAppendNoResults(tbody, cols) {
-        safeRemoveNoResults(tbody);
-        const tr = document.createElement('tr');
-        tr.className = '__no_search_results';
-        const td = document.createElement('td');
-        td.setAttribute('colspan', cols);
-        td.style.textAlign = 'center';
-        td.style.color = '#999';
-        td.style.padding = '8px 0';
-        td.textContent = 'No matching results';
-        tr.appendChild(td);
-        tbody.appendChild(tr);
-    }
-
-    function filterAllTabs() {
-        const term = (searchInput.value || '').toLowerCase().trim();
-        const tbodies = getAllTBodies();
-
-        console.log(START_LABEL, 'running filter', { term, tbodiesCount: tbodies.length });
-
-        if (tbodies.length === 0) {
-            console.warn(START_LABEL, 'no tbodies found to filter - check your markup');
-            return;
-        }
-
-        tbodies.forEach(tbody => {
-            // find rows directly under tbody
-            const rows = Array.from(tbody.querySelectorAll('tr')).filter(r => !r.classList.contains('__no_search_results'));
-            let visible = 0;
-
-            rows.forEach(row => {
-                // if row has no text (or is a nested header), still handle gracefully
-                const text = (row.textContent || '').toLowerCase();
-                const match = term === '' || text.includes(term);
-                row.style.display = match ? '' : 'none';
-                if (match) visible++;
-            });
-
-            // handle no-results marker
-            if (term !== '' && visible === 0) {
-                // compute columns (table header count) fallback 3
-                let cols = 1;
-                const table = tbody.closest('table');
-                if (table) {
-                    const ths = table.querySelectorAll('thead th');
-                    cols = Math.max(ths.length, 1);
-                }
-                safeAppendNoResults(tbody, cols);
-            } else {
-                safeRemoveNoResults(tbody);
-            }
-        });
-
-        console.log(START_LABEL, 'filter complete');
-    }
-
-    // debounce helper to avoid excessive runs while typing quickly
-    function debounce(fn, wait){
-        let t;
-        return function(...args){
-            clearTimeout(t);
-            t = setTimeout(() => fn.apply(this, args), wait);
-        }
-    }
-
-    // bind input (debounced)
-    const debouncedFilter = debounce(filterAllTabs, 120);
-    searchInput.addEventListener('input', debouncedFilter);
-
-    // run once initially to set state
-    filterAllTabs();
-
-    // Expose for debugging in console
-    window.__globalMarketSearch = {
-        run: filterAllTabs,
-        getTbodies: getAllTBodies,
-        startLabel: START_LABEL
-    };
-
-    console.log(START_LABEL, 'ready - use __globalMarketSearch.run() to invoke manually');
-})();
 
 // Add iOS-specific CSS improvements
 const iosStyle = document.createElement('style');
@@ -1239,11 +1181,28 @@ iosStyle.textContent = `
         -webkit-tap-highlight-color: transparent;
         user-select: none;
         touch-action: manipulation;
+        pointer-events: auto;
     }
     
     .btn {
         -webkit-tap-highlight-color: transparent;
         touch-action: manipulation;
+        pointer-events: auto;
+    }
+    
+    /* Completely isolate tab area from button area */
+    .market-trade {
+        pointer-events: auto;
+    }
+    
+    #orderTypeTabs {
+        pointer-events: auto;
+        z-index: 10;
+        position: relative;
+    }
+    
+    .market-trade-buy, .market-trade-sell {
+        pointer-events: auto;
     }
     
     /* Prevent zoom on input focus in iOS */
@@ -1261,6 +1220,7 @@ iosStyle.textContent = `
     @media (max-width: 768px) {
         .nav-link {
             padding: 12px 16px !important;
+            margin: 2px;
         }
         
         .btn {
@@ -1270,7 +1230,7 @@ iosStyle.textContent = `
 `;
 document.head.appendChild(iosStyle);
 
-console.log('Trading interface JavaScript loaded successfully');
+console.log('Trading interface JavaScript loaded successfully - iOS FIXED VERSION');
 </script>
 
 <script>

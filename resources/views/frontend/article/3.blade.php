@@ -27,7 +27,7 @@
                     
                     <h1 class="f-s-24 f-w-600 m-b-15">Privacy Policy</h1>
                     <figure>
-                        <img class="img-fluid" src="{{ asset('Upload/article/6529e405a4df3.png') }}"  >
+                        <img class="img-fluid" src="{{ asset('Upload/article/6529e405a4df3.png') }}" style="width: 120px;height:120px;" >
                     </figure>
                     <div class="articletext" ><p><p>
 	<font face="Arial">We understand the importance of users&rsquo; personal information, comply with relevant laws and regulations such as the &ldquo;Personal Information Protection Law,&rdquo; and always respect and protect the security of users&rsquo; personal information. We will collect, store, maintain, and use your personal information so that we can provide better access to utility programs or services. Therefore, we disclose how we use and store your personal information to ensure security through our privacy terms.</font>

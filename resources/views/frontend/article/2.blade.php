@@ -27,7 +27,7 @@
                     
                     <h1 class="f-s-24 f-w-600 m-b-15">Staking Terms</h1>
                     <figure>
-                        <img class="img-fluid" src="{{ asset('Upload/article/6529e254e1c96.png') }}"  >
+                        <img class="img-fluid" src="{{ asset('Upload/article/6529e254e1c96.png') }}" style="width: 120px;height:120px;" >
                     </figure>
                     <div class="articletext" ><p><p>
 	<font face="Arial">PLEASE READ THESE TERMS OF USE CAREFULLY AS THEY CONTAIN RISK NOTICE, ACKNOWLEDGEMENT AND ACCEPTANCE, NO WAIVER AND NO CLASS ACTION CLAUSE, WHICH AFFECT YOUR RIGHTS. IF YOU DO NOT AGREE TO THESE TERMS OF USE</font>

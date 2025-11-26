@@ -76,13 +76,13 @@ class TradingController extends Controller
                     ->where('trading_pair_id', $pairId)
                     ->whereIn('status', ['pending', 'partial'])
                     ->latest()
-                    ->get();
+                    ->get(); 
 
                 $closedOrders = $user->orders()
                     ->where('trading_pair_id', $pairId)
-                    ->whereIn('status', ['completed', 'cancelled', 'failed'])
+                    ->whereIn('status', ['completed', 'cancelled', 'failed','partial','open','pending','expired'])
                     ->latest()
-                    ->take(20)
+                    // ->take(20)
                     ->get();
             } catch (\Exception $e) {
                 Log::error("Orders fetch failed: ".$e->getMessage(), [

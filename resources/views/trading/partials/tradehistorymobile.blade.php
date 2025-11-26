@@ -164,9 +164,9 @@
                                 // Get completed/cancelled orders for this trading pair
                                 $closedOrders = Auth::user()->orders()
                                     ->where('trading_pair_id', $tradingPair->id)
-                                    ->whereIn('status', ['completed', 'cancelled', 'failed'])
+                                    ->whereIn('status', ['completed', 'cancelled', 'failed','partial','open','pending','expired'])
                                     ->latest()
-                                    ->take(20)
+                                    // ->take(20)
                                     ->get();
                             @endphp
                             

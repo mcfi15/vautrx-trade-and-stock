@@ -14,6 +14,18 @@
     </div>
 </div>
 
+@if(session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Order Summary -->
     <div class="lg:col-span-1">
@@ -24,8 +36,8 @@
             
             <div class="space-y-4">
                 <div>
-                    <label class="text-sm text-gray-500">Order ID</label>
-                    <div class="font-mono font-medium">#{{ $order->id }}</div>
+                    <label class="text-sm text-gray-500">Order Number</label>
+                    <div class="font-mono font-medium">{{ $order->order_number }}</div>
                 </div>
 
                 <div>
@@ -64,39 +76,74 @@
                 </div>
 
                 <div>
-                    <label class="text-sm text-gray-500">Amount</label>
-                    <div class="font-mono font-medium">{{ number_format($order->amount, 8) }} {{ $order->tradingPair->baseCurrency->symbol }}</div>
+                    <label class="text-sm text-gray-500">Quantity</label>
+                    <div class="font-mono font-medium">{{ number_format($order->quantity, 8) }} {{ $order->tradingPair->baseCurrency->symbol }}</div>
                 </div>
 
                 <div>
-                    <label class="text-sm text-gray-500">Filled Amount</label>
-                    <div class="font-mono font-medium">{{ number_format($order->filled_amount, 8) }} {{ $order->tradingPair->baseCurrency->symbol }}</div>
+                    <label class="text-sm text-gray-500">Filled Quantity</label>
+                    <div class="font-mono font-medium">{{ number_format($order->filled_quantity, 8) }} {{ $order->tradingPair->baseCurrency->symbol }}</div>
+                </div>
+
+                <div>
+                    <label class="text-sm text-gray-500">Remaining Quantity</label>
+                    <div class="font-mono font-medium">{{ number_format($order->remaining_quantity, 8) }} {{ $order->tradingPair->baseCurrency->symbol }}</div>
                 </div>
 
                 <div>
                     <label class="text-sm text-gray-500">Price</label>
-                    <div class="font-mono font-medium">${{ number_format($order->price, 2) }}</div>
+                    <div class="font-mono font-medium">{{ number_format($order->price, 8) }} {{ $order->tradingPair->quoteCurrency->symbol }}</div>
                 </div>
 
                 <div>
-                    <label class="text-sm text-gray-500">Total Value</label>
-                    <div class="font-mono font-medium text-lg">${{ number_format($order->amount * $order->price, 2) }}</div>
+                    <label class="text-sm text-gray-500">Total Amount</label>
+                    <div class="font-mono font-medium text-lg">{{ number_format($order->total_amount, 8) }} {{ $order->tradingPair->quoteCurrency->symbol }}</div>
+                </div>
+
+                <div>
+                    <label class="text-sm text-gray-500">Fee</label>
+                    <div class="font-mono font-medium">{{ number_format($order->fee, 8) }} {{ $order->tradingPair->quoteCurrency->symbol }}</div>
                 </div>
 
                 <div>
                     <label class="text-sm text-gray-500">Created At</label>
                     <div class="text-sm">{{ $order->created_at->format('M d, Y H:i:s') }}</div>
                 </div>
+
+                @if($order->executed_at)
+                <div>
+                    <label class="text-sm text-gray-500">Executed At</label>
+                    <div class="text-sm">{{ $order->executed_at->format('M d, Y H:i:s') }}</div>
+                </div>
+                @endif
+
+                @if($order->cancelled_at)
+                <div>
+                    <label class="text-sm text-gray-500">Cancelled At</label>
+                    <div class="text-sm">{{ $order->cancelled_at->format('M d, Y H:i:s') }}</div>
+                </div>
+                @endif
             </div>
 
             @if(in_array($order->status, ['pending', 'partial']))
                 <hr class="my-6">
-                <form action="{{ route('admin.orders.cancel', $order->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition" onclick="return confirm('Are you sure you want to cancel this order?')">
-                        <i class="fas fa-times"></i> Cancel Order
-                    </button>
-                </form>
+                <div class="space-y-3">
+                    <form action="{{ route('admin.orders.cancel', $order->id) }}" method="POST">
+                        @csrf
+                        @method('POST')
+                        <button type="submit" class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition" onclick="return confirm('Are you sure you want to cancel this order?')">
+                            <i class="fas fa-times"></i> Cancel Order
+                        </button>
+                    </form>
+                    
+                    <form action="{{ route('admin.orders.complete', $order->id) }}" method="POST">
+                        @csrf
+                        @method('POST')
+                        <button type="submit" class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition" onclick="return confirm('Are you sure you want to mark this order as completed?')">
+                            <i class="fas fa-check"></i> Mark as Completed
+                        </button>
+                    </form>
+                </div>
             @endif
         </div>
     </div>
@@ -108,7 +155,7 @@
             <h3 class="text-lg font-semibold text-gray-900 mb-4">
                 <i class="fas fa-user"></i> User Information
             </h3>
-            <div class="flex items-center">
+            <div class="flex items-center"> 
                 @if($order->user->avatar)
                     <img src="{{ $order->user->avatar }}" alt="{{ $order->user->name }}" class="h-12 w-12 rounded-full mr-4">
                 @else
@@ -150,8 +197,8 @@
                                 <tr>
                                     <td class="px-4 py-3 text-sm font-mono">#{{ $trade->id }}</td>
                                     <td class="px-4 py-3 text-sm font-mono text-right">{{ number_format($trade->amount, 8) }}</td>
-                                    <td class="px-4 py-3 text-sm font-mono text-right">${{ number_format($trade->price, 2) }}</td>
-                                    <td class="px-4 py-3 text-sm font-mono text-right font-semibold">${{ number_format($trade->amount * $trade->price, 2) }}</td>
+                                    <td class="px-4 py-3 text-sm font-mono text-right">{{ number_format($trade->price, 8) }} {{ $order->tradingPair->quoteCurrency->symbol }}</td>
+                                    <td class="px-4 py-3 text-sm font-mono text-right font-semibold">{{ number_format($trade->amount * $trade->price, 8) }} {{ $order->tradingPair->quoteCurrency->symbol }}</td>
                                     <td class="hidden sm:table-cell px-4 py-3 text-sm text-gray-500">{{ $trade->created_at->format('M d, H:i:s') }}</td>
                                 </tr>
                             @endforeach
@@ -159,7 +206,7 @@
                         <tfoot class="bg-gray-50">
                             <tr>
                                 <td colspan="3" class="px-4 py-3 text-sm font-semibold text-right">Total Executed:</td>
-                                <td class="px-4 py-3 text-sm font-mono font-bold text-right">${{ number_format($order->trades->sum(function($trade) { return $trade->amount * $trade->price; }), 2) }}</td>
+                                <td class="px-4 py-3 text-sm font-mono font-bold text-right">{{ number_format($order->trades->sum(function($trade) { return $trade->amount * $trade->price; }), 8) }} {{ $order->tradingPair->quoteCurrency->symbol }}</td>
                                 <td class="hidden sm:table-cell"></td>
                             </tr>
                         </tfoot>
@@ -180,11 +227,11 @@
             </h3>
             <div class="mb-2">
                 <div class="flex justify-between text-sm mb-1">
-                    <span>Filled: {{ number_format(($order->filled_amount / $order->amount) * 100, 2) }}%</span>
-                    <span class="font-mono">{{ number_format($order->filled_amount, 4) }} / {{ number_format($order->amount, 4) }}</span>
+                    <span>Filled: {{ $order->filled_percentage_formatted }}%</span>
+                    <span class="font-mono">{{ number_format($order->filled_quantity, 8) }} / {{ number_format($order->quantity, 8) }}</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-4">
-                    <div class="bg-indigo-600 h-4 rounded-full transition-all" style="width: {{ ($order->filled_amount / $order->amount) * 100 }}%"></div>
+                    <div class="bg-indigo-600 h-4 rounded-full transition-all" style="width: {{ $order->filled_percentage }}%"></div>
                 </div>
             </div>
         </div>

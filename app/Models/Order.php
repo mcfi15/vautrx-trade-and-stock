@@ -43,6 +43,15 @@ class Order extends Model
         'expires_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'filled_percentage',
+        'filled_percentage_formatted',
+        'total_value',
+        'filled_value',
+        'amount', // Add alias for quantity
+        'filled_amount', // Add alias for filled_quantity
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -107,5 +116,49 @@ class Order extends Model
         $this->status = 'cancelled';
         $this->cancelled_at = now();
         return $this->save();
+    }
+
+    public function complete()
+    {
+        $this->status = 'completed';
+        $this->executed_at = now();
+        $this->filled_quantity = $this->quantity;
+        $this->remaining_quantity = 0;
+        return $this->save();
+    }
+
+    // Accessors for compatibility with your Blade template
+    public function getAmountAttribute()
+    {
+        return $this->quantity;
+    }
+
+    public function getFilledAmountAttribute()
+    {
+        return $this->filled_quantity;
+    }
+
+    public function getFilledPercentageAttribute()
+    {
+        if ($this->quantity == 0) {
+            return 0;
+        }
+        
+        return ($this->filled_quantity / $this->quantity) * 100;
+    }
+
+    public function getFilledPercentageFormattedAttribute()
+    {
+        return number_format($this->filled_percentage, 2);
+    }
+
+    public function getTotalValueAttribute()
+    {
+        return $this->price * $this->quantity;
+    }
+
+    public function getFilledValueAttribute()
+    {
+        return $this->price * $this->filled_quantity;
     }
 }

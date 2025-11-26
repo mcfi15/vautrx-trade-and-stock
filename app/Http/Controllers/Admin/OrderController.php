@@ -43,23 +43,37 @@ class OrderController extends Controller
      * Display the specified order.
      */
     public function show(Order $order)
-    {
-        $order->load(['user', 'tradingPair.baseCurrency', 'tradingPair.quoteCurrency', 'trades']);
+{
+    $order->load(['user', 'tradingPair.baseCurrency', 'tradingPair.quoteCurrency', 'trades']);
 
-        return view('admin.orders.show', compact('order'));
+    return view('admin.orders.show', compact('order'));
+}
+
+public function cancel(Order $order)
+{
+    try {
+        $order->cancel();
+        
+        return redirect()->route('admin.orders.show', $order)
+            ->with('success', 'Order has been cancelled successfully.');
+            
+    } catch (\Exception $e) {
+        return redirect()->route('admin.orders.show', $order)
+            ->with('error', 'Failed to cancel order: ' . $e->getMessage());
     }
+}
 
-    /**
-     * Cancel an order (admin action).
-     */
-    public function cancel(Order $order)
-    {
-        if (!in_array($order->status, ['pending', 'partial'])) {
-            return back()->with('error', 'Only pending or partially filled orders can be cancelled.');
-        }
-
-        $order->update(['status' => 'cancelled']);
-
-        return back()->with('success', 'Order cancelled successfully.');
+public function complete(Order $order)
+{
+    try {
+        $order->complete();
+        
+        return redirect()->route('admin.orders.show', $order)
+            ->with('success', 'Order has been marked as completed successfully.');
+            
+    } catch (\Exception $e) {
+        return redirect()->route('admin.orders.show', $order)
+            ->with('error', 'Failed to complete order: ' . $e->getMessage());
     }
+}
 }

@@ -3,6 +3,50 @@
 @section('title', 'Orders Management')
 
 @section('content')
+<style>
+    /* Add this to your CSS */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination li {
+    margin: 0 2px;
+}
+
+.pagination li a,
+.pagination li span {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #374151;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+.pagination li a:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.pagination li.active span {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.pagination li.disabled span {
+    color: #9ca3af;
+    background-color: #f9fafb;
+    border-color: #e5e7eb;
+    cursor: not-allowed;
+}
+</style>
 <div class="mb-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">
@@ -113,6 +157,12 @@
                                 <i class="fas fa-eye"></i><span class="hidden xl:inline ml-1">View</span>
                             </a>
                             @if(in_array($order->status, ['pending', 'partial']))
+                            <form action="{{ route('admin.orders.complete', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-green-600 hover:text-green-900" onclick="return confirm('Complete this order?')">
+                                        <i class="fas fa-check"></i><span class="hidden xl:inline ml-1">Complete</span>
+                                    </button>
+                                </form>
                                 <form action="{{ route('admin.orders.cancel', $order->id) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Cancel this order?')">

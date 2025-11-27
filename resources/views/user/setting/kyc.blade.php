@@ -115,7 +115,7 @@
                                 Submit the following documents:<br>
                                 • Document Front<br>
                                 • Document Back<br>
-                                • Selfie holding document<br>
+                                {{-- • Selfie holding document<br> --}}
                                 • Proof of Address<br>
                             </div>
 

@@ -86,7 +86,7 @@ class SettingController extends Controller
         ]);
 
         // Send email to user
-        Mail::to($user->email)->send(new KycSubmittedMail($user));
+        // Mail::to($user->email)->send(new KycSubmittedMail($user));
 
         return back()->with('success', 'KYC submitted successfully. Please wait for verification.');
     }

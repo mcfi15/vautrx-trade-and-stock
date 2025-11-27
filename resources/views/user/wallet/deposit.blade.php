@@ -108,10 +108,10 @@
                         <input type="number" step="0.00000001" min="0" class="form-control" name="amount" id="amount" required>
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="payment_proof" class="form-label small text-secondary">Upload Payment Proof (optional)</label>
                         <input type="file" class="form-control" name="payment_proof" id="payment_proof" accept=".jpg,.jpeg,.png,.pdf">
-                    </div>
+                    </div> --}}
 
                     <button type="submit" class="btn btn-accent fw-semibold w-100">
                         <i class="fa fa-upload me-1"></i> Submit Deposit

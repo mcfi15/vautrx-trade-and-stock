@@ -105,17 +105,17 @@ class WalletController extends Controller
     $request->validate([
         'amount' => 'required|numeric|min:0.000001',
         'method_id' => 'required|exists:payment_methods,id',
-        'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        // 'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
     ]);
 
     $proofPath = null;
 
-    if ($request->hasFile('payment_proof')) {
-        $file = $request->file('payment_proof');
-        $filename = time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('uploads/deposits'), $filename);
-        $proofPath = "uploads/deposits/$filename";
-    }
+    // if ($request->hasFile('payment_proof')) {
+    //     $file = $request->file('payment_proof');
+    //     $filename = time() . '.' . $file->getClientOriginalExtension();
+    //     $file->move(public_path('uploads/deposits'), $filename);
+    //     $proofPath = "uploads/deposits/$filename";
+    // }
 
     try {
         // Create deposit record
@@ -125,7 +125,7 @@ class WalletController extends Controller
             'payment_method_id' => $request->method_id,
             'amount' => $request->amount,
             'status' => 'pending',
-            'payment_proof_path' => $proofPath
+            // 'payment_proof_path' => $proofPath
         ]);
 
         // ✅ Send email notification to user
@@ -440,16 +440,58 @@ class WalletController extends Controller
 
 
 
-    public function showWithdrawForm(Request $request)
+//     public function showWithdrawForm(Request $request)
+// {
+//     $user = Auth::user();
+
+//          // KYC REQUIRED BEFORE WITHDRAWAL
+//         if ($user->kyc_status !== 'approved') {
+//             return redirect('kyc')
+//                 ->with('error', 'You must complete KYC verification before withdrawing.');
+//         }
+    
+//     // Get all cryptocurrencies for the dropdown
+//     $cryptocurrencies = Cryptocurrency::all();
+    
+//     // Get selected coin from query parameter or default
+//     $selectedCoinId = $request->query('coin', $cryptocurrencies->first()->id ?? null);
+//     $selectedCrypto = Cryptocurrency::find($selectedCoinId);
+    
+//     // Get user's wallet balance for selected coin
+//     $walletBalance = 0;
+//     if ($selectedCrypto) {
+//         $wallet = $user->getWallet($selectedCrypto->id);
+//         $walletBalance = $wallet ? ($wallet->balance - ($wallet->locked_balance ?? 0)) : 0;
+//     }
+    
+//     // Get saved addresses for selected coin
+//     $addresses = WithdrawalAddress::where('user_id', $user->id)
+//         ->where('cryptocurrency_id', $selectedCoinId)
+//         ->get();
+    
+//     // Get available networks for selected coin (you might need to adjust this based on your data structure)
+//     $networks = $selectedCrypto ? ['ERC20', 'BEP20', 'Mainnet'] : []; // Example networks
+    
+//     return view('user.wallet.withdraw', compact(
+//         'cryptocurrencies',
+//         'selectedCrypto',
+//         'walletBalance',
+//         'addresses',
+//         'networks'
+//     ));
+// }
+
+
+public function showWithdrawForm(Request $request)
 {
     $user = Auth::user();
 
-         // KYC REQUIRED BEFORE WITHDRAWAL
-        if ($user->kyc_status !== 'approved') {
-            return redirect('kyc')
-                ->with('error', 'You must complete KYC verification before withdrawing.');
-        }
-    
+    // KYC REQUIRED BEFORE WITHDRAWAL
+    if ($user->kyc_status !== 'approved') {
+        return redirect('kyc')
+            ->with('error', 'You must complete KYC verification before withdrawing.');
+    }
+
     // Get all cryptocurrencies for the dropdown
     $cryptocurrencies = Cryptocurrency::all();
     
@@ -469,15 +511,22 @@ class WalletController extends Controller
         ->where('cryptocurrency_id', $selectedCoinId)
         ->get();
     
-    // Get available networks for selected coin (you might need to adjust this based on your data structure)
+    // Get available networks for selected coin
     $networks = $selectedCrypto ? ['ERC20', 'BEP20', 'Mainnet'] : []; // Example networks
     
+    // Get withdrawal history
+    $withdrawals = $user->withdrawals()
+        ->with('cryptocurrency')
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
     return view('user.wallet.withdraw', compact(
         'cryptocurrencies',
         'selectedCrypto',
         'walletBalance',
         'addresses',
-        'networks'
+        'networks',
+        'withdrawals'
     ));
 }
 
@@ -525,7 +574,7 @@ class WalletController extends Controller
             'cryptocurrency_id' => $request->cryptocurrency_id,
             'network' => $request->network,
             'address' => $request->address,
-            'dest_tag' => $request->dest_tag ?? null,
+            // 'dest_tag' => $request->dest_tag ?? null,
             'label' => $request->label ?? null,
             'is_verified' => false,
         ]);
@@ -589,6 +638,20 @@ class WalletController extends Controller
                 'fee' => $fee,
                 'net_amount' => $netAmount,
                 'status' => 'pending',
+            ]);
+
+                    // Create transaction record
+            $transaction = Transaction::create([
+                'user_id' => $user->id,
+                'cryptocurrency_id' => $request->cryptocurrency_id,
+                'type' => 'withdrawal',
+                'amount' => $request->amount,
+                'fee' => $fee,
+                'balance_before' => $wallet->balance,
+                'balance_after' => bcsub($wallet->balance, $request->amount, 18),
+                'to_address' => $request->address,
+                'status' => 'pending',
+                'description' => "Withdrawal to {$request->address}",
             ]);
 
             // clear OTP

@@ -20,12 +20,22 @@
                             <a href="{{ url('wallet') }}" class="btn btn-primary btn-sm">Finance</a>
                         </li>
                         <li class="btn btn-primary btn-sm active">Crypto Withdrawal</li>
-                        <li>
-                            <a class="btn btn-primary btn-sm" >Withdrawal History</a>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
+        </div>
+
+        <div class="mb-4 d-flex flex-wrap gap-3">
+            <a href="{{ url('wallet/deposit') }}" class="btn btn-primary text-dark fw-semibold">
+                <i class="fa fa-plus-circle me-2"></i> Deposit
+            </a>
+            <a href="{{ route('wallet.withdraw') }}" class="btn btn-outline-light">
+                <i class="fa fa-minus-circle me-2"></i> Withdraw
+            </a>
+            <a href="{{ route('wallet.transactions') }}" class="btn btn-outline-light">
+                <i class="fa fa-history me-2"></i> Transaction History
+            </a>
         </div>
 
 
@@ -149,6 +159,85 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Withdrawal History Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card white-bg">
+                    <div class="card-header">
+                        <h4 class="mb-0">Withdrawal History</h4>
+                    </div>
+                    <div class="card-body">
+                        @if($withdrawals && $withdrawals->count() > 0)
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Coin</th>
+                                            <th>Amount</th>
+                                            <th>Address</th>
+                                            <th>Status</th>
+                                            {{-- <th>Transaction ID</th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($withdrawals as $withdrawal)
+                                            <tr>
+                                                <td>{{ $withdrawal->created_at->format('Y-m-d H:i') }}</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        @if($withdrawal->cryptocurrency && $withdrawal->cryptocurrency->logo_url)
+                                                            <img src="{{ $withdrawal->cryptocurrency->logo_url }}" style="height:30px;width:30px;" class="mr-2">
+                                                        @endif
+                                                        <span>{{ strtoupper($withdrawal->cryptocurrency->symbol ?? 'N/A') }}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{{ number_format($withdrawal->amount, 8) }}</td>
+                                                <td class="text-truncate" style="max-width: 150px;">
+                                                    {{ $withdrawal->withdrawal_address }}
+                                                </td>
+                                                <td>
+                                                    @if($withdrawal->status === 'completed')
+                                                        <span class="badge badge-success">Completed</span>
+                                                    @elseif($withdrawal->status === 'pending')
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    @elseif($withdrawal->status === 'failed')
+                                                        <span class="badge badge-danger">Failed</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">{{ ucfirst($withdrawal->status) }}</span>
+                                                    @endif
+                                                </td>
+                                                {{-- <td class="text-truncate" style="max-width: 120px;">
+                                                    @if($withdrawal->txid)
+                                                        <a href="#" class="text-primary" title="{{ $withdrawal->txid }}">
+                                                            {{ substr($withdrawal->txid, 0, 10) }}...
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted">N/A</span>
+                                                    @endif
+                                                </td> --}}
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            @if($withdrawals->hasPages())
+                                <div class="mt-3">
+                                    {{ $withdrawals->links() }}
+                                </div>
+                            @endif
+                        @else
+                            <div class="text-center py-4">
+                                <p class="text-muted">No withdrawal history found.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Add payment method modal -->
@@ -189,12 +278,12 @@
                                     <input id="wallet_addr" type="text" class="form-control" placeholder="Please enter the withdrawal address" required>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            {{-- <div class="col-12">
                                 <div class="form-group">
                                     <label>Dest Tag [if any]</label> 
                                     <input type="text" id="wallet_dest_tag" class="form-control" placeholder="Enter the Dest tag if any">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Funding Password</label> 

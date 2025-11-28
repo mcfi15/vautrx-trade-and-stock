@@ -382,7 +382,7 @@ class TradingController extends Controller
         }
 
         // Create transaction records
-        $this->createTransactionRecords($order, $baseWallet, $quoteWallet);
+        // $this->createTransactionRecords($order, $baseWallet, $quoteWallet);
     }
 
     private function createTransactionRecords($order, $baseWallet, $quoteWallet)

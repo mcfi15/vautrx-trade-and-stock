@@ -676,15 +676,51 @@ public function showWithdrawForm(Request $request)
     }
 
 
-    public function transactions()
-    {
-        $transactions = Auth::user()->transactions()
-            ->with('cryptocurrency')
-            ->latest()
-            ->paginate(20);
+    // public function transactions()
+    // {
+    //     $transactions = Auth::user()->transactions()
+    //         ->with('cryptocurrency')
+    //         ->latest()
+    //         ->paginate(20);
         
-        return view('user.wallet.transactions', compact('transactions'));
+    //     return view('user.wallet.transactions', compact('transactions'));
+    // }
+
+    public function transactions(Request $request)
+{
+    // Start query
+    $query = Auth::user()->transactions()->with('cryptocurrency')->latest();
+
+    // FILTER: Transaction Type (deposit/withdraw)
+    if ($request->filled('type')) {
+        $query->where('type', $request->type);
     }
+
+    // FILTER: Status (pending/confirmed/failed)
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    // FILTER: Cryptocurrency
+    if ($request->filled('crypto')) {
+        $query->where('cryptocurrency_id', $request->crypto);
+    }
+
+    // FILTER: Date Range
+    if ($request->filled('from')) {
+        $query->whereDate('created_at', '>=', $request->from);
+    }
+
+    if ($request->filled('to')) {
+        $query->whereDate('created_at', '<=', $request->to);
+    }
+
+    // Pagination + Keep filters on next page
+    $transactions = $query->paginate(20)->appends($request->all());
+
+    return view('user.wallet.transactions', compact('transactions'));
+}
+
 
     public function transactionDetail($id)
     {

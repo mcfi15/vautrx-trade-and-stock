@@ -60,8 +60,7 @@
                         <option value="">All Types</option>
                         <option value="deposit" {{ request('type') === 'deposit' ? 'selected' : '' }}>Deposit</option>
                         <option value="withdrawal" {{ request('type') === 'withdrawal' ? 'selected' : '' }}>Withdrawal</option>
-                        <option value="trade" {{ request('type') === 'trade' ? 'selected' : '' }}>Trade</option>
-                        <option value="transfer" {{ request('type') === 'transfer' ? 'selected' : '' }}>Transfer</option>
+                       
                     </select>
                 </div>
 

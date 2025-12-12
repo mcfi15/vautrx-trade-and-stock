@@ -27,7 +27,7 @@
                     
                     <h1 class="f-s-24 f-w-600 m-b-15">Cookie Policy</h1>
                     <figure>
-                        <img class="img-fluid" src="{{ asset('Upload/article/6529e42c01234.png') }}" style="width: 120px;height:120px;" >
+                        <img src="{{ asset('Upload/article/6529dfea9df1a.png') }}" style="width: 70px !important; height: 70px !important; max-width: 70px !important;">
                     </figure>
                     <div class="articletext" ><p><p>
 	<font face="Arial">This is the Cookie Policy for this website.</font>

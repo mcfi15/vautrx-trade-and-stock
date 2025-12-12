@@ -54,6 +54,44 @@ class FrontendController extends Controller
 	return view('frontend.index', compact('markets', 'cryptos', 'balances', 'user'));
     }
 
+    public function coinRate(Request $request)
+    {
+        $from = strtoupper($request->from);
+        $to = strtoupper($request->to);
+
+        $fromCoin = Cryptocurrency::where('symbol', $from)->first();
+        $toCoin   = Cryptocurrency::where('symbol', $to)->first();
+
+        if (!$fromCoin || !$toCoin) {
+            return response()->json([
+                'success' => false,
+                'rate' => 0
+            ]);
+        }
+
+        // Convert both coins to USD price
+        $fromUsd = $fromCoin->current_price;
+        $toUsd   = $toCoin->current_price;
+
+        if ($fromUsd == 0 || $toUsd == 0) {
+            return response()->json([
+                'success' => false,
+                'rate' => 0
+            ]);
+        }
+
+        // MAIN FORMULA:
+        // convert 1 unit of FROM coin → USD → TO coin
+        $rate = $fromUsd / $toUsd;
+
+        return response()->json([
+            'success' => true,
+            'rate' => $rate
+        ]);
+    }
+
+    
+
     public function doTrade(Request $request)
 {
     if (!Auth::check()) {
@@ -160,14 +198,50 @@ class FrontendController extends Controller
     public function article_13(){
         return view('frontend.article.13');
     }
+    public function article_16(){
+        return view('frontend.article.16');
+    }
+    public function article_21(){
+        return view('frontend.article.21');
+    }
+    public function article_15(){
+        return view('frontend.article.15');
+    }
     public function article_24(){
         return view('frontend.article.24');
+    }
+    public function article_18(){
+        return view('frontend.article.18');
+    }
+    public function article_19(){
+        return view('frontend.article.19');
+    }
+    public function article_20(){
+        return view('frontend.article.20');
+    }
+    public function article_17(){
+        return view('frontend.article.17');
+    }
+    public function article_14(){
+        return view('frontend.article.14');
     }
     public function article_25(){
         return view('frontend.article.25');
     }
     public function article_26(){
         return view('frontend.article.26');
+    }
+    public function article_22(){
+        return view('frontend.article.22');
+    }
+    public function article_9(){
+        return view('frontend.article.9');
+    }
+    public function article_8(){
+        return view('frontend.article.8');
+    }
+    public function article_7(){
+        return view('frontend.article.7');
     }
     public function dex(){
         return view('frontend.dex');

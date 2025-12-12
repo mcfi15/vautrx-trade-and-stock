@@ -27,7 +27,7 @@
                     
                     <h1 class="f-s-24 f-w-600 m-b-15">User Agreement</h1>
                     <figure>
-                        <img class="img-fluid" src="{{ asset('Upload/article/6529dfea9df1a.png') }}" style="width: 120px;height:120px;" >
+                        <img src="{{ asset('Upload/article/6529dfea9df1a.png') }}" style="width: 70px !important; height: 70px !important; max-width: 70px !important;">
                     </figure>
                     <div class="articletext" ><p><p>
 Welcome to our cryptocurrency and digital asset exchange platform, designed with an eye on the future. Throughout this User Agreement, we will refer to our platform simply as "this website" or "the website". Our website provides a space for users to engage in digital asset trades and access a variety of related services, collectively referred to as "the services".

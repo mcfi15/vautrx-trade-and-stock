@@ -6,8 +6,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Vautrx | Vautrx | Secure &amp; Fast Cryptocurrency Exchange for Bitcoin, Ethereum &amp; Altcoins')</title>
-    
+    <title>
+        @yield('title', 'Vautrx | Vautrx | Secure &amp; Fast Cryptocurrency Exchange for Bitcoin, Ethereum &amp; Altcoins')
+    </title>
+
     <meta charset="utf-8">
     <meta name="Keywords"
         content="{{ \App\Models\Setting::get('site_name', 'Website Name') }} | {{ \App\Models\Setting::get('site_name', 'Website Name') }}, {{ \App\Models\Setting::get('site_name', 'Website Name') }}.com, cryptocurrency exchange, crypto trading, buy Bitcoin, sell Ethereum, altcoin exchange, secure crypto platform, low-fee crypto trading, Bitcoin exchange, Ethereum trading, blockchain trading, digital asset exchange, crypto market, DeFi trading, instant crypto swaps, crypto wallet integration">
@@ -22,7 +24,8 @@
 
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/style.css?v=1') }}">
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/add-style.css?v=2') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/bootstrap.css') }}"> --}}
+    {{--
+    <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/bootstrap.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/6pp9tx5LPOzE.css?v=6') }}">
     <link rel="stylesheet" href="{{ asset('Public/template/epsilon/css/custom/8pHr7IdzNTAX.css') }}">
 
@@ -1414,10 +1417,14 @@
     @include('layouts.inc.navbar')
     <!-- Header ends -->
 
-   
+
 
     <main class="wrapper grey-bg"></main>
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"e9cc9f2ea4dd45ae89519d10063abb12","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+    <script defer
+        src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+        data-cf-beacon='{"version":"2024.11.0","token":"e9cc9f2ea4dd45ae89519d10063abb12","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}'
+        crossorigin="anonymous"></script>
     <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'979578cdb9897740',t:'MTc1NjkwNDg2NA=='};var a=document.createElement('script');a.src='cdn-cgi/challenge-platform/h/b/scripts/jsd/4710d66e8fda/maind41d.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
 </body>
 
@@ -1425,273 +1432,303 @@
 
 
 
+
+
 <!-- Footer -->
-<footer class="cex-ui-footer">
-    <div class="cex-ui-footer-content">
-        <div class="cex-ui-footer-content-menu cex-ui-footer-content-menu--grid">
-            <div class="subscription-form-wrapper">
-               
-                <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" class="img-fluid m-b-15" width="152px">
-                
-                <div>Trade securely and efficiently on {{ \App\Models\Setting::get('site_name', 'Website Name') }}, the leading cryptocurrency exchange platform. Buy, sell,
+<footer>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="footer-blocks">
+                    <div class="block">
+                        <img src="{{ asset(\App\Models\Setting::get('site_logo')) }}" alt="Cryptimize" class="img-fluid m-b-15"
+                            width="152px">
+                        <h4>Trade securely and efficiently on {{ \App\Models\Setting::get('site_name', 'Website Name') }}, the leading cryptocurrency exchange platform. Buy, sell,
                     and swap Bitcoin, Ethereum, and altcoins with low fees, advanced security, and real-time market
-                    data.</div>
+                    data.</h4>
+                    </div>
+                    <div class="block">
+                        <h3>Trade</h3>
+
+                        <ul>
+                            <li>
+                                <a class="slash" href="{{ url('/trade/spot') }}"> Spot </a>
+                            </li>
+                            <li>
+                                <a class="noslash" href="{{ url('/easy-trade') }}">
+                                    Easy Convert </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block">
+                        <h3>Earn</h3>
+
+                        <ul>
+                            <li>
+                                <a class="noslash" href="{{ url('/staking') }}">
+                                    Staking </a>
+                            </li>
+                            <li>
+                                <a class="noslash" href="{{ url('/airdrops') }}">
+                                    Airdrop </a>
+                            </li>
+                            <li>
+                                <a class="noslash" href="{{ url('/faucets') }}">
+                                    Faucet </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block">
+                        <h3>Platform</h3>
+
+                        <ul>
+                            <li>
+                                <a class="noslash" href="{{ url('/about') }}">
+                                    About Us </a>
+                            </li>
+                            {{-- <li>
+                                <a class="noslash" href="/Dex">
+                                    Decentralized </a>
+                            </li> --}}
+                            <li>
+                                <a class="noslash" href="{{ url('/markets') }}">
+                                    Market </a>
+                            </li>
+                            <li>
+                                <a class="noslash" href="{{ url('/pool') }}">
+                                    Mining </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block">
+                        <h3>Terms</h3>
+
+                        <ul>
+                            <li>
+                                <a class="noslash" href="{{ url('article/1') }}">
+                                    User Agreement </a>
+                            </li>
+                            <li>
+                                <a class="noslash" href="{{ url('article/2') }}">
+                                    Staking Terms </a>
+                            </li>
+                            <li>
+                                <a class="noslash" href="{{ url('article/3') }}">
+                                    Privacy Policy </a>
+                            </li>
+                            <li>
+                                <a class="noslash" href="{{ url('article/4') }}">
+                                    Cookie Policy </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="block">
+                        <!--h3>Community</h3-->
+                        <h3>Contact</h3>
+                        <ul>
+                            <li>
+                                <a href="mailto:support@vautrx.com"
+                                    style="white-space: nowrap; margin-bottom: 5px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                        <path fill="#fff"
+                                            d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
+                                    </svg>
+                                    support@vautrx.com </a>
+                            </li>
+                            <li>
+                                <a href="mailto:info@vautrx.com" style="white-space: nowrap; margin-bottom: 5px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                        <path fill="#fff"
+                                            d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
+                                    </svg>
+                                    info@vautrx.com </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-
-
-            <div class="links-columns">
-                <div class="cex-ui-footer-content-menu-column">
-                    <h2 class="cex-ui-title cex-ui-title-m cex-ui-title-bold cex-ui-title-left" title="">
-                        Trade</h2>
-
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/trade/spot') }}" class="cex-ui-text cex-ui-text-small" id="">Spot</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/easy-trade') }}" class="cex-ui-text cex-ui-text-small" id="">Easy Convert</a>
-                    </div>
-                </div>
-                <div class="cex-ui-footer-content-menu-column">
-                    <h2 class="cex-ui-title cex-ui-title-m cex-ui-title-bold cex-ui-title-left" title="">
-                        Earn</h2>
-
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/staking') }}" class="cex-ui-text cex-ui-text-small" id="">Staking</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/airdrops') }}" class="cex-ui-text cex-ui-text-small" id="">Airdrop</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/faucets') }}" class="cex-ui-text cex-ui-text-small" id="">Faucet</a>
-                    </div>
-                </div>
-                <div class="cex-ui-footer-content-menu-column">
-                    <h2 class="cex-ui-title cex-ui-title-m cex-ui-title-bold cex-ui-title-left" title="">
-                        Platform</h2>
-
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/about') }}" class="cex-ui-text cex-ui-text-small" id="">About Us</a>
-                    </div>
-                    {{-- <div class="cex-ui-services">
-                        <a href="{{ url('dex') }}" class="cex-ui-text cex-ui-text-small" id="">Decentralized</a>
-                    </div> --}}
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/markets') }}" class="cex-ui-text cex-ui-text-small" id="">Market</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('/pool') }}" class="cex-ui-text cex-ui-text-small" id="">Mining</a>
-                    </div>
-                </div>
-                <div class="cex-ui-footer-content-menu-column">
-                    <h2 class="cex-ui-title cex-ui-title-m cex-ui-title-bold cex-ui-title-left" title="">
-                        Terms</h2>
-
-                    <div class="cex-ui-services">
-                        <a href="{{ url('article/1') }}" class="cex-ui-text cex-ui-text-small" id="">User
-                            Agreement</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('article/2') }}" class="cex-ui-text cex-ui-text-small" id="">Staking Terms</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('article/3') }}" class="cex-ui-text cex-ui-text-small" id="">Privacy
-                            Policy</a>
-                    </div>
-                    <div class="cex-ui-services">
-                        <a href="{{ url('article/4') }}" class="cex-ui-text cex-ui-text-small" id="">Cookie Policy</a>
-                    </div>
-                </div>
+        </div>
+        <div class="row f-s-12 m-t-30">
+            <div class="col-12 m-b-15">
+                <div class="col-12 col-sm-4 copyright">
+                    Copyright 2025 Cryptocurrency Exchange Software </div>
             </div>
-
-            <div class="cex-ui-footer-content-menu-column">
-                <h2 class="cex-ui-title cex-ui-title-m cex-ui-title-bold cex-ui-title-left" title="">
-                    Contact</h2>
-
-                <div class="cex-ui-services">
-
-
-                    <a href="mailto:support@vautrx.com"
-                        class="cex-ui-text cex-ui-text-small" style="white-space: nowrap; margin-bottom: 5px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                            <path fill="#fff"
-                                d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
-                        </svg>
-                        <span >support@vautrx.com</span> </a>
-
-                    <a href="mailto:info@vautrx.com"
-                        class="cex-ui-text cex-ui-text-small" style="white-space: nowrap; margin-bottom: 5px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                            <path fill="#fff"
-                                d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
-                        </svg>
-                        <span>info@vautrx.com</span> </a>
-                </div>
-            </div>
-            <!--            <div class="cex-ui-footer-content-menu-column">-->
-            <!--                <h2 class="cex-ui-title cex-ui-title-m cex-ui-title-bold cex-ui-title-left" title="">Follow</h2>-->
-            <!--                <div class="cex-ui-social">-->
-            <!--                    <div class="cex-ui-messengers">-->
-            <!-- X (Twitter) -->
-            <!--                        <a href="https://twitter.com/dec_trx"-->
-            <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
-            <!--                            target="_blank">-->
-            <!--                            <svg viewBox="0 0 24 24" class="cex-ui-icon">-->
-            <!--                                <path-->
-            <!--                                    d="M23.954 4.569c-.885.392-1.83.656-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.564-2.005.974-3.127 1.195-.897-.959-2.178-1.558-3.594-1.558-2.723 0-4.928 2.206-4.928 4.928 0 .386.045.762.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.422.722-.666 1.561-.666 2.475 0 1.708.869 3.213 2.188 4.096-.807-.026-1.566-.248-2.229-.616v.062c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.6 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.179 1.394 4.768 2.21 7.557 2.21 9.054 0 14-7.496 14-13.986 0-.21-.006-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"-->
-            <!--                                    fill="#0C87F2"></path>-->
-            <!--                            </svg>-->
-            <!--                        </a>-->
-
-            <!-- YouTube -->
-            <!--                        <a href="https://www.youtube.com/@{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
-            <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
-            <!--                            target="_blank">-->
-            <!--                            <svg viewBox="0 0 24 24" class="cex-ui-icon">-->
-            <!--                                <path-->
-            <!--                                    d="M23.498 6.186c-.275-1.037-1.089-1.853-2.127-2.128C19.396 3.5 12 3.5 12 3.5s-7.396 0-9.371.558C1.591 4.334.776 5.15.501 6.187.001 8.18 0 12 0 12s.001 3.82.501 5.814c.275 1.037 1.09 1.853 2.128 2.128 1.975.558 9.371.558 9.371.558s7.396 0 9.371-.558c1.038-.275 1.852-1.091 2.127-2.128.501-1.994.501-5.814.501-5.814s0-3.82-.501-5.814zM9.546 15.568V8.432L15.818 12l-6.272 3.568z"-->
-            <!--                                    fill="#FF0000"></path>-->
-            <!--                            </svg>-->
-            <!--                        </a>-->
-
-            <!-- Facebook -->
-            <!--                        <a href="https://www.facebook.com/{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
-            <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
-            <!--                            target="_blank">-->
-            <!--                            <svg viewBox="0 0 24 24" class="cex-ui-icon">-->
-            <!--                                <path-->
-            <!--                                    d="M22.675 0h-21.35C.6 0 0 .6 0 1.337v21.326C0 23.4.6 24 1.337 24H12.82v-9.294H9.692V11.21h3.127V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.463.1 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.495h-3.12V24h6.116C23.4 24 24 23.4 24 22.663V1.337C24 .6 23.4 0 22.675 0z"-->
-            <!--                                    fill="#1877F2"></path>-->
-            <!--                            </svg>-->
-            <!--                        </a>-->
-
-            <!-- Telegram -->
-            <!--                        <a href="https://t.me/dec_trx"-->
-            <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
-            <!--                            target="_blank">-->
-            <!--                            <svg viewBox="0 0 24 24" class="cex-ui-icon">-->
-            <!--                                <path-->
-            <!--                                    d="M9.353 15.862l-.398 5.618c.57 0 .815-.245 1.116-.54l2.67-2.496 5.53 4.03c1.013.557 1.73.264 1.985-.935L23.972 1.47c.303-1.226-.422-1.705-1.43-1.35L1.56 9.17c-1.21.47-1.198 1.137-.21 1.437l5.775 1.803 13.391-8.43-10.164 12.43z"-->
-            <!--                                    fill="#0088cc"></path>-->
-            <!--                            </svg>-->
-            <!--                        </a>-->
-
-            <!-- Instagram -->
-            <!--                        <a href="https://www.instagram.com/dec_trx"-->
-            <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
-            <!--                            target="_blank">-->
-            <!--                            <svg viewBox="0 0 24 24" class="cex-ui-icon">-->
-            <!--                                <path-->
-            <!--                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.322 3.608 1.297.975.975 1.235 2.242 1.297 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.322 2.633-1.297 3.608-.975.975-2.242 1.235-3.608 1.297-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.322-3.608-1.297-.975-.975-1.235-2.242-1.297-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.322-2.633 1.297-3.608C4.505 2.485 5.772 2.225 7.138 2.163 8.404 2.105 8.784 2.163 12 2.163z"-->
-            <!--                                    fill="#E4405F"></path>-->
-            <!--                            </svg>-->
-            <!--                        </a>-->
-
-            <!--                        <a href="https://medium.com/@{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
-            <!--                            class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
-            <!--                            target="_blank">-->
-            <!--                            <svg viewBox="0 0 1043.63 592.71" class="cex-ui-icon">-->
-            <!--                                <path-->
-            <!--                                    d="M588.67 296.35c0 163.66-131.82 296.35-294.33 296.35S0 460.01 0 296.35 131.82 0 294.33 0s294.34 132.69 294.34 296.35zM741.61 296.35c0 147.74-65.74 267.58-146.84 267.58s-146.84-119.84-146.84-267.58 65.74-267.58 146.84-267.58 146.84 119.84 146.84 267.58zM1043.63 296.35c0 133.71-29.43 242.1-65.74 242.1s-65.73-108.39-65.73-242.1 29.43-242.1 65.73-242.1 65.74 108.39 65.74 242.1z"-->
-            <!--                                    fill="#000000"></path>-->
-            <!--                            </svg>-->
-            <!--                        </a>-->
-
-            <!--                        <a href="https://www.linkedin.com/company/{{ \App\Models\Setting::get('site_name', 'Website Name') }}"-->
-            <!--   class="cex-ui-icon-button cex-ui-icon-button-big cex-ui-icon-button-secondary"-->
-            <!--   target="_blank">-->
-            <!--   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 34" class="cex-ui-icon">-->
-            <!--       <title>LinkedIn</title>-->
-            <!--       <g>-->
-            <!--           <path d="M34,2.52V31.48A2.52,2.52,0,0,1,31.48,34H2.52A2.52,2.52,0,0,1,0,31.48V2.52A2.52,2.52,0,0,1,2.52,0H31.48A2.52,2.52,0,0,1,34,2.52Z" fill="#0077B5"/>-->
-            <!--           <path d="M5,12.79h5.06V29H5ZM7.52,4.94A2.94,2.94,0,1,1,4.58,7.88,2.93,2.93,0,0,1,7.52,4.94Zm6.17,7.85h4.85v2.2h.07a5.32,5.32,0,0,1,4.78-2.63c5.11,0,6.05,3.36,6.05,7.72V29H24.24V21.44c0-1.8,0-4.11-2.5-4.11s-2.88,1.95-2.88,3.97V29H14.19Z" fill="#ffffff"/>-->
-            <!--       </g>-->
-            <!--   </svg>-->
-            <!--</a>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
         </div>
 
-        <span style="padding: 10px; display: block; font-size: 12px;"> Copyright 2025 Cryptocurrency Exchange
-            Software</span>
     </div>
 </footer>
+<section>
+    <div class="panel-group pt-3 pb-3" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading20">
+                <p class="panel-title" style="margin: 0;">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-20"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        Trade </a>
+                </p>
+            </div>
+            <div id="collapse-20" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading20">
+                <ul class="link-wrapper">
+                    <li>
+                        <a href="{{ url('/trade/spot') }}">
+                            Spot </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/easy-trade') }}">Easy Convert</a> </a>
+                    </li>
+                </ul>
+            </div>
+            <ul>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading31">
+                <p class="panel-title" style="margin: 0;">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-31"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        Earn </a>
+                </p>
+            </div>
+            <div id="collapse-31" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading31">
+                <ul class="link-wrapper">
+                    <li>
+                        <a href="{{ url('/staking') }}">
+                            Staking </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/airdrops') }}">
+                            Airdrop </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/faucets') }}">
+                            Faucet </a>
+                    </li>
+                </ul>
+            </div>
+            <ul>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading24">
+                <p class="panel-title" style="margin: 0;">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-24"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        Platform </a>
+                </p>
+            </div>
+            <div id="collapse-24" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading24">
+                <ul class="link-wrapper">
+                    <li>
+                        <a href="{{ url('/about') }}">
+                            About Us </a>
+                    </li>
+                    {{-- <li>
+                        <a href="/Dex">
+                            Decentralized </a>
+                    </li> --}}
+                    <li>
+                        <a href="{{ url('/markets') }}">
+                            Market </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/pool') }}">
+                            Mining </a>
+                    </li>
+                </ul>
+            </div>
+            <ul>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading32">
+                <p class="panel-title" style="margin: 0;">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-32"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        Terms </a>
+                </p>
+            </div>
+            <div id="collapse-32" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading32">
+                <ul class="link-wrapper">
+                    <li>
+                        <a href="{{ url('article/1') }}">
+                            User Agreement </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('article/2') }}">
+                            Staking Terms </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('article/3') }}">
+                            Privacy Policy </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('article/4') }}">
+                            Cookie Policy </a>
+                    </li>
+                </ul>
+            </div>
+            <ul>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingFive">
+                <p class="panel-title" style="margin: 0;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                        href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Community </a>
+                </p>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                <ul class="link-wrapper">
+                    <li>
+                        <a href="mailto:support@vautrx.com" style="white-space: nowrap; margin-bottom: 5px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                <path fill="#fff"
+                                    d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
+                            </svg>
+                            support@vautrx.com </a>
+                    </li>
+                    <li>
+                        <a href="mailto:info@vautrx.com" style="white-space: nowrap; margin-bottom: 5px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                                <path fill="#fff"
+                                    d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
+                            </svg>
+                            info@vautrx.com </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-group">
+        <ul class="footerul link-wrapper d-flex justify-content-center w-100 align-items-center">
+            <li class="text-white">Copyright 2025 Cryptocurrency Exchange Software</li>
+            <li class="ml-2 text-white">All rights reserved.</li>
+        </ul>
+
+    </div>
+</section>
 <div class="gtranslate_wrapper" id="gt-wrapper-16411826"></div>
 
-{{-- <script>
-var LANGS = {
-    en: { flag: "gb", name: "English" },
-    tr: { flag: "tr", name: "Turkish" },
-    es: { flag: "es", name: "Spanish" },
-    nl: { flag: "nl", name: "Dutch" },
-    il: { flag: "il", name: "Hebrew" },
-    de: { flag: "de", name: "German" },
-    ko: { flag: "kr", name: "Korean" },
-    ja: { flag: "jp", name: "Japanese" },
-    pt: { flag: "pt", name: "Portuguese" },
-    ru: { flag: "ru", name: "Russian" },
-    vi: { flag: "vn", name: "Vietnamese" },
-    zhtw: { flag: "tw", name: "Traditional Chinese" },
-    zhcn: { flag: "cn", name: "Simplified Chinese" }
-};
-
-// Update language UI instantly
-function updateLangUI(lang) {
-    var sel = LANGS[lang] || LANGS['en'];
-    $("#langselection img").attr("src", "https://flagcdn.com/w40/" + sel.flag + ".png");
-    $("#langselection span").text(sel.name);
-}
-
-$(document).ready(function () {
-
-    // Restore saved language
-    var saved = localStorage.getItem("site_lang") || "en";
-    updateLangUI(saved);
-
-    // Click event
-    $(".dropdown-item").on("click", function () {
-        var lang = $(this).data("lang");
-
-        // Save
-        localStorage.setItem("site_lang", lang);
-
-        // Update UI instantly
-        updateLangUI(lang);
-
-        // Optional: reload page (no redirect, no URL change)
-        setTimeout(() => {
-            window.location.reload(true);
-        }, 50);
-    });
-});
-</script> --}}
-
-
-
 <style>
-    footer {
-        display: block !important;
+    .panel-group ul.link-wrapper li a {
+        color: rgba(197, 197, 197, 1);
     }
 
-    footer a {
-        opacity: 1 !important;
-    }
+    @media(max-width: 425px) {
+        .footerul {
+            display: block !important;
+            text-align: center;
+            font-size: 12px;
+            padding: 4px 8px 8px 8px !important;
+        }
 
-    .subscription-form-wrapper {
-        padding-bottom: 20px;
-    }
+        .footerul li:last-child {
+            margin: 0 !important;
+        }
 
-    .zsiq-float.zsiq-flexM {
-        margin-bottom: 15px;
+        #accordion.panel-group ul li {
+            margin-bottom: 16px;
+        }
     }
 </style>
-
-<script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script>
-
-<script src="//code.tidio.co/uqbpiq2aat8nk1xcocsltwkbetan75qy.js" async></script>
-
-
 <style>
     @media only screen and (max-width: 991px) {
         footer {
@@ -1771,6 +1808,108 @@ $(document).ready(function () {
 </style>
 
 
+{{-- <style>
+    footer {
+        display: block !important;
+    }
+
+    footer a {
+        opacity: 1 !important;
+    }
+
+    .subscription-form-wrapper {
+        padding-bottom: 20px;
+    }
+
+    .zsiq-float.zsiq-flexM {
+        margin-bottom: 15px;
+    }
+</style> --}}
+
+<script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script>
+
+<script src="//code.tidio.co/uqbpiq2aat8nk1xcocsltwkbetan75qy.js" async></script>
+
+
+{{-- <style>
+    @media only screen and (max-width: 991px) {
+        footer {
+            display: none;
+        }
+
+        .panel-group {
+            display: block !important;
+        }
+    }
+
+    .panel-group {
+        display: none;
+        background-color: var(--box-bg-dark)
+    }
+
+    .link-wrapper {
+        background-color: var(--box-bg-dark) color: gray;
+        padding: 20px;
+    }
+
+    .link-wrapper ul li a {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .panel-default>.panel-heading {
+
+        color: #333;
+        background-color: var(--box-bg-dark);
+        /* border-color: #e4e5e7; */
+        padding: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+    }
+
+    .panel-default>.panel-heading a {
+        display: block;
+        padding: 10px 15px;
+        color: white;
+    }
+
+    .panel-default>.panel-heading a:after {
+        content: "";
+        position: relative;
+        top: 1px;
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        float: right;
+        transition: transform .25s linear;
+        -webkit-transition: -webkit-transform .25s linear;
+    }
+
+    .panel-default>.panel-heading a[aria-expanded="true"] {
+        color: white;
+    }
+
+    .panel-default>.panel-heading a[aria-expanded="true"]:after {
+        content: "\2212";
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+
+    .panel-default>.panel-heading a[aria-expanded="false"]:after {
+        content: "\002b";
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+</style> --}}
+
+
 
 <script>
     function choose_lang(lang) {
@@ -1809,13 +1948,12 @@ $(document).ready(function () {
 <!-- Scripts End -->
 
 <script type="text/javascript" id="gt_widget_script_16411826-js-before">
-		/* <![CDATA[ */
-		window.gtranslateSettings = /* document.write */ window.gtranslateSettings || {}; window.gtranslateSettings['16411826'] = { "default_language": "en", "languages": ["af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "ceb", "ny", "zh-CN", "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "tl", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "iw", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tg", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "cy", "xh", "yi", "yo", "zu"], "url_structure": "none", "flag_style": "3d", "flag_size": 16, "wrapper_selector": "#gt-wrapper-16411826", "alt_flags": [], "switcher_open_direction": "top", "switcher_horizontal_position": "left", "switcher_vertical_position": "bottom", "switcher_text_color": "#666", "switcher_arrow_color": "#666", "switcher_border_color": "#ccc", "switcher_background_color": "#fff", "switcher_background_shadow_color": "#efefef", "switcher_background_hover_color": "#fff", "dropdown_text_color": "#000", "dropdown_hover_color": "#fff", "dropdown_background_color": "#eee", "flags_location": "https://cdn.gtranslate.net/flags/" };
-		/* ]]> */
-	</script>
-	<script src="{{ asset('Public/gtranslate/js/dwf84fc.js?ver=6.4.3') }}" data-no-optimize="1" data-no-minify="1"
-		data-gt-orig-url="/" data-gt-orig-domain="http://127.0.0.1:8000/" data-gt-widget-id="16411826"
-		defer></script>
+    /* <![CDATA[ */
+    window.gtranslateSettings = /* document.write */ window.gtranslateSettings || {}; window.gtranslateSettings['16411826'] = { "default_language": "en", "languages": ["af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "ceb", "ny", "zh-CN", "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "tl", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "iw", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tg", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "cy", "xh", "yi", "yo", "zu"], "url_structure": "none", "flag_style": "3d", "flag_size": 16, "wrapper_selector": "#gt-wrapper-16411826", "alt_flags": [], "switcher_open_direction": "top", "switcher_horizontal_position": "left", "switcher_vertical_position": "bottom", "switcher_text_color": "#666", "switcher_arrow_color": "#666", "switcher_border_color": "#ccc", "switcher_background_color": "#fff", "switcher_background_shadow_color": "#efefef", "switcher_background_hover_color": "#fff", "dropdown_text_color": "#000", "dropdown_hover_color": "#fff", "dropdown_background_color": "#eee", "flags_location": "https://cdn.gtranslate.net/flags/" };
+    /* ]]> */
+</script>
+<script src="{{ asset('Public/gtranslate/js/dwf84fc.js?ver=6.4.3') }}" data-no-optimize="1" data-no-minify="1"
+    data-gt-orig-url="/" data-gt-orig-domain="http://127.0.0.1:8000/" data-gt-widget-id="16411826" defer></script>
 
 @stack('scripts')
 </body>

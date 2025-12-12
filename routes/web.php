@@ -39,6 +39,9 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 
 Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->group(function () {
     Route::get('/','index');
+    Route::get('/Ajax/coin_rate','coinRate');
+
+
     Route::post('/do-trade', 'doTrade')->middleware(['auth', 'verify.email'])->name('do-trade');
     Route::get('/markets', 'markets');
     Route::get('/about', 'about');
@@ -53,9 +56,21 @@ Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->grou
     Route::get('/article/10', 'article_10');
     Route::get('/article/11', 'article_11');
     Route::get('/article/13', 'article_13');
+    Route::get('/article/21', 'article_21');
+    Route::get('/article/15', 'article_15');
+    Route::get('/article/16', 'article_16');
+    Route::get('/article/17', 'article_17');
+    Route::get('/article/14', 'article_14');
     Route::get('/article/24', 'article_24');
+    Route::get('/article/18', 'article_18');
+    Route::get('/article/19', 'article_19');
+    Route::get('/article/20', 'article_20');
     Route::get('/article/25', 'article_25');
     Route::get('/article/26', 'article_26');
+    Route::get('/article/22', 'article_22');
+    Route::get('/article/9', 'article_9');
+    Route::get('/article/8', 'article_8');
+    Route::get('/article/7', 'article_7');
     Route::get('/article/27', 'article_27');
     Route::get('/dex', 'dex');
     

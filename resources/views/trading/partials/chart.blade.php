@@ -5,102 +5,53 @@
             <div class="charttcontnr" id="tradingview_chart_container"></div>
             
             <script>
-                // Trading configuration from backend - FIXED
-const tradingConfig = {
-    baseSymbol: '{{ $tradingPair->baseCurrency->symbol }}',
-    quoteSymbol: '{{ $tradingPair->quoteCurrency->symbol }}',
-    currentPrice: {{ $tradingPair->getCurrentPrice() ?? 0 }}
-};
+// Global check
+let chartInitialized = false;
 
-// Function to get TradingView symbol format
-function getTradingViewSymbol(baseSymbol, quoteSymbol) {
-    const symbolMap = {
-        'USDT': 'USDT',
-        'BTC': 'BTC',
-        'ETH': 'ETH',
-        'BNB': 'BNB',
-        'ADA': 'ADA',
-        'DOT': 'DOT',
-        'LTC': 'LTC',
-        'BCH': 'BCH',
-        'XRP': 'XRP',
-        'LINK': 'LINK',
-        'EUR': 'EUR',
-    };
-
-    const formattedBase = symbolMap[baseSymbol] || baseSymbol;
-    const formattedQuote = symbolMap[quoteSymbol] || quoteSymbol;
-    
-    if (quoteSymbol === 'EUR') {
-        return `COINBASE:${formattedBase}${formattedQuote}`;
-    } else {
-        return `BINANCE:${formattedBase}${formattedQuote}`;
-    }
-}
-
-// SIMPLIFIED Chart initialization - This is all you need
-function initializeTradingViewChart() {
-    // Get the correct symbol for the current trading pair
-    const symbol = getTradingViewSymbol(tradingConfig.baseSymbol, tradingConfig.quoteSymbol);
-    
-    // Set appropriate height
-    const chartHeight = window.innerWidth <= 768 ? 300 : 370;
-    
-    // Use consistent container ID
-    const containerId = 'tradingview_chart_container';
-    
-    // Make sure our container has the correct ID
-    const chartContainer = document.querySelector('.charttcontnr');
-    if (chartContainer) {
-        chartContainer.id = containerId;
-    }
-
-    console.log('Initializing TradingView chart with:', {
-        symbol: symbol,
-        baseSymbol: tradingConfig.baseSymbol,
-        quoteSymbol: tradingConfig.quoteSymbol,
-        containerId: containerId
-    });
-
-    // TradingView widget configuration
-    new TradingView.widget({
-        "width": "100%",
-        "height": chartHeight,
-        "symbol": symbol,
-        "interval": "D",
-        "timezone": "Etc/UTC",
-        "theme": 'dark',
-        "style": "1",
-        "locale": "en",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "withdateranges": true,
-        "hide_side_toolbar": false,
-        "allow_symbol_change": true,
-        "show_popup_button": true,
-        "popup_width": "1000",
-        "popup_height": "650",
-        "hide_legend": true,
-        "container_id": containerId,
-        "studies": [
-            "RSI@tv-basicstudies",
-            "StochasticRSI@tv-basicstudies", 
-            "MASimple@tv-basicstudies"
-        ]
-    });
-}
-
-// Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    initializeTradingViewChart();
+    startChartOnce();
 });
 
-// Reinitialize on window resize
-window.addEventListener('resize', function() {
-    // Small delay to ensure resize is complete
-    setTimeout(initializeTradingViewChart, 300);
+function startChartOnce() {
+    if (chartInitialized) return;
+    chartInitialized = true;
+
+    const base = "{{ $tradingPair->baseCurrency->symbol }}";
+    const quote = "{{ $tradingPair->quoteCurrency->symbol }}";
+
+    const symbol =
+        quote === "EUR"
+            ? `COINBASE:${base}${quote}`
+            : `BINANCE:${base}${quote}`;
+
+    const height = window.innerWidth <= 768 ? 300 : 370;
+
+    // DO NOT touch container ID
+    new TradingView.widget({
+        width: "100%",
+        height: height,
+        symbol: symbol,
+        interval: "D",
+        theme: "dark",
+        timezone: "Etc/UTC",
+        style: "1",
+        locale: "en",
+        allow_symbol_change: true,
+        withdateranges: true,
+        hide_legend: true,
+        enable_publishing: false,
+        container_id: "tradingview_chart_container",
+        studies: ["RSI@tv-basicstudies", "StochasticRSI@tv-basicstudies", "MASimple@tv-basicstudies"]
+    });
+}
+
+// DISABLE all resize triggers
+// Mobile resize should NOT reload
+window.addEventListener("resize", function () {
+    // Do nothing
 });
-            </script>
+</script>
+
         </div>
         <!-- TradingView Widget End -->
     </div>

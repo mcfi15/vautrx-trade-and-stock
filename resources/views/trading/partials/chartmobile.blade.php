@@ -8,30 +8,37 @@
 
 
 <script>
-// Global check
-let chartInitialized = false;
+let chartLoaded = false;
 
-document.addEventListener('DOMContentLoaded', function() {
-    startChartOnce();
+document.addEventListener('DOMContentLoaded', function () {
+    if (!chartLoaded) {
+        chartLoaded = true;
+        initChart();
+    }
 });
 
-function startChartOnce() {
-    if (chartInitialized) return;
-    chartInitialized = true;
+function getTradingViewSymbol(base, quote) {
+    const map = {
+        USDT:'USDT', BTC:'BTC', ETH:'ETH', BNB:'BNB', ADA:'ADA',
+        DOT:'DOT', LTC:'LTC', BCH:'BCH', XRP:'XRP', LINK:'LINK', EUR:'EUR'
+    };
+    const b = map[base] || base;
+    const q = map[quote] || quote;
 
+    return quote === "EUR"
+        ? `COINBASE:${b}${q}`
+        : `BINANCE:${b}${q}`;
+}
+
+function initChart() {
     const base = "{{ $tradingPair->baseCurrency->symbol }}";
     const quote = "{{ $tradingPair->quoteCurrency->symbol }}";
-
-    const symbol =
-        quote === "EUR"
-            ? `COINBASE:${base}${quote}`
-            : `BINANCE:${base}${quote}`;
+    const symbol = getTradingViewSymbol(base, quote);
 
     const height = window.innerWidth <= 768 ? 300 : 370;
 
-    // DO NOT touch container ID
     new TradingView.widget({
-        width: "100%",
+        autosize: true,
         height: height,
         symbol: symbol,
         interval: "D",
@@ -40,20 +47,24 @@ function startChartOnce() {
         style: "1",
         locale: "en",
         allow_symbol_change: true,
-        withdateranges: true,
         hide_legend: true,
         enable_publishing: false,
+        withdateranges: true,
         container_id: "tradingview_chart_container",
-        studies: ["RSI@tv-basicstudies", "StochasticRSI@tv-basicstudies", "MASimple@tv-basicstudies"]
+        studies: [
+            "RSI@tv-basicstudies",
+            "StochasticRSI@tv-basicstudies",
+            "MASimple@tv-basicstudies"
+        ]
     });
 }
 
-// DISABLE all resize triggers
-// Mobile resize should NOT reload
-window.addEventListener("resize", function () {
-    // Do nothing
+// DO NOT reinitialize chart on resize
+window.addEventListener('resize', function () {
+    // do nothing
 });
 </script>
+
 
 
         </div>

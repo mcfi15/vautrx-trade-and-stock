@@ -97,10 +97,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Reinitialize on window resize
-window.addEventListener('resize', function() {
-    // Small delay to ensure resize is complete
-    setTimeout(initializeTradingViewChart, 300);
-});
+// window.addEventListener('resize', function() {
+//     // Small delay to ensure resize is complete
+//     setTimeout(initializeTradingViewChart, 300);
+// });
             </script>
         </div>
         <!-- TradingView Widget End -->

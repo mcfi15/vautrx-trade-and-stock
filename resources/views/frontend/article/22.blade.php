@@ -69,7 +69,7 @@
 </div>
 <div class="my-blog-post-box">
 <h2>   What Is A Candlestick  </h2>
-<a href="https://cryptimize.com/Upload/article/3f7900542ede679b.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/3f7900542ede679b.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>   
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>   
 			<p>
 				 A price chart used in technical analysis by traders to determine the market's opening, closing, high, and low prices based on different timeframes is known as a candlestick. 
 			</p>
@@ -91,7 +91,7 @@
 <p>
 <br/>
 </p>
-<a href="https://cryptimize.com/Upload/article/c67a2133de0725ca.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/c67a2133de0725ca.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -101,7 +101,7 @@
 <p>
 <br/>
 </p>
-<a href="https://cryptimize.com/Upload/article/dbfd4813ef6053c4.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/dbfd4813ef6053c4.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -114,7 +114,7 @@
 </div>
 <div class="my-blog-post-box">
 <h2>   The Pin Bar Setup  </h2>
-<a href="https://cryptimize.com/Upload/article/f6f1b6c61b70bb7c.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/f6f1b6c61b70bb7c.png" style="margin-right: auto; margin-left: auto; display: block;" width="600"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="600"/></a>
 <p>
 <br/>
 </p>
@@ -136,7 +136,7 @@
 </div>
 <div class="my-blog-post-box">
 <h3>   Bullish Pin Bar  </h3>
-<a href="https://cryptimize.com/Upload/article/ed48f461eb31ff61.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/ed48f461eb31ff61.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -146,7 +146,7 @@
 </div>
 <div class="my-blog-post-box">
 <h2>   </h2><h3>Bearish Pin Bar</h3><h3>  </h3>
-<a href="https://cryptimize.com/Upload/article/eed1b3b13c6db11c.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/eed1b3b13c6db11c.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 				 The same is true for a bearish pin bar signaling a potential price reversal as sellers have overpowered the buyers with price exhaustion. The bearish pin bar has a long wick or shadow located at the upper part of the body due to the price actions of the sellers. 
 			</p>
@@ -159,7 +159,7 @@
 <p>
 <br/>
 </p>
-<a href="https://cryptimize.com/Upload/article/32171a948d035a91.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/32171a948d035a91.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -190,7 +190,7 @@
 <p>
 <br/>
 </p>
-<a href="https://cryptimize.com/Upload/article/1306235ea33ae298.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/1306235ea33ae298.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -209,7 +209,7 @@
 <p>
 <br/>
 </p>
-<a href="https://cryptimize.com/Upload/article/203c50da502cb841.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/203c50da502cb841.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -225,7 +225,7 @@
 <p>
 <br/>
 </p>
-<a href="https://cryptimize.com/Upload/article/d3b6d4039be79b57.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/d3b6d4039be79b57.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -262,7 +262,7 @@
 <p>
 <br/>
 </p>
-<a href="https://cryptimize.com/Upload/article/ea89c701b1fa94f5.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/ea89c701b1fa94f5.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -281,7 +281,7 @@
 </div>
 <div class="my-blog-post-box">
 <h3>50% Retracements  </h3>
-<a href="https://cryptimize.com/Upload/article/38dc3c54c2538159.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/38dc3c54c2538159.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -291,7 +291,7 @@
 </div>
 <div class="my-blog-post-box">
 <h3>   VWAP Bounce  </h3>
-<a href="https://cryptimize.com/Upload/article/cf00a1e5693f79dc.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/cf00a1e5693f79dc.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -301,7 +301,7 @@
 </div>
 <div class="my-blog-post-box">
 <h3>   Moving Average Bounce  </h3>
-<a href="https://cryptimize.com/Upload/article/5806da70a031f9d1.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/5806da70a031f9d1.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>
@@ -311,7 +311,7 @@
 </div>
 <div class="my-blog-post-box">
 <h3>   Double Bottom Strategy  </h3>
-<a href="https://cryptimize.com/Upload/article/5138c36cbd433441.png" target="_blank"><img height="60%" src="https://cryptimize.com/Upload/article/5138c36cbd433441.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
+<a href="{{ asset('uploads/22/3f7900542ede679b.png') }}" target="_blank"><img height="60%" src="{{ asset('uploads/22/3f7900542ede679b.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/></a>
 <p>
 <br/>
 </p>

@@ -939,7 +939,7 @@
         </div>
         <div class="nav__item">
             <div class="nav__item elseifnav">
-                <a href="Content/market.html">Market</a>
+                <a href="{{ url('/markets') }}">Market</a>
             </div>
         </div>
         <div class="nav__item">

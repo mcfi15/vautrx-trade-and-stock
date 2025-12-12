@@ -123,8 +123,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/fa970e881515d479.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/fa970e881515d479.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -145,8 +145,8 @@
     In the downtrend above, support appears at 1 and the price rises until it meets resistance and forms a lower high at 2. The support and another lower high are then observed at 3 and 4, respectively. This pattern ends with a breakout at 5 and the downtrend resumes.
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/ca3e6a313918a8d6.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/ca3e6a313918a8d6.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
   </div>
@@ -158,8 +158,8 @@
     The bullish symmetrical triangle is another type of triangular crypto chart pattern that predicts the continuation of a bullish trend. This pattern forms when two sloping trendlines intersect to form a triangle shape. The top trendline (resistance) is sloping down, while the bottom trendline (support) is sloping up. As the market nears the peak of the triangle, it will most likely break the resistance and resume its bullish trend.
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/e1f8c2a91df23c86.png" target="_blank">
-     <img height="335" src="https://cryptimize.com/Upload/article/e1f8c2a91df23c86.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img height="335" src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -180,8 +180,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/c631d52aa3946d1f.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/c631d52aa3946d1f.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -201,8 +201,8 @@
    <p>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/99ed4f3a2f37d762.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/99ed4f3a2f37d762.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -222,8 +222,8 @@
    <p>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/d38d0e846ab7ab0b.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/d38d0e846ab7ab0b.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -252,8 +252,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/778a5f3ed763f4cf.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/778a5f3ed763f4cf.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -274,8 +274,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/2eaf231980179e65.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/2eaf231980179e65.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -296,8 +296,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/4713da32d8ba4e89.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/4713da32d8ba4e89.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -318,8 +318,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/7efcdc19cbaadf8e.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/7efcdc19cbaadf8e.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -340,8 +340,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/5ac10756dafefeee.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/5ac10756dafefeee.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -362,8 +362,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/2caa9ab83ac25c7c.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/2caa9ab83ac25c7c.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -392,8 +392,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/0c01b323035a34cc.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/0c01b323035a34cc.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -414,8 +414,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/31f62897ab4edac7.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/31f62897ab4edac7.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -433,8 +433,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/ea3d340bc2080bc5.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/ea3d340bc2080bc5.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -455,8 +455,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/f3a63d3a1b7325f0.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/f3a63d3a1b7325f0.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -485,8 +485,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/3a28421d6dde33f5.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/3a28421d6dde33f5.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -507,8 +507,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/aa76b202049e89d6.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/aa76b202049e89d6.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -529,8 +529,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/f0189ab925a37f4b.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/f0189ab925a37f4b.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -551,8 +551,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/b1d719697e716e33.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/b1d719697e716e33.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -573,8 +573,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/120b8d3648ec82b0.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/120b8d3648ec82b0.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -595,8 +595,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/11a4163eba46fdaf.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/11a4163eba46fdaf.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -622,8 +622,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/f07623d42a940f63.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/f07623d42a940f63.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>
@@ -644,8 +644,8 @@
     <br/>
    </p>
    <p>
-    <a href="https://cryptimize.com/Upload/article/a1aaafd78b58261d.png" target="_blank">
-     <img src="https://cryptimize.com/Upload/article/a1aaafd78b58261d.png" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
+    <a href="{{ asset('uploads/9/fa970e881515d479.png') }}" target="_blank">
+     <img src="{{ asset('uploads/9/fa970e881515d479.png') }}" style="margin-right: auto; margin-left: auto; display: block;" width="750"/>
     </a>
    </p>
    <p>

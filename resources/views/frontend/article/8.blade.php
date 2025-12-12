@@ -118,7 +118,7 @@
 </div>
 <div class="my-blog-post-box">
 <h2>Uptrend Line  </h2>
-<a href="https://cryptimize.com/Upload/article/b1d719697e716e33.png" target="_blank"><a href="https://cryptimize.com/Upload/article/b1d719697e716e33.png" target="_blank"><img src="https://cryptimize.com/Upload/article/b1d719697e716e33.png" style="width: 564px; height: 407px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 564px; height: 407px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -134,7 +134,7 @@
 </div>
 <div class="my-blog-post-box">
 <h2>   Downtrend Line  </h2>
-<a href="https://cryptimize.com/Upload/article/120b8d3648ec82b0.png" target="_blank"><a href="https://cryptimize.com/Upload/article/120b8d3648ec82b0.png" target="_blank"><img src="https://cryptimize.com/Upload/article/b1d719697e716e33.png" style="width: 564px; height: 369px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 564px; height: 369px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -171,7 +171,7 @@
 <p>
 							 
 						</p>
-<a href="https://cryptimize.com/Upload/article/11a4163eba46fdaf.png" target="_blank"><a href="https://cryptimize.com/Upload/article/11a4163eba46fdaf.png" target="_blank"><img src="https://cryptimize.com/Upload/article/11a4163eba46fdaf.png" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -187,7 +187,7 @@
 <p>
 							 
 						</p>
-<a href="https://cryptimize.com/Upload/article/f07623d42a940f63.png" target="_blank"><a href="https://cryptimize.com/Upload/article/f07623d42a940f63.png" target="_blank"><img src="https://cryptimize.com/Upload/article/f07623d42a940f63.png" style="width: 750px; height: 359px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 359px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -347,7 +347,7 @@
 																	  To begin trading on our platform, you must first create new users and accounts, as well as verify your email address, to gain access to the UI page, where you can enjoy trading while existing users can do so by logging in.  
 																</p>
 </p></p></p></p></p></p></p></div>
-<a href="https://cryptimize.com/Upload/article/a1aaafd78b58261d.png" target="_blank"><a href="https://cryptimize.com/Upload/article/a1aaafd78b58261d.png" target="_blank"><img src="https://cryptimize.com/Upload/article/a1aaafd78b58261d.png" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -357,7 +357,7 @@
 <p>
 																 
 															</p>
-<a href="https://cryptimize.com/Upload/article/fe2d7c50cc590415.png" target="_blank"><a href="https://cryptimize.com/Upload/article/fe2d7c50cc590415.png" target="_blank"><img src="https://cryptimize.com/Upload/article/fe2d7c50cc590415.png" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -370,7 +370,7 @@
 <p>
 																 
 															</p>
-<a href="https://cryptimize.com/Upload/article/a82f9c00eb17aeba.png" target="_blank"><a href="https://cryptimize.com/Upload/article/a82f9c00eb17aeba.png" target="_blank"><img src="https://cryptimize.com/Upload/article/a82f9c00eb17aeba.png" style="width: 750px; height: 367px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 367px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -380,7 +380,7 @@
 <p>
 																 
 															</p>
-<a href="https://cryptimize.com/Upload/article/1c07203182ae1a46.png" target="_blank"><a href="https://cryptimize.com/Upload/article/1c07203182ae1a46.png" target="_blank"><img src="https://cryptimize.com/Upload/article/1c07203182ae1a46.png" style="width: 750px; height: 371px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 371px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -390,7 +390,7 @@
 <p>
 																  
 															</p>
-<a href="https://cryptimize.com/Upload/article/acb3789ad21b4887.png" target="_blank"><a href="https://cryptimize.com/Upload/article/acb3789ad21b4887.png" target="_blank"><img src="https://cryptimize.com/Upload/article/acb3789ad21b4887.png" style="width: 750px; height: 320px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 320px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>
@@ -400,7 +400,7 @@
 <p>
 																 
 															</p>
-<a href="https://cryptimize.com/Upload/article/ce0593cf0f5a9fed.png" target="_blank"><a href="https://cryptimize.com/Upload/article/ce0593cf0f5a9fed.png" target="_blank"><img src="https://cryptimize.com/Upload/article/ce0593cf0f5a9fed.png" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
+<a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><a href="{{ asset('uploads/8/1c07203182ae1a46.png') }}" target="_blank"><img src="{{ asset('uploads/8/1c07203182ae1a46.png') }}" style="width: 750px; height: 350px; margin-right: auto; margin-left: auto; display: block;"/></a></a>
 <p>
 <br/>
 </p>

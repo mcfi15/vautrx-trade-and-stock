@@ -5,15 +5,18 @@
         <div class="tradingview-widget-container">
             <div class="charttcontnr" id="tradingview_chart_container"></div>
             <script src="{{ asset('Public/s3.tradingview.com/tv.js') }}"></script>
-            <script>
-                // Trading configuration from backend - FIXED
+
+
+           <script>
+// Prevent multiple chart initializations
+let chartInitialized = false;
+
 const tradingConfig = {
     baseSymbol: '{{ $tradingPair->baseCurrency->symbol }}',
     quoteSymbol: '{{ $tradingPair->quoteCurrency->symbol }}',
     currentPrice: {{ $tradingPair->getCurrentPrice() ?? 0 }}
 };
 
-// Function to get TradingView symbol format
 function getTradingViewSymbol(baseSymbol, quoteSymbol) {
     const symbolMap = {
         'USDT': 'USDT',
@@ -28,80 +31,52 @@ function getTradingViewSymbol(baseSymbol, quoteSymbol) {
         'LINK': 'LINK',
         'EUR': 'EUR',
     };
-
     const formattedBase = symbolMap[baseSymbol] || baseSymbol;
     const formattedQuote = symbolMap[quoteSymbol] || quoteSymbol;
-    
-    if (quoteSymbol === 'EUR') {
-        return `COINBASE:${formattedBase}${formattedQuote}`;
-    } else {
-        return `BINANCE:${formattedBase}${formattedQuote}`;
-    }
+
+    return quoteSymbol === 'EUR'
+        ? `COINBASE:${formattedBase}${formattedQuote}`
+        : `BINANCE:${formattedBase}${formattedQuote}`;
 }
 
-// SIMPLIFIED Chart initialization - This is all you need
 function initializeTradingViewChart() {
-    // Get the correct symbol for the current trading pair
+    // ❌ STOP if already initialized (prevents reload on mobile)
+    if (chartInitialized) return;
+    chartInitialized = true;
+
     const symbol = getTradingViewSymbol(tradingConfig.baseSymbol, tradingConfig.quoteSymbol);
-    
-    // Set appropriate height
     const chartHeight = window.innerWidth <= 768 ? 300 : 370;
-    
-    // Use consistent container ID
-    const containerId = 'tradingview_chart_container';
-    
-    // Make sure our container has the correct ID
-    const chartContainer = document.querySelector('.charttcontnr');
-    if (chartContainer) {
-        chartContainer.id = containerId;
-    }
 
-    console.log('Initializing TradingView chart with:', {
-        symbol: symbol,
-        baseSymbol: tradingConfig.baseSymbol,
-        quoteSymbol: tradingConfig.quoteSymbol,
-        containerId: containerId
-    });
-
-    // TradingView widget configuration
     new TradingView.widget({
         "width": "100%",
         "height": chartHeight,
         "symbol": symbol,
         "interval": "D",
         "timezone": "Etc/UTC",
-        "theme": 'dark',
+        "theme": "dark",
         "style": "1",
         "locale": "en",
         "toolbar_bg": "#f1f3f6",
         "enable_publishing": false,
         "withdateranges": true,
-        "hide_side_toolbar": false,
         "allow_symbol_change": true,
         "show_popup_button": true,
         "popup_width": "1000",
         "popup_height": "650",
         "hide_legend": true,
-        "container_id": containerId,
-        "studies": [
-            "RSI@tv-basicstudies",
-            "StochasticRSI@tv-basicstudies", 
-            "MASimple@tv-basicstudies"
-        ]
+        "container_id": "tradingview_chart_container",
+        "studies": ["RSI@tv-basicstudies","StochasticRSI@tv-basicstudies","MASimple@tv-basicstudies"]
     });
 }
 
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    initializeTradingViewChart();
-});
+document.addEventListener('DOMContentLoaded', initializeTradingViewChart);
 
-// Reinitialize on window resize
+// ❌ REMOVE THIS to prevent reload
 // window.addEventListener('resize', function() {
-//     // Small delay to ensure resize is complete
 //     setTimeout(initializeTradingViewChart, 300);
 // });
-            </script>
+</script>
+
         </div>
         <!-- TradingView Widget End -->
     </div>

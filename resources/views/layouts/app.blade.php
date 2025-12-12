@@ -1395,6 +1395,8 @@
     <script src="{{ asset('Public/cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js') }}"
         type="text/javascript"></script>
 
+        <script src="{{ asset('Public/s3.tradingview.com/tv.js') }}"></script>
+
     <script>
 
         $('body').hide();

@@ -3,7 +3,7 @@
         <!-- TradingView Widget Start -->
         <div class="tradingview-widget-container">
             <div class="charttcontnr" id="tradingview_chart_container"></div>
-            <script src="{{ asset('Public/s3.tradingview.com/tv.js') }}"></script>
+            
             <script>
                 // Trading configuration from backend - FIXED
 const tradingConfig = {

@@ -244,9 +244,9 @@ function initializeChart() {
 $(document).ready(function () {
     initializeChart();
     
-    $(window).resize(function() {
-        setTimeout(initializeChart, 300);
-    });
+    // $(window).resize(function() {
+    //     setTimeout(initializeChart, 300);
+    // });
 });
 </script>
 @endpush

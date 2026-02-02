@@ -83,40 +83,99 @@
                 <h2 class="h5 card-title mb-4 fw-semibold">Submit Deposit</h2>
 
                 <form method="POST" action="{{ route('wallet.deposit.submit', $cryptocurrency->id) }}" enctype="multipart/form-data">
-                    @csrf
+    @csrf
 
-                    <div class="mb-3">
-    <label for="method_id" class="form-label small text-secondary">Select Payment Method</label>
+    <!-- ================= SELECT PAYMENT METHOD ================= -->
+    <div class="mb-3">
+        <label for="method_id" class="form-label small text-secondary">Select Payment Method</label>
 
-    @if($paymentMethods->isEmpty())
-        <div class="alert alert-warning p-2">
-            ⚠️ No payment method or address has been set for this cryptocurrency yet. Please contact support.
+        @if($paymentMethods->isEmpty())
+            <div class="alert alert-warning p-2">
+                ⚠️ No payment method or address has been set for this cryptocurrency yet. Please contact support.
+            </div>
+        @else
+            <select name="method_id" id="method_id" class="form-control" required>
+                <option value="">-- Select Method --</option>
+                @foreach($paymentMethods as $method)
+                    <option 
+                        value="{{ $method->id }}"
+                        data-address="{{ $method->address }}"
+                    >
+                        {{ $method->name }}
+                    </option>
+                @endforeach
+            </select>
+        @endif
+    </div>
+
+    <!-- ================= WALLET ADDRESS + COPY ================= -->
+    <div id="walletBox" class="mb-3 d-none">
+        <label class="form-label small text-secondary">Payment Address</label>
+
+        <div class="input-group">
+            <input type="text" id="walletAddress" class="form-control" readonly>
+            <button type="button" class="btn btn-outline-secondary" id="copyBtn">
+                <i class="fa fa-copy"></i> Copy
+            </button>
         </div>
-    @else
-        <select name="method_id" id="method_id" class="form-control" required>
-            <option value="">-- Select Method --</option>
-            @foreach($paymentMethods as $method)
-                <option value="{{ $method->id }}">{{ $method->name }} • {{ $method->address }}</option>
-            @endforeach
-        </select>
-    @endif
-</div>
 
+        <small id="copyMsg" class="text-success d-none">
+            ✔ Address copied to clipboard
+        </small>
+    </div>
 
-                    <div class="mb-3">
-                        <label for="amount" class="form-label small text-secondary">Deposit Amount</label>
-                        <input type="number" step="0.00000001" min="0" class="form-control" name="amount" id="amount" required>
-                    </div>
+    <!-- ================= DEPOSIT AMOUNT ================= -->
+    <div class="mb-3">
+        <label for="amount" class="form-label small text-secondary">Deposit Amount</label>
+        <input 
+            type="number" 
+            step="0.00000001" 
+            min="0" 
+            class="form-control" 
+            name="amount" 
+            id="amount" 
+            required
+        >
+    </div>
 
-                    {{-- <div class="mb-3">
-                        <label for="payment_proof" class="form-label small text-secondary">Upload Payment Proof (optional)</label>
-                        <input type="file" class="form-control" name="payment_proof" id="payment_proof" accept=".jpg,.jpeg,.png,.pdf">
-                    </div> --}}
+    <!-- ================= SUBMIT ================= -->
+    <button type="submit" class="btn btn-accent fw-semibold w-100">
+        <i class="fa fa-upload me-1"></i> Submit Deposit
+    </button>
+</form>
 
-                    <button type="submit" class="btn btn-accent fw-semibold w-100">
-                        <i class="fa fa-upload me-1"></i> Submit Deposit
-                    </button>
-                </form>
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+    const methodSelect = document.getElementById('method_id');
+    const walletBox = document.getElementById('walletBox');
+    const walletAddress = document.getElementById('walletAddress');
+    const copyBtn = document.getElementById('copyBtn');
+    const copyMsg = document.getElementById('copyMsg');
+
+    methodSelect.addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const address = selectedOption.getAttribute('data-address');
+
+        if (address) {
+            walletAddress.value = address;
+            walletBox.classList.remove('d-none');
+            copyMsg.classList.add('d-none');
+        } else {
+            walletBox.classList.add('d-none');
+        }
+    });
+
+    copyBtn.addEventListener('click', function () {
+        walletAddress.select();
+        walletAddress.setSelectionRange(0, 99999); // mobile support
+
+        navigator.clipboard.writeText(walletAddress.value).then(() => {
+            copyMsg.classList.remove('d-none');
+            setTimeout(() => copyMsg.classList.add('d-none'), 2000);
+        });
+    });
+</script>
+
             </div>
         </div>
 

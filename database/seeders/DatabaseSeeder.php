@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             CryptocurrencySeeder::class,
             TradingPairSeeder::class,
             OrderSeeder::class, 
+            CountrySeeder::class,
 
             // Add other seeders here
         ]);

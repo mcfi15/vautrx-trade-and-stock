@@ -44,6 +44,9 @@ class User extends Authenticatable
         'fund_password_otp_expires_at',
         'withdrawal_permission', // Add this line
         'withdrawal_limit', // Optional: if you want to set custom limits
+        'country_id',
+        'dob'
+
 
     ];
 
@@ -70,6 +73,11 @@ class User extends Authenticatable
     public function watchlists()
     {
         return $this->hasMany(\App\Models\Watchlist::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     /**

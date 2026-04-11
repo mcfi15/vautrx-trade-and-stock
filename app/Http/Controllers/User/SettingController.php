@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\TradingPair;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Mail\KycSubmittedMail;
 use App\Mail\PasswordChangedMail;
-use App\Http\Controllers\Controller;
+use App\Models\Country;
+use App\Models\TradingPair;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -19,7 +20,8 @@ class SettingController extends Controller
 
     public function kyc(){
         $user = Auth::user();
-        return view('user.setting.kyc', compact('user'));
+        $countries = Country::all();
+        return view('user.setting.kyc', compact('user','countries'));
     }
 
     public function submit(Request $request)
@@ -28,6 +30,10 @@ class SettingController extends Controller
             'kyc_full_name'       => 'required|string|max:255',
             'kyc_document_type'   => 'required|string',
             'kyc_document_number' => 'required|string',
+
+            // New Fields
+            'country_id' => 'required|exists:countries,id',
+            'dob'        => 'required|date|before:today',
 
             'kyc_front'  => 'required|mimes:jpg,png,jpeg,pdf|max:4096',
             'kyc_back'   => 'required|mimes:jpg,png,jpeg,pdf|max:4096',
@@ -56,14 +62,6 @@ class SettingController extends Controller
             $file->move($uploadPath, $filename_back);
         }
 
-        // SELFIE
-        // if ($request->hasFile('kyc_selfie')) {
-        //     $file = $request->file('kyc_selfie');
-        //     $ext = $file->getClientOriginalExtension();
-        //     $filename_selfie = time().'_selfie.'.$ext;
-        //     $file->move($uploadPath, $filename_selfie);
-        // }
-
         // PROOF OF RESIDENCE
         if ($request->hasFile('kyc_proof')) {
             $file = $request->file('kyc_proof');
@@ -79,14 +77,14 @@ class SettingController extends Controller
             'kyc_document_number' => $request->kyc_document_number,
             'kyc_status'          => 'pending',
 
+            // New Fields
+            'country_id' => $request->country_id,
+            'dob'        => $request->dob,
+
             'kyc_front'  => $uploadPath . $filename_front,
             'kyc_back'   => $uploadPath . $filename_back,
-            // 'kyc_selfie' => $uploadPath . $filename_selfie,
             'kyc_proof'  => $uploadPath . $filename_proof,
         ]);
-
-        // Send email to user
-        // Mail::to($user->email)->send(new KycSubmittedMail($user));
 
         return back()->with('success', 'KYC submitted successfully. Please wait for verification.');
     }

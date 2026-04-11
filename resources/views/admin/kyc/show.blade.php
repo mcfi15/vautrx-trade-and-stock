@@ -39,6 +39,19 @@
             </div>
 
             <div>
+                <p class="font-semibold text-gray-600">Country:</p>
+                <p>{{ $user->country->name ?? 'N/A' }}</p>
+            </div>
+
+            {{-- NEW: DOB --}}
+            <div>
+                <p class="font-semibold text-gray-600">Date of Birth:</p>
+                <p>
+                    {{ $user->dob ? \Carbon\Carbon::parse($user->dob)->format('d M Y') : 'N/A' }}
+                </p>
+            </div>
+
+            <div>
                 <p class="font-semibold text-gray-600">KYC Status:</p>
 
                 @php

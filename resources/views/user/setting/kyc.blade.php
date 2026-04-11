@@ -90,7 +90,21 @@
 
                             <div class="form-group mb-3">
                                 <label>Full Name</label>
-                                <input type="text" name="kyc_full_name" class="form-control" required>
+                                <input type="text" name="kyc_full_name" class="form-control" value="{{ $user->name }}" readonly>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label>Date of Birth</label>
+                                <input type="date" name="dob" class="form-control" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label>Country</label>
+                                <select name="country_id" class="form-control" required>
+                                    @foreach($countries as $country)
+                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="form-group mb-3">

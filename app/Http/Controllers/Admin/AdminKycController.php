@@ -23,10 +23,10 @@ class AdminKycController extends Controller
     }
 
     public function approve(User $user)
-    {
+    { 
         $user->update([
             'kyc_status' => 'approved',
-            'kyc_verified' => true,
+            'kyc_verified' => true, 
         ]);
 
         Mail::to($user->email)->send(new KycApprovedMail($user));

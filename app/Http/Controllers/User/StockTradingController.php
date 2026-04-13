@@ -152,10 +152,10 @@ class StockTradingController extends Controller
             Mail::to($user)->send(new StockPurchased($transaction));
 
             // Admin alert
-            if ($total_amount > 10000) {
-                $adminEmail = config('mail.admin_email', 'admin@tradingplatform.com');
-                Mail::to($adminEmail)->send(new AdminTradeNotification($transaction));
-            }
+            // if ($total_amount > 10000) {
+            //     $adminEmail = config('mail.admin_email', 'admin@tradingplatform.com');
+            //     Mail::to($adminEmail)->send(new AdminTradeNotification($transaction));
+            // }
         });
 
         return back()->with('success', 'Buy order executed successfully using USDT.');
@@ -233,10 +233,10 @@ class StockTradingController extends Controller
 
             Mail::to($user)->send(new StockSold($transaction, $profit_loss));
 
-            if ($total_amount > 10000) {
-                $adminEmail = config('mail.admin_email', 'admin@tradingplatform.com');
-                Mail::to($adminEmail)->send(new AdminTradeNotification($transaction));
-            }
+            // if ($total_amount > 10000) {
+            //     $adminEmail = config('mail.admin_email', 'admin@tradingplatform.com');
+            //     Mail::to($adminEmail)->send(new AdminTradeNotification($transaction));
+            // }
         });
 
         return back()->with('success', 'Sell order executed successfully. Proceeds credited to USDT wallet.');

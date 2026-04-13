@@ -77,9 +77,9 @@
     View Portfolio
 </a>
 
-<a href="{{ route('transactions.index') }}" class="btn" style="margin-left: 10px; background-color: #17a2b8;">
+{{-- <a href="{{ route('transactions.index') }}" class="btn" style="margin-left: 10px; background-color: #17a2b8;">
     View All Transactions
-</a>
+</a> --}}
 
 <p class="text-muted">
     <strong>Current Balance:</strong> ${{ number_format($transaction->user->balance, 2) }}

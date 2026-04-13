@@ -2,7 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\Transaction;
+use App\Models\StockTransaction;
+// use App\Models\Transaction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -14,8 +15,12 @@ class AdminTradeNotification extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    // public function __construct(
+    //     public Transaction $transaction
+    // ) {}
+
     public function __construct(
-        public Transaction $transaction
+        public StockTransaction $transaction
     ) {}
 
     public function envelope(): Envelope

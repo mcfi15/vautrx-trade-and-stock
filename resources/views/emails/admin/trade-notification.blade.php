@@ -64,9 +64,20 @@
 
 <div class="alert alert-info">
     <h4>📋 User Trading Summary</h4>
-    <strong>Total Transactions (Last 30 days):</strong> {{ $transaction->user->transactions()->where('created_at', '>=', now()->subDays(30))->count() }}<br>
-    <strong>Total Trading Volume (Last 30 days):</strong> ${{ number_format($transaction->user->transactions()->where('created_at', '>=', now()->subDays(30))->sum('total_amount'), 2) }}<br>
-    <strong>Portfolio Value:</strong> ${{ number_format($transaction->user->portfolios()->sum('current_value'), 2) }}<br>
+
+    <strong>Total Transactions (Last 30 days):</strong> 
+    {{ $transaction->user->transactions()->where('created_at', '>=', now()->subDays(30))->count() }}<br>
+
+    <strong>Total Trading Volume (Last 30 days):</strong> 
+    ${{ number_format($transaction->user->transactions()->where('created_at', '>=', now()->subDays(30))->sum('total_amount'), 2) }}<br>
+
+    <strong>Portfolio Value:</strong> 
+    ${{ number_format(
+        $transaction->user->portfolios->sum(function ($p) {
+            return $p->quantity * $p->average_price;
+        }),
+    2) }}<br>
+
     <strong>Account Status:</strong> {{ $transaction->user->is_active ? 'Active' : 'Inactive' }}<br>
     <strong>KYC Verified:</strong> {{ $transaction->user->kyc_verified ? 'Yes' : 'No' }}
 </div>

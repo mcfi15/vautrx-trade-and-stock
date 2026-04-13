@@ -27,7 +27,7 @@ class AdminTradeNotification extends Mailable implements ShouldQueue
     {
         $action = ucfirst($this->transaction->type);
         return new Envelope(
-            subject: "Large Trade Alert - {$action} {$this->transaction->stock->symbol} ({$this->transaction->total_amount})",
+            subject: "Large Trade Alert - {$action} {$this->transaction->stock->symbol} ($" . number_format($this->transaction->total_amount, 2) . ")",
         );
     }
 

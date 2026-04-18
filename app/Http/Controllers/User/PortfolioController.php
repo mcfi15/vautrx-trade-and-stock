@@ -17,14 +17,18 @@ class PortfolioController extends Controller
         ->where('user_id', $user->id)
         ->get();
 
-    // Calculate totals
+    // Calculate totals using correct field names
     $totalValue = $portfolios->sum(function ($p) {
         return $p->stock->current_price * $p->quantity;
     });
 
-    $totalInvestment = $portfolios->sum(function ($p) {
-        return $p->buy_price * $p->quantity;
-    });
+    // Use total_invested instead of buy_price * quantity
+    $totalInvestment = $portfolios->sum('total_invested');
+    
+    // OR if total_invested is not populated, use average_price:
+    // $totalInvestment = $portfolios->sum(function ($p) {
+    //     return $p->average_price * $p->quantity;
+    // });
 
     $profitLoss = $totalValue - $totalInvestment;
 

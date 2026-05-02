@@ -232,41 +232,108 @@
         </div>
     </div>
 
-    <!-- Search and Filters -->
-    <div class="search-container mb-5 bg-dark">
-        <div class="card-body p-4">
-            <form method="GET" action="{{ route('stocks.index') }}">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-5">
-                        <label for="search" class="form-label fw-semibold">Search Stocks</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-end-0">
-                                <i class="fa fa-search text"></i>
-                            </span>
-                            <input type="text" class="form-control border-start-0 ps-0" id="search" name="search" 
-                                value="{{ request('search') }}" placeholder="Enter symbol or company name">
-                        </div>
+   <div class="search-container mb-5 bg-dark">
+    <div class="card-body p-4">
+        <form method="GET" action="{{ route('stocks.index') }}">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label for="search" class="form-label fw-semibold text-light">Search Stocks</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-end-0 text-secondary">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control bg-dark border-start-0 text-light" id="search" name="search" 
+                            value="{{ request('search') }}" placeholder="Enter symbol or company name">
                     </div>
-                    <div class="col-md-4">
-                        <label for="sector" class="form-label fw-semibold">Filter by Sector</label>
-                        <select class="form-select" id="sector" name="sector">
-                            <option value="">All Sectors</option>
-                            @foreach($sectors as $sector)
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="sector" class="form-label fw-semibold text-light">Filter by Sector</label>
+                    <select class="form-select bg-dark border-secondary text-light" 
+                            id="sector" 
+                            name="sector" 
+                            onchange="this.form.submit()"
+                            size="1">
+                        <option value="" {{ request('sector') == '' ? 'selected' : '' }}>🌐 All Sectors</option>
+                        @foreach($sectors as $sector)
                             <option value="{{ $sector }}" {{ request('sector') === $sector ? 'selected' : '' }}>
                                 {{ $sector }}
                             </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary w-100 btn-modern">
-                            <i class="fas fa-filter me-2"></i> Apply Filters
-                        </button>
-                    </div>
+                        @endforeach
+                    </select>
                 </div>
-            </form>
-        </div>
+                
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
+
+<style>
+    /* CRITICAL FIX: Force dropdown to show multiple options */
+    .search-container select.form-select {
+        cursor: pointer;
+        min-height: 38px;
+    }
+    
+    /* This is the KEY fix - ensures dropdown expands properly */
+    .search-container select.form-select option {
+        background-color: #2c3034 !important;
+        color: white !important;
+        padding: 10px 12px !important;
+        min-height: 40px !important;
+        display: block !important;
+    }
+    
+    /* Force the select to show dropdown properly when clicked */
+    .search-container select.form-select:focus {
+        outline: none;
+    }
+    
+    /* Fix any overflow clipping */
+    .search-container,
+    .search-container .card-body,
+    .search-container .row,
+    .search-container .col-md-4 {
+        overflow: visible !important;
+    }
+    
+    /* Improve input group styling */
+    .search-container .input-group-text {
+        border-right: none;
+    }
+    
+    .search-container .form-control {
+        border-left: none;
+    }
+    
+    .search-container .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: none;
+    }
+    
+    /* Custom dropdown arrow for dark theme */
+    select.form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+    }
+    
+    /* Fix for the dropdown list display */
+    select.form-select[size] {
+        height: auto;
+    }
+    
+    /* Ensure the dropdown menu appears properly when clicked */
+    select.form-select:not([size]) {
+        background-color: #212529;
+    }
+</style>
 
     <!-- Stocks Grid -->
     <div class="row g-4">

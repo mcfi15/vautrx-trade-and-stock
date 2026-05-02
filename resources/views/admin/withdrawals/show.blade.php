@@ -95,6 +95,18 @@
                         <p><b>Total:</b> {{ number_format($withdrawal->amount + $withdrawal->fee, 8) }} {{ $withdrawal->cryptocurrency->symbol }}</p>
                     </div>
                     <div>
+                        @if ($withdrawal->withdrawal_type == "bank")
+                        <h3 class="text-gray-500 font-semibold text-sm mb-2">Bank Details</h3>
+                        <b>Bank Name:</b>
+                        <code class="block bg-gray-100 p-2 rounded text-xs break-all">{{ $withdrawal->bank_name }}</code>
+                        <b>Account Name:</b>
+                        <code class="block bg-gray-100 p-2 rounded text-xs break-all">{{ $withdrawal->account_name }}</code>
+                        <b>Account Number:</b>
+                        <code class="block bg-gray-100 p-2 rounded text-xs break-all">{{ $withdrawal->account_number }}</code>
+                        <b>Swift Code:</b>
+                        <code class="block bg-gray-100 p-2 rounded text-xs break-all">{{ $withdrawal->swift_code ?? 'N/A' }}</code>
+                        @else
+                        
                         <h3 class="text-gray-500 font-semibold text-sm mb-2">Addresses & Hash</h3>
                         <b>Withdrawal Address:</b>
                         <code class="block bg-gray-100 p-2 rounded text-xs break-all">{{ $withdrawal->withdrawal_address }}</code>
@@ -104,6 +116,7 @@
                             <code class="block bg-gray-100 p-2 rounded text-xs break-all">{{ $withdrawal->tx_hash }}</code>
                         @else
                             <p><b>Transaction Hash:</b> <span class="text-gray-500">Not provided</span></p>
+                        @endif
                         @endif
                     </div>
                 </div>

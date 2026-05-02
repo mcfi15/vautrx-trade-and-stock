@@ -205,6 +205,8 @@ Route::middleware(['auth', 'verify.email'])->group(function () {
         Route::post('/withdraw/add-address', [WalletController::class, 'addAddress'])->name('withdraw.addAddress');
         Route::post('/withdraw/process', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');
 
+        Route::post('/withdraw/bank', [WalletController::class, 'processBankWithdraw'])->name('withdraw.bank.process');
+
         // Route::get('/withdraw', [WalletController::class, 'showWithdraw'])->name('withdraw'); // General withdraw page
         // Route::get('/withdraw/{cryptoId}', [WalletController::class, 'showWithdraw'])->name('withdraw.specific'); // Specific crypto withdraw
         // Route::post('/withdraw', [WalletController::class, 'processWithdrawal'])->name('withdraw.process');

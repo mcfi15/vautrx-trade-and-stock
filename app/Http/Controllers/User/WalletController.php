@@ -72,32 +72,61 @@ class WalletController extends Controller
     }
 
     public function showDeposit($cryptoId = null)
-    {
-        $user = Auth::user();
-        
-        $cryptocurrencies = Cryptocurrency::active()->get();
+{
+    $user = Auth::user();
+    $cryptocurrencies = Cryptocurrency::active()->get();
 
-            // If no cryptocurrency ID provided, show selection page
-        if (!$cryptoId) {
-            return view('user.wallet.deposit-select', compact('cryptocurrencies'));
-        }
-
-        $crypto = Cryptocurrency::findOrFail($cryptoId);
-
-        $paymentMethods = PaymentMethod::where('cryptocurrency_id', $cryptoId)->get();
-
-        $deposits = Deposit::where('user_id', $user->id)
-            ->where('cryptocurrency_id', $cryptoId)
-            ->latest()
-            ->get();
-
-        return view('user.wallet.deposit', [
-            'cryptocurrency' => $crypto,
-            'paymentMethods' => $paymentMethods,
-            'deposits' => $deposits
-        ]);
+    if (!$cryptoId) {
+        return view('user.wallet.deposit-select', compact('cryptocurrencies'));
     }
 
+    $crypto = Cryptocurrency::findOrFail($cryptoId);
+
+    // Fetch methods that match this crypto ID OR are of type 'bank'
+    $paymentMethods = PaymentMethod::where('cryptocurrency_id', $cryptoId)
+        ->orWhere('type', 'bank')
+        ->get();
+
+    $deposits = Deposit::where('user_id', $user->id)
+        ->where('cryptocurrency_id', $cryptoId)
+        ->latest()
+        ->get();
+
+    return view('user.wallet.deposit', [
+        'cryptocurrency' => $crypto,
+        'paymentMethods' => $paymentMethods,
+        'deposits' => $deposits
+    ]);
+}
+
+    // public function showDeposit($cryptoId = null)
+    // {
+    //     $user = Auth::user();
+        
+    //     $cryptocurrencies = Cryptocurrency::active()->get();
+
+    //         // If no cryptocurrency ID provided, show selection page
+    //     if (!$cryptoId) {
+    //         return view('user.wallet.deposit-select', compact('cryptocurrencies'));
+    //     }
+
+    //     $crypto = Cryptocurrency::findOrFail($cryptoId);
+
+    //     $paymentMethods = PaymentMethod::where('cryptocurrency_id', $cryptoId)->get();
+
+    //     $deposits = Deposit::where('user_id', $user->id)
+    //         ->where('cryptocurrency_id', $cryptoId)
+    //         ->latest()
+    //         ->get();
+
+    //     return view('user.wallet.deposit', [
+    //         'cryptocurrency' => $crypto,
+    //         'paymentMethods' => $paymentMethods,
+    //         'deposits' => $deposits
+    //     ]);
+    // }
+
+    
     public function submitDeposit(Request $request, $cryptoId)
 {
     $user = Auth::user();
@@ -599,6 +628,8 @@ public function showWithdrawForm(Request $request)
             'fund_password' => 'required|string',
             'otp' => 'required|string',
         ]);
+        
+        
 
         // Check fund password
         if (!$user->fund_password || !Hash::check($request->fund_password, $user->fund_password)) {
@@ -674,6 +705,126 @@ public function showWithdrawForm(Request $request)
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+
+    // app/Http/Controllers/WalletController.php
+
+public function processBankWithdraw(Request $request)
+{
+    $user = Auth::user();
+
+    if (!$user->canWithdraw()) {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => false, 'message' => 'Withdrawals are currently disabled for your account.'], 400);
+        }
+        return redirect()->back()->with('error', 'Withdrawals are currently disabled for your account.');
+    }
+
+    $request->validate([
+        'cryptocurrency_id' => 'required|exists:cryptocurrencies,id',
+        'bank_name'         => 'required|string',
+        'account_name'      => 'required|string',
+        'account_number'    => 'required|string',
+        'amount'            => 'required|numeric|min:0.00000001', 
+        'fund_password'     => 'required|string',
+        'otp'               => 'required|string',
+    ]);
+
+    // Check fund password
+    if (!$user->fund_password || !Hash::check($request->fund_password, $user->fund_password)) {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => false, 'message' => 'Invalid fund password', 'field' => 'fund_password'], 400);
+        }
+        return redirect()->back()->withErrors(['fund_password' => 'Invalid fund password']);
+    }
+
+    // OTP check
+    if (!$user->fund_password_otp || $user->fund_password_otp !== $request->otp ||
+        !$user->fund_password_otp_expires_at || $user->fund_password_otp_expires_at->isPast()) {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => false, 'message' => 'Invalid or expired OTP', 'field' => 'otp'], 400);
+        }
+        return redirect()->back()->withErrors(['otp' => 'Invalid or expired OTP']);
+    }
+
+    DB::beginTransaction();
+    try {
+        $cryptocurrency = Cryptocurrency::findOrFail($request->cryptocurrency_id);
+        $wallet = $user->getWallet($cryptocurrency->id);
+
+        // Standard Wallet Balance Check
+        if (!$wallet || ($wallet->balance - ($wallet->locked_balance ?? 0)) < $request->amount) {
+            throw new \Exception('Insufficient ' . $cryptocurrency->symbol . ' balance');
+        }
+
+        // Logic for Fees (consistent with your crypto logic)
+        $fee = max(0.001, round($request->amount * 0.001, 8));
+        $netAmount = round($request->amount - $fee, 8);
+
+        // Deduct from Crypto Wallet
+        $wallet->balance = bcsub($wallet->balance, $request->amount, 18);
+        $wallet->locked_balance = bcadd($wallet->locked_balance ?? 0, $request->amount, 18);
+        $wallet->save();
+
+        // Create Bank Withdrawal Record
+        $withdrawal = Withdrawal::create([
+            'user_id'            => $user->id,
+            'withdrawal_type'    => 'bank',
+            'cryptocurrency_id'  => $cryptocurrency->id,
+            'bank_name'          => $request->bank_name,
+            'account_name'       => $request->account_name,
+            'account_number'     => $request->account_number,
+            'swift_code'         => $request->swift_code,
+            'amount'             => $request->amount,
+            'fee'                => $fee,
+            'net_amount'         => $netAmount,
+            'status'             => 'pending',
+        ]);
+
+        // Create transaction record
+        Transaction::create([
+            'user_id'           => $user->id,
+            'cryptocurrency_id' => $request->cryptocurrency_id,
+            'type'              => 'withdrawal',
+            'amount'            => $request->amount,
+            'fee'               => $fee,
+            'balance_before'    => bcadd($wallet->balance, $request->amount, 18),
+            'balance_after'     => $wallet->balance,
+            'status'            => 'pending',
+            'description'       => "Bank Withdrawal via {$cryptocurrency->symbol} to {$request->bank_name}",
+        ]);
+
+        $user->update(['fund_password_otp' => null, 'fund_password_otp_expires_at' => null]);
+
+        DB::commit();
+
+        try {
+            Mail::to($user->email)->send(new WithdrawalSubmittedMail($withdrawal));
+        } catch (\Exception $e) {
+            \Log::error('Bank Withdrawal email failed: '.$e->getMessage());
+        }
+
+        // Return JSON for AJAX requests, redirect for normal form submissions
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true, 
+                'message' => 'Bank withdrawal request submitted successfully! You will receive the funds within 1-3 business days.',
+                'withdrawal' => $withdrawal
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Bank withdrawal request submitted');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+        
+        return redirect()->back()->with('error', $e->getMessage());
+    }
+}
 
 
     // public function transactions()

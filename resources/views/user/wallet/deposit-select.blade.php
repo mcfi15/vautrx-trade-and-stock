@@ -59,6 +59,27 @@
 
         @if($cryptocurrencies->count() > 0)
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 p-4 " style="background-color: black;">
+            
+<div class="col p-5">
+    <div class="card h-100 bg-dark border border-secondary rounded-4 shadow-sm crypto-card" 
+         onclick="location.href='{{ route('wallet.deposit.specific', $cryptocurrencies->first()->id ?? 1) }}'">
+        <div class="card-body text-center">
+            <div class="mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center text-dark fw-bold fs-4"
+                style="width:70px; height:70px; background-color:#1e90ff; box-shadow:0 0 15px #1e90ff;">
+                <i class="fa fa-university"></i>
+            </div>
+            <h5 class="fw-semibold text-light">Bank Transfer</h5>
+            <p class="text-muted small mb-3">USD / EUR / LOCAL</p>
+            <div class="text-start px-3">
+                <p class="small text-white text-center">Deposit using direct bank wire or local transfer.</p>
+            </div>
+            <hr class="border-secondary my-3">
+            <button class="btn btn-outline-primary btn-sm w-100 fw-semibold">
+                <i class="fa fa-arrow-down me-2"></i> Deposit via Bank
+            </button>
+        </div>
+    </div>
+</div>
             @foreach($cryptocurrencies as $crypto)
             <div class="col p-5">
                 <div class="card h-100 bg-dark border border-secondary rounded-4 shadow-sm crypto-card" 
@@ -97,6 +118,8 @@
                 </div>
             </div>
             @endforeach
+
+            
         </div>
 
         

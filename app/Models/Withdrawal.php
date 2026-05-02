@@ -19,6 +19,11 @@ class Withdrawal extends Model
         'status',
         'transaction_id',
         'processed_at',
+        'withdrawal_type',
+        'bank_name',
+        'account_name',
+        'account_number',
+        'swift_code'
     ];
 
     protected $casts = [

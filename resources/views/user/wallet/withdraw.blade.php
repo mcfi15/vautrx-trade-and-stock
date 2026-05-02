@@ -43,7 +43,10 @@
             <div class="col-12">
                 <ul id="withdraw-money-tabs" class="nav nav-pills" role="tablist">
                     <li class="nav-item white-bg">
-                        <a aria-selected="true" class="nav-link active" data-toggle="pill" href="#crypto" data-target=".crypto" role="tab">Crypto</a>
+                        <a class="nav-link active" data-toggle="pill" href="#crypto" role="tab">Crypto Withdrawal</a>
+                    </li>
+                    <li class="nav-item white-bg">
+                        <a class="nav-link" data-toggle="pill" href="#bank" role="tab">Bank Withdrawal</a>
                     </li>
                 </ul>
             </div>
@@ -51,6 +54,7 @@
         
         <div class="col-12 white-bg">
             <div class="tab-content withdraw-tab white-bg">
+
                 <div class="tab-pane fade show active p-t-15 crypto" role="tabpanel" id="crypto">
                     <form id="withdrawalForm" method="POST" action="{{ route('wallet.withdraw.process') }}">
                         @csrf
@@ -157,6 +161,69 @@
                         </div>
                     </form>
                 </div>
+
+                <div class="tab-pane fade bank" id="bank" role="tabpanel">
+                    <form id="bankWithdrawalForm" method="POST" action="{{ route('wallet.withdraw.bank.process') }}">
+                        @csrf
+                        <input type="hidden" name="type" value="bank">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                    <label>Select Coin to Withdraw From</label>
+                    <select name="cryptocurrency_id" class="form-control select-control" style="color:black !important;">
+                        @foreach($cryptocurrencies as $crypto)
+                            <option value="{{ $crypto->id }}" 
+                                    data-symbol="{{ $crypto->symbol }}"
+                                    data-name="{{ $crypto->name }}"
+                                    data-content="<img src='{{ $crypto->logo_url }}' height='20px'/> {{ strtoupper($crypto->symbol) }}"
+                                    {{ $selectedCrypto && $selectedCrypto->id == $crypto->id ? 'selected' : '' }}>
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                                <div class="form-group">
+                                    <label>Bank Name</label>
+                                    <input type="text" name="bank_name" class="form-control" placeholder="e.g. JPMorgan Chase" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Account Holder Name</label>
+                                    <input type="text" name="account_name" class="form-control" placeholder="Full legal name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Account Number / IBAN</label>
+                                    <input type="text" name="account_number" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>SWIFT / BIC Code</label>
+                                    <input type="text" name="swift_code" class="form-control" placeholder="Optional for domestic">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                
+                                <div class="form-group">
+                                    <label>Withdrawal Amount (USD)</label>
+                                    <input type="number" name="amount" class="form-control" placeholder="0.00" step="0.01" required>
+                                </div>
+                                <div class="form-group input-group">
+                                    <input type="text" class="form-control" id="otp" name="otp" value="" placeholder="Enter OTP" required>
+                                    <div class="input-group-append">
+                                        <button type="button" onclick="requestOTP()" class="btn btn-outline-secondary">Request OTP</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Funding Password</label>
+                                    <input type="password" name="fund_password" class="form-control" required>
+                                </div>
+                                <div class="alert alert-info small">
+                                    <i class="fa fa-info-circle"></i> Bank transfers typically take 1-3 business days to process. Ensure all details are correct to avoid reversal fees.
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Request Bank Transfer</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                
             </div>
         </div>
         
@@ -173,10 +240,11 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
+                                            <<th>Date</th>
                                             <th>Coin</th>
+                                            <th>Method</th>
                                             <th>Amount</th>
-                                            <th>Address</th>
+                                            <th>Details</th>
                                             <th>Status</th>
                                             {{-- <th>Transaction ID</th> --}}
                                         </tr>
@@ -186,17 +254,23 @@
                                             <tr>
                                                 <td>{{ $withdrawal->created_at->format('Y-m-d H:i') }}</td>
                                                 <td>
+
                                                     <div class="d-flex align-items-center">
+
                                                         @if($withdrawal->cryptocurrency && $withdrawal->cryptocurrency->logo_url)
+
                                                             <img src="{{ $withdrawal->cryptocurrency->logo_url }}" style="height:30px;width:30px;" class="mr-2">
+
                                                         @endif
+
                                                         <span>{{ strtoupper($withdrawal->cryptocurrency->symbol ?? 'N/A') }}</span>
+
                                                     </div>
+
                                                 </td>
+                                                <td><span class="badge badge-info">{{ strtoupper($withdrawal->withdrawal_type ?? 'Crypto') }}</span></td>
                                                 <td>{{ number_format($withdrawal->amount, 8) }}</td>
-                                                <td class="text-truncate" style="max-width: 150px;">
-                                                    {{ $withdrawal->withdrawal_address }}
-                                                </td>
+                                                <td>{{ $withdrawal->withdrawal_address ?? $withdrawal->bank_name }}</td>
                                                 <td>
                                                     @if($withdrawal->status === 'completed')
                                                         <span class="badge badge-success">Completed</span>
@@ -306,7 +380,7 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 </main>
 
 <script>
@@ -606,6 +680,678 @@ $('#addPaymentMethodModal').on('hidden.bs.modal', function () {
     $('#wallet_addr, #wallet_name, #wallet_dest_tag, #wallet_paypassword').val('');
     $('.btn-2').prop('disabled', false).text('Approve');
 });
+
+
+
+// Bank Withdrawal Specific Script
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize bank withdrawal specific elements
+    initBankWithdrawal();
+});
+
+function initBankWithdrawal() {
+    // Get all bank withdrawal form elements
+    const bankForm = document.getElementById('bankWithdrawalForm');
+    if (!bankForm) return;
+    
+    const bankAmountInput = bankForm.querySelector('input[name="amount"]');
+    const bankCoinSelect = bankForm.querySelector('select[name="cryptocurrency_id"]');
+    const bankNameInput = bankForm.querySelector('input[name="bank_name"]');
+    const accountNameInput = bankForm.querySelector('input[name="account_name"]');
+    const accountNumberInput = bankForm.querySelector('input[name="account_number"]');
+    const swiftCodeInput = bankForm.querySelector('input[name="swift_code"]');
+    const bankOTPButton = bankForm.querySelector('.input-group-append .btn-outline-secondary');
+    const bankOTPInput = bankForm.querySelector('#otp');
+    
+    // Add bank withdrawal specific validation and features
+    setupBankAmountValidation(bankAmountInput, bankCoinSelect);
+    setupBankDetailsValidation(bankNameInput, accountNameInput, accountNumberInput, swiftCodeInput);
+    setupBankOTPHandler(bankOTPButton, bankOTPInput);
+    setupBankFormSubmission(bankForm);
+    setupBankCurrencyDisplay(bankCoinSelect);
+    setupBankSavedAccounts(bankForm);
+}
+
+// Bank amount validation with real-time USD to crypto conversion
+function setupBankAmountValidation(amountInput, coinSelect) {
+    if (!amountInput || !coinSelect) return;
+    
+    // Add input event for real-time validation
+    amountInput.addEventListener('input', function() {
+        const amountUSD = parseFloat(this.value) || 0;
+        const selectedCoin = coinSelect.options[coinSelect.selectedIndex];
+        const coinSymbol = selectedCoin ? selectedCoin.getAttribute('data-symbol') : 'BTC';
+        
+        // Validate amount range (assuming bank withdrawal minimum $50, maximum $50,000)
+        if (amountUSD > 0) {
+            if (amountUSD < 50) {
+                showBankError(amountInput, 'Minimum bank withdrawal amount is $50.00');
+                updateBankWithdrawalSummary(0, coinSymbol);
+            } else if (amountUSD > 50000) {
+                showBankError(amountInput, 'Maximum bank withdrawal amount is $50,000.00');
+                updateBankWithdrawalSummary(0, coinSymbol);
+            } else {
+                clearBankError(amountInput);
+                updateBankWithdrawalSummary(amountUSD, coinSymbol);
+            }
+        } else {
+            clearBankError(amountInput);
+            updateBankWithdrawalSummary(0, coinSymbol);
+        }
+    });
+    
+    // Add blur event for final validation
+    amountInput.addEventListener('blur', function() {
+        const amountUSD = parseFloat(this.value) || 0;
+        if (amountUSD > 0 && (amountUSD < 50 || amountUSD > 50000)) {
+            this.value = '';
+            showBankError(amountInput, `Amount must be between $50 and $50,000 USD`);
+        }
+    });
+}
+
+// Update withdrawal summary with fees and estimated crypto amount
+function updateBankWithdrawalSummary(amountUSD, coinSymbol) {
+    // Find or create summary div
+    let summaryDiv = document.querySelector('.bank-withdrawal-summary');
+    if (!summaryDiv) {
+        const bankAmountGroup = document.querySelector('#bankWithdrawalForm .form-group:has(input[name="amount"])');
+        if (bankAmountGroup) {
+            summaryDiv = document.createElement('div');
+            summaryDiv.className = 'alert alert-info bank-withdrawal-summary mt-2';
+            bankAmountGroup.parentNode.insertBefore(summaryDiv, bankAmountGroup.nextSibling);
+        }
+    }
+    
+    if (summaryDiv && amountUSD > 0) {
+        // Calculate fees (example: 1% fee with minimum $5)
+        const feePercentage = 1; // 1%
+        const minFee = 5;
+        let feeAmount = (amountUSD * feePercentage) / 100;
+        feeAmount = Math.max(minFee, feeAmount);
+        const netAmount = amountUSD - feeAmount;
+        
+        // Estimated crypto conversion (assuming BTC price - you should fetch real price from API)
+        const estimatedCrypto = (netAmount / 50000).toFixed(8); // Placeholder conversion
+        
+        summaryDiv.innerHTML = `
+            <div class="row">
+                <div class="col-md-4">
+                    <small class="text-muted">Withdrawal Amount:</small>
+                    <strong class="text-success">$${amountUSD.toFixed(2)} USD</strong>
+                </div>
+                <div class="col-md-4">
+                    <small class="text-muted">Fee (${feePercentage}%):</small>
+                    <strong class="text-warning">$${feeAmount.toFixed(2)} USD</strong>
+                </div>
+                <div class="col-md-4">
+                    <small class="text-muted">Net Amount:</small>
+                    <strong class="text-primary">$${netAmount.toFixed(2)} USD</strong>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <small class="text-muted">Estimated ${coinSymbol.toUpperCase()} Amount:</small>
+                    <strong>${estimatedCrypto} ${coinSymbol.toUpperCase()}</strong>
+                    <small class="text-muted d-block">*Rate may vary at time of processing</small>
+                </div>
+            </div>
+        `;
+    } else if (summaryDiv) {
+        summaryDiv.innerHTML = '<small class="text-muted">Enter amount to see withdrawal summary</small>';
+    }
+}
+
+// Bank details validation with bank-specific rules
+function setupBankDetailsValidation(bankNameInput, accountNameInput, accountNumberInput, swiftCodeInput) {
+    if (!bankNameInput) return;
+    
+    // Bank name validation
+    bankNameInput.addEventListener('blur', function() {
+        const bankName = this.value.trim();
+        if (bankName.length < 3) {
+            showBankError(this, 'Please enter a valid bank name (minimum 3 characters)');
+        } else {
+            clearBankError(this);
+            suggestBankType(bankName);
+        }
+    });
+    
+    // Account holder name validation
+    if (accountNameInput) {
+        accountNameInput.addEventListener('blur', function() {
+            const accountName = this.value.trim();
+            if (accountName.length < 5) {
+                showBankError(this, 'Please enter the complete account holder name');
+            } else if (!/^[a-zA-Z\s\.\-]+$/.test(accountName)) {
+                showBankError(this, 'Account name should only contain letters, spaces, dots, and hyphens');
+            } else {
+                clearBankError(this);
+            }
+        });
+    }
+    
+    // Account number validation
+    if (accountNumberInput) {
+        accountNumberInput.addEventListener('blur', function() {
+            const accountNumber = this.value.trim();
+            if (accountNumber.length < 5 || accountNumber.length > 34) {
+                showBankError(this, 'Account number/IBAN should be between 5 and 34 characters');
+            } else if (!/^[a-zA-Z0-9]+$/.test(accountNumber)) {
+                showBankError(this, 'Account number should only contain letters and numbers');
+            } else {
+                clearBankError(this);
+                if (accountNumber.length >= 15 && /^[A-Z]{2}[0-9]{2}/.test(accountNumber)) {
+                    validateIBAN(accountNumber);
+                }
+            }
+        });
+    }
+    
+    // SWIFT/BIC validation
+    if (swiftCodeInput) {
+        swiftCodeInput.addEventListener('blur', function() {
+            const swiftCode = this.value.trim();
+            if (swiftCode && swiftCode.length !== 8 && swiftCode.length !== 11) {
+                showBankError(this, 'SWIFT/BIC code should be 8 or 11 characters');
+            } else if (swiftCode && !/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(swiftCode)) {
+                showBankError(this, 'Please enter a valid SWIFT/BIC code format');
+            } else {
+                clearBankError(this);
+            }
+        });
+    }
+}
+
+// Suggest bank type based on name
+function suggestBankType(bankName) {
+    const bankNameLower = bankName.toLowerCase();
+    let bankType = '';
+    
+    if (bankNameLower.includes('chase') || bankNameLower.includes('jpmorgan')) {
+        bankType = 'JPMorgan Chase (US Bank)';
+    } else if (bankNameLower.includes('bank of america')) {
+        bankType = 'Bank of America (US Bank)';
+    } else if (bankNameLower.includes('wells fargo')) {
+        bankType = 'Wells Fargo (US Bank)';
+    } else if (bankNameLower.includes('hsbc')) {
+        bankType = 'HSBC (International)';
+    } else if (bankNameLower.includes('barclays')) {
+        bankType = 'Barclays (UK Bank)';
+    }
+    
+    if (bankType) {
+        console.log(`Suggested bank type: ${bankType}`);
+    }
+}
+
+// IBAN validation helper
+function validateIBAN(iban) {
+    const ibanPattern = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/;
+    if (!ibanPattern.test(iban)) {
+        showBankError(document.querySelector('input[name="account_number"]'), 'Invalid IBAN format for international transfer');
+        return false;
+    }
+    return true;
+}
+
+// Bank OTP handler
+function setupBankOTPHandler(otpButton, otpInput) {
+    if (!otpButton || !otpInput) return;
+    
+    // Remove any existing event listeners by cloning
+    const newButton = otpButton.cloneNode(true);
+    otpButton.parentNode.replaceChild(newButton, otpButton);
+    
+    newButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        requestBankWithdrawalOTP(this, otpInput);
+    });
+}
+
+function requestBankWithdrawalOTP(button, otpInput) {
+    // Validate bank details before sending OTP
+    const bankForm = document.getElementById('bankWithdrawalForm');
+    const amount = bankForm.querySelector('input[name="amount"]').value;
+    const bankName = bankForm.querySelector('input[name="bank_name"]').value;
+    const accountName = bankForm.querySelector('input[name="account_name"]').value;
+    const accountNumber = bankForm.querySelector('input[name="account_number"]').value;
+    
+    if (!amount || parseFloat(amount) < 50) {
+        alert('Please enter a valid withdrawal amount (minimum $50)');
+        return;
+    }
+    
+    if (!bankName || !accountName || !accountNumber) {
+        alert('Please fill in all bank details before requesting OTP');
+        return;
+    }
+    
+    // Disable button and show loading
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = 'Sending...';
+    
+    // Send OTP request
+    fetch('/wallet/withdraw/send-otp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            type: 'bank',
+            amount: amount,
+            bank_name: bankName
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('OTP has been sent to your registered email address. Please check your inbox.');
+            startBankOTPTimer(button, originalText);
+            otpInput.focus();
+        } else {
+            alert('Failed to send OTP: ' + (data.message || 'Please try again'));
+            button.disabled = false;
+            button.textContent = originalText;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Network error. Please check your connection and try again.');
+        button.disabled = false;
+        button.textContent = originalText;
+    });
+}
+
+function startBankOTPTimer(button, originalText) {
+    let seconds = 60;
+    const timer = setInterval(() => {
+        seconds--;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            button.disabled = false;
+            button.textContent = originalText;
+        } else {
+            button.textContent = `Resend (${seconds}s)`;
+        }
+    }, 1000);
+}
+
+// Bank form submission with comprehensive validation
+function setupBankFormSubmission(bankForm) {
+    if (!bankForm) return;
+    
+    bankForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Clear previous errors
+        clearBankErrors();
+        
+        // Validate all fields
+        let isValid = true;
+        
+        // Validate coin selection
+        const coinSelect = this.querySelector('select[name="cryptocurrency_id"]');
+        if (!coinSelect.value) {
+            showBankError(coinSelect, 'Please select a cryptocurrency');
+            isValid = false;
+        }
+        
+        // Validate amount
+        const amount = this.querySelector('input[name="amount"]').value;
+        const amountNum = parseFloat(amount);
+        if (!amount || amountNum < 50 || amountNum > 50000) {
+            showBankError(this.querySelector('input[name="amount"]'), 'Amount must be between $50 and $50,000 USD');
+            isValid = false;
+        }
+        
+        // Validate bank details
+        const bankName = this.querySelector('input[name="bank_name"]').value;
+        if (!bankName || bankName.trim().length < 3) {
+            showBankError(this.querySelector('input[name="bank_name"]'), 'Please enter a valid bank name');
+            isValid = false;
+        }
+        
+        const accountName = this.querySelector('input[name="account_name"]').value;
+        if (!accountName || accountName.trim().length < 5) {
+            showBankError(this.querySelector('input[name="account_name"]'), 'Please enter the account holder name');
+            isValid = false;
+        }
+        
+        const accountNumber = this.querySelector('input[name="account_number"]').value;
+        if (!accountNumber || accountNumber.trim().length < 5) {
+            showBankError(this.querySelector('input[name="account_number"]'), 'Please enter a valid account number/IBAN');
+            isValid = false;
+        }
+        
+        // Validate OTP
+        const otp = this.querySelector('#otp').value;
+        if (!otp || otp.length < 4) {
+            showBankError(this.querySelector('#otp'), 'Please enter the OTP sent to your email');
+            isValid = false;
+        }
+        
+        // Validate funding password
+        const fundPassword = this.querySelector('input[name="fund_password"]').value;
+        if (!fundPassword) {
+            showBankError(this.querySelector('input[name="fund_password"]'), 'Please enter your funding password');
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            const firstError = document.querySelector('.bank-field-error');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return;
+        }
+        
+        // Show confirmation dialog for bank withdrawal
+        showBankWithdrawalConfirmation(this);
+    });
+}
+
+// FIXED: Main submission function - handles redirect responses correctly
+function showBankWithdrawalConfirmation(form) {
+    const amount = form.querySelector('input[name="amount"]').value;
+    const bankName = form.querySelector('input[name="bank_name"]').value;
+    const accountName = form.querySelector('input[name="account_name"]').value;
+    const accountNumber = form.querySelector('input[name="account_number"]').value;
+    
+    const confirmationMessage = `Please review your bank withdrawal details:
+
+Amount: ${parseFloat(amount).toFixed(8)} (in crypto)
+Bank: ${bankName}
+Account Holder: ${accountName}
+Account Number: ${accountNumber}
+
+Note: Bank transfers typically take 1-3 business days to process.
+Fees are non-refundable once the withdrawal is initiated.
+
+Do you wish to proceed with this withdrawal?`;
+    
+    if (confirm(confirmationMessage)) {
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Processing...';
+        
+        // Submit the form via AJAX
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            // Check if response is a redirect (302)
+            if (response.redirected) {
+                // Success - withdrawal went through and server redirected
+                showBankSuccessNotification('Bank withdrawal request submitted successfully! You will receive the funds within 1-3 business days.');
+                resetBankForm(form);
+                refreshBankWithdrawalData();
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+                return null;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data === null) return; // Already handled redirect case
+            
+            if (data.success) {
+                showBankSuccessNotification(data.message || 'Bank withdrawal request submitted successfully!');
+                resetBankForm(form);
+                refreshBankWithdrawalData();
+            } else {
+                alert('Withdrawal failed: ' + (data.message || 'Please try again or contact support'));
+                if (data.field) {
+                    const field = form.querySelector(`[name="${data.field}"]`);
+                    if (field) {
+                        showBankError(field, data.message);
+                        field.focus();
+                    }
+                }
+            }
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // If we get a network error but the withdrawal might have gone through,
+            // let's check by reloading the page data
+            alert('Unable to process request. Please refresh the page to check your withdrawal status.');
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+            refreshBankWithdrawalData();
+        });
+    }
+}
+
+// Success notification function
+function showBankSuccessNotification(message) {
+    // Check if we already have a notification container
+    let notificationContainer = document.getElementById('bank-notification-container');
+    if (!notificationContainer) {
+        notificationContainer = document.createElement('div');
+        notificationContainer.id = 'bank-notification-container';
+        notificationContainer.style.position = 'fixed';
+        notificationContainer.style.top = '20px';
+        notificationContainer.style.right = '20px';
+        notificationContainer.style.zIndex = '9999';
+        document.body.appendChild(notificationContainer);
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success alert-dismissible fade show';
+    notification.style.marginBottom = '10px';
+    notification.style.minWidth = '300px';
+    notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    notification.style.borderRadius = '8px';
+    notification.innerHTML = `
+        <div class="d-flex align-items-center">
+            <div class="mr-3">
+                <i class="fa fa-check-circle fa-2x text-success"></i>
+            </div>
+            <div class="flex-grow-1">
+                <strong class="d-block">Success!</strong>
+                <span>${message}</span>
+            </div>
+            <button type="button" class="close ml-3" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    `;
+    
+    notificationContainer.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification && notification.remove) {
+            notification.remove();
+        }
+    }, 5000);
+    
+    // Also show traditional alert as backup
+    alert(message);
+}
+
+// Refresh bank withdrawal data (balance and history) without full page reload
+function refreshBankWithdrawalData() {
+    // Refresh the current page data by reloading the withdrawal history section
+    fetch(window.location.href, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Update withdrawal history table if it exists
+        const newHistoryTable = doc.querySelector('.table-responsive table');
+        const currentHistoryTable = document.querySelector('.table-responsive table');
+        if (newHistoryTable && currentHistoryTable) {
+            currentHistoryTable.innerHTML = newHistoryTable.innerHTML;
+        }
+        
+        // Update balance display
+        const newBalance = doc.querySelector('#bankWithdrawalForm .alert-primary #balance');
+        const currentBalance = document.querySelector('#bankWithdrawalForm .alert-primary #balance');
+        if (newBalance && currentBalance) {
+            currentBalance.textContent = newBalance.textContent;
+        }
+    })
+    .catch(error => {
+        console.error('Error refreshing data:', error);
+        // If AJAX refresh fails, do a full page reload after 2 seconds
+        setTimeout(() => window.location.reload(), 2000);
+    });
+}
+
+// Reset form function
+function resetBankForm(form) {
+    // Clear all input fields except submit buttons
+    const inputs = form.querySelectorAll('input:not([type="submit"]):not([type="button"])');
+    inputs.forEach(input => {
+        if (input.type !== 'hidden' && input.id !== 'otp') {
+            input.value = '';
+        }
+    });
+    
+    // Clear OTP field specifically
+    const otpField = form.querySelector('#otp');
+    if (otpField) otpField.value = '';
+    
+    // Reset OTP button
+    const otpButton = form.querySelector('.input-group-append .btn-outline-secondary');
+    if (otpButton) {
+        otpButton.disabled = false;
+        otpButton.textContent = 'Request OTP';
+    }
+    
+    // Clear all errors
+    clearBankErrors();
+    
+    // Reset withdrawal summary
+    const summaryDiv = document.querySelector('.bank-withdrawal-summary');
+    if (summaryDiv) {
+        summaryDiv.innerHTML = '<small class="text-muted">Enter amount to see withdrawal summary</small>';
+    }
+}
+
+// Currency display handler
+function setupBankCurrencyDisplay(coinSelect) {
+    if (!coinSelect) return;
+    
+    coinSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const coinSymbol = selectedOption ? selectedOption.getAttribute('data-symbol') : 'BTC';
+        
+        // Update balance symbol
+        const balanceSpan = document.querySelector('#bankWithdrawalForm .alert-primary #balanceSymbol');
+        if (balanceSpan) {
+            balanceSpan.textContent = coinSymbol.toUpperCase();
+        }
+        
+        // Update amount placeholder
+        const amountInput = document.querySelector('#bankWithdrawalForm input[name="amount"]');
+        if (amountInput) {
+            amountInput.placeholder = `Enter amount in ${coinSymbol.toUpperCase()}`;
+        }
+        
+        // Trigger amount validation to update summary
+        if (amountInput && amountInput.value) {
+            const event = new Event('input');
+            amountInput.dispatchEvent(event);
+        }
+    });
+}
+
+// Saved bank accounts feature
+function setupBankSavedAccounts(bankForm) {
+    const savedAccounts = JSON.parse(localStorage.getItem('savedBankAccounts') || '[]');
+    
+    if (savedAccounts.length > 0 && !document.querySelector('.saved-banks-section')) {
+        const bankNameGroup = bankForm.querySelector('.form-group:has(input[name="bank_name"])');
+        if (bankNameGroup) {
+            const savedBanksDiv = document.createElement('div');
+            savedBanksDiv.className = 'saved-banks-section mb-3';
+            savedBanksDiv.innerHTML = `
+                <label>Saved Bank Accounts</label>
+                <select class="form-control saved-banks-select" style="color: black !important;">
+                    <option value="">-- Select a saved bank account --</option>
+                    ${savedAccounts.map((account, index) => `
+                        <option value="${index}">${account.bank_name} - ${account.account_name} (${account.account_number})</option>
+                    `).join('')}
+                </select>
+            `;
+            
+            bankNameGroup.parentNode.insertBefore(savedBanksDiv, bankNameGroup);
+            
+            const savedBanksSelect = savedBanksDiv.querySelector('.saved-banks-select');
+            savedBanksSelect.addEventListener('change', function() {
+                const selectedIndex = this.value;
+                if (selectedIndex !== '') {
+                    const account = savedAccounts[selectedIndex];
+                    bankForm.querySelector('input[name="bank_name"]').value = account.bank_name;
+                    bankForm.querySelector('input[name="account_name"]').value = account.account_name;
+                    bankForm.querySelector('input[name="account_number"]').value = account.account_number;
+                    if (account.swift_code && bankForm.querySelector('input[name="swift_code"]')) {
+                        bankForm.querySelector('input[name="swift_code"]').value = account.swift_code;
+                    }
+                    localStorage.setItem('lastUsedBankAccount', JSON.stringify(account));
+                }
+            });
+        }
+    }
+}
+
+// Helper functions for bank errors
+function showBankError(element, message) {
+    if (!element) return;
+    
+    clearBankError(element);
+    element.classList.add('is-invalid');
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'bank-field-error text-danger small mt-1';
+    errorDiv.textContent = message;
+    
+    if (element.parentElement.classList.contains('input-group')) {
+        element.parentElement.parentElement.appendChild(errorDiv);
+    } else {
+        element.parentElement.appendChild(errorDiv);
+    }
+}
+
+function clearBankError(element) {
+    if (!element) return;
+    element.classList.remove('is-invalid');
+    
+    const parent = element.parentElement;
+    const errorDiv = parent.querySelector('.bank-field-error');
+    if (errorDiv) {
+        errorDiv.remove();
+    }
+}
+
+function clearBankErrors() {
+    document.querySelectorAll('.is-invalid').forEach(el => {
+        el.classList.remove('is-invalid');
+    });
+    document.querySelectorAll('.bank-field-error').forEach(el => {
+        el.remove();
+    });
+}
 </script>
 
 @endsection

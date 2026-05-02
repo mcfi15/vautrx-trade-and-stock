@@ -10,6 +10,11 @@ class PaymentMethod extends Model
         'cryptocurrency_id',
         'name',
         'address',
+        'type',
+        'bank_name',
+        'account_name',
+        'account_number',
+        'swift_code'
     ];
 
     public function cryptocurrency()

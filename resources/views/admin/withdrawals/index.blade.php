@@ -101,10 +101,11 @@
                         <tr>
                             <th class="px-4 py-2 text-left">ID</th>
                             <th class="px-4 py-2 text-left">User</th>
-                            <th class="px-4 py-2 text-left">Crypto</th>
+                            <th class="px-4 py-2 text-left">Coin</th>
+                            <th class="px-4 py-2 text-left">Method</th>
                             <th class="px-4 py-2 text-left">Amount</th>
                             <th class="px-4 py-2 text-left">Fee</th>
-                            <th class="px-4 py-2 text-left">Address</th>
+                            <th class="px-4 py-2 text-left">Details</th>
                             <th class="px-4 py-2 text-left">Status</th>
                             <th class="px-4 py-2 text-left">Date</th>
                             <th class="px-4 py-2 text-left">Actions</th>
@@ -123,15 +124,17 @@
                                 <p class="font-medium">{{ $withdrawal->user->email }}</p>
                                 <span class="text-xs text-gray-500">{{ $withdrawal->user->name }}</span>
                             </td>
+                            
 
                             <td class="px-4 py-3">
                                 <span class="px-2 py-1 text-xs bg-gray-200 rounded">{{ $withdrawal->cryptocurrency->symbol }}</span>
                             </td>
+                            <td class="px-4 py-3">{{ $withdrawal->withdrawal_type }}</td>
 
                             <td class="px-4 py-3">{{ number_format($withdrawal->amount, 8) }}</td>
                             <td class="px-4 py-3">{{ number_format($withdrawal->fee, 8) }}</td>
 
-                            <td class="px-4 py-3 font-mono text-xs">{{ Str::limit($withdrawal->withdrawal_address, 20) }}</td>
+                            <td class="px-4 py-3 font-mono text-xs">{{ Str::limit($withdrawal->withdrawal_address, 20) ?? $withdrawal->bank_name }}</td>
 
                             {{-- Status Badge --}}
                             <td class="px-4 py-3">

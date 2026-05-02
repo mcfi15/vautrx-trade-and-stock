@@ -445,8 +445,8 @@
                 data-target="#headerNavMenu"
                     data-toggle="collapse"
                     type="button" -->
-        <button class="nav__toggle fa fa-bars fa-1x p-5 border bg-dark text-warning f-s-24 rounded">
-            <!-- <i class="icon ion-md-menu"></i> -->
+        <button class="nav__toggle p-5 d-flex align-items-center justify-content-center border bg-dark text-white f-s-24 rounded">
+             <i class="fa fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="headerNavMenu">
             <ul class="navbar-nav mr-auto">

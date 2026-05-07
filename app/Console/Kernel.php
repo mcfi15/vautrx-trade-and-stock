@@ -7,37 +7,55 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    protected function schedule(Schedule $schedule)
+    protected $commands = [
+    \App\Console\Commands\UpdateStockPrices::class,
+];
+    /**
+     * Define the application's command schedule.
+     */
+    protected function schedule(Schedule $schedule): void
     {
-        // Run the Laravel command that syncs crypto prices every minute
-        $schedule->command('crypto:sync-prices')->everyMinute()->withoutOverlapping();
+        // 1. CRYPTO UPDATES
+        $schedule->command('crypto:sync-prices')
+                 ->everyMinute()
+                 ->withoutOverlapping();
 
-        $schedule->command('stocks:update-live')->everyMinute();
+        $schedule->command('stocks:update-prices')->everyFiveMinutes();
 
-        // Update stock prices every 5 minutes during market hours (9 AM - 4 PM EST)
-        $schedule->command('stocks:update-prices')
-                 ->everyFiveMinutes()
-                 ->between('09:00', '16:00')
+        // 2. LIVE STOCK UPDATES (Price only)
+        // We use withoutOverlapping to ensure if an update takes > 60s, a new one doesn't start
+        $schedule->command('stocks:update-live')
+                 ->everyMinute()
                  ->withoutOverlapping()
                  ->runInBackground();
 
-        // Full stock data update once daily at 6 PM EST (after market close)
+        // 3. FULL STOCK SYNC (Metadata/Profiles)
+        // Runs after market close to refresh company details without slowing down live price updates
         $schedule->command('stocks:update --force')
                  ->dailyAt('18:00')
+                 ->timezone('America/New_York') // Force EST timezone
                  ->withoutOverlapping();
 
-        // Clean up old stock price history (older than 1 year)
-        $schedule->command('stocks:cleanup')
-                 ->weekly()
-                 ->sundays()
-                 ->at('02:00');
+        // 4. MAINTENANCE TASKS
+        $schedule->command('mining:process-rewards')
+                 ->dailyAt('00:00');
 
-        $schedule->command('mining:process-rewards')->dailyAt('00:00');
+        $schedule->command('stocks:cleanup')
+                 ->weeklyOn(0, '02:00') // Sunday at 2 AM
+                 ->withoutOverlapping();
+
+                 
     }
 
-    protected function commands()
+    
+
+    /**
+     * Register the commands for the application.
+     */
+    protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
+
         require base_path('routes/console.php');
     }
 }

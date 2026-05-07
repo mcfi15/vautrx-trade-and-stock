@@ -128,7 +128,7 @@
 
         <!-- Stock -->
         <li>
-            <a href="{{ url('admin/stocks') }}"
+            <a href="{{ url('admin/stocks/realtime') }}"
                 class="flex items-center px-4 py-2 text-white/90 hover:bg-white/10 rounded-lg transition">
                 <i class="fas fa-chart-line w-5"></i>
                 <span class="ml-3">Stock</span>

@@ -23,6 +23,10 @@ class Stock extends Model
         'exchange',
         'is_active',
         'last_updated',
+        'day_high',
+        'day_low',
+        'previous_close',
+        'last_sync_at'
     ];
 
     protected $casts = [
@@ -36,6 +40,7 @@ class Stock extends Model
         'is_active' => 'boolean',
         'last_updated' => 'datetime',
     ];
+
 
     public function portfolios()
     {

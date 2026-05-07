@@ -351,7 +351,16 @@ return [
     ],
 
     'yahoo_finance' => [
+        'api_key' => env('YAHOO_FINANCE_API_KEY'),
         'base_url' => env('YAHOO_FINANCE_BASE_URL', 'https://query1.finance.yahoo.com/v8/finance'),
+    ],
+
+    'polygon' => [
+        'api_key' => env('POLYGON_API_KEY'),
+    ],
+
+    'finnhub' => [
+        'key' => env('FINNHUB_API_KEY'),
     ],
 
 ];

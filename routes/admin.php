@@ -45,6 +45,8 @@ Route::prefix('admin')->name('admin.')->middleware(['guest:admin'])->group(funct
     Route::post('/login', [AuthController::class, 'login']);
 });
 
+
+
 // Admin Protected Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(function () {
 
@@ -98,16 +100,29 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::post('/users/{user}/activate-withdrawals', [UserController::class, 'activateWithdrawals'])->name('users.activate-withdrawals');
 
     // Real-Time Stock Management Routes
-    Route::prefix('stocks-management')->name('stocks-management.')->group(function () {
-        Route::get('/', [StockManagementController::class, 'index'])->name('index');
-        Route::post('/import', [StockManagementController::class, 'importStock'])->name('import');
-        Route::post('/bulk-import', [StockManagementController::class, 'bulkImport'])->name('bulk-import');
-        Route::post('/update-prices', [StockManagementController::class, 'updatePrices'])->name('update-prices');
-        Route::get('/lists', [StockManagementController::class, 'getStockLists'])->name('lists');
-        Route::get('/{symbol}/details', [StockManagementController::class, 'getStockDetails'])->name('details');
-        Route::post('/{stock}/toggle-status', [StockManagementController::class, 'toggleStatus'])->name('toggle-status');
-        Route::delete('/{stock}', [StockManagementController::class, 'destroy'])->name('destroy');
-    });
+    // Route::prefix('stocks-management')->name('stocks-management.')->group(function () {
+    //     Route::get('/', [StockManagementController::class, 'index'])->name('index');
+    //     Route::post('/import', [StockManagementController::class, 'importStock'])->name('import');
+    //     Route::post('/bulk-import', [StockManagementController::class, 'bulkImport'])->name('bulk-import');
+    //     Route::post('/update-prices', [StockManagementController::class, 'updatePrices'])->name('update-prices');
+    //     Route::get('/lists', [StockManagementController::class, 'getStockLists'])->name('lists');
+    //     Route::get('/{symbol}/details', [StockManagementController::class, 'getStockDetails'])->name('details');
+    //     Route::post('/{stock}/toggle-status', [StockManagementController::class, 'toggleStatus'])->name('toggle-status');
+    //     Route::delete('/{stock}', [StockManagementController::class, 'destroy'])->name('destroy');
+    // });
+
+    
+
+    
+// Real-time stock routes
+    Route::get('/stocks/realtime', [App\Http\Controllers\Admin\WebSocketStockController::class, 'realtimeDashboard'])
+        ->name('stocks.realtime');
+    Route::get('/stocks/initial-data', [App\Http\Controllers\Admin\WebSocketStockController::class, 'getInitialData'])
+        ->name('stocks.initial-data');
+    Route::post('/stocks/{stock}/update-price', [App\Http\Controllers\Admin\StockPriceUpdateController::class, 'updateStockPrice'])
+        ->name('stocks.update-price');
+    Route::get('/stocks/live-data', [App\Http\Controllers\Admin\StockPriceUpdateController::class, 'getLiveData'])
+        ->name('stocks.live-data');
 
     // Stock Management
     // Automatic Stock Import Routes (must be before resource routes)

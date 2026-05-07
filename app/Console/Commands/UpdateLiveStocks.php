@@ -19,14 +19,27 @@ class UpdateLiveStocks extends Command
         $this->stockService = $stockService;
     }
 
-    public function handle()
-    {
-        $stocks = Stock::where('is_active', true)->get();
+public function handle()
+{
+    // Get only active stocks
+    $stocks = Stock::where('is_active', true)->get();
+    
+    $this->info("Updating " . $stocks->count() . " stocks...");
 
-        foreach ($stocks as $stock) {
-            $this->stockService->updateSingleStock($stock->symbol);
+    foreach ($stocks as $stock) {
+        $success = $this->stockService->updateStockFromFMP($stock);
+        
+        if ($success) {
+            $this->line("<info>✔</info> {$stock->symbol} updated.");
+        } else {
+            $this->line("<fg=red>✘</fg=red> {$stock->symbol} failed.");
         }
 
-        $this->info("Live stock update complete.");
+        // Delay to respect FMP Free Tier (up to 10 calls per minute)
+        // If on a paid tier, you can remove this sleep.
+        sleep(6); 
     }
+
+    $this->info("All stocks processed.");
+}
 }

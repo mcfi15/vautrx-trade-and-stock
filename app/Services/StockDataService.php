@@ -616,4 +616,34 @@ class StockDataService
 
     return true;
 }
+
+public function updateStockFromFMP(Stock $stock)
+{
+    $url = "{$this->fmpBaseUrl}/quote/{$stock->symbol}?apikey={$this->fmpApiKey}";
+
+    try {
+        $response = Http::timeout(10)->get($url);
+
+        if ($response->successful() && !empty($response->json())) {
+            $data = $response->json()[0];
+
+            $stock->update([
+                'current_price'  => $data['price'],
+                'opening_price'  => $data['open'],
+                'closing_price'  => $data['previousClose'],
+                'high_price'     => $data['dayHigh'],
+                'low_price'      => $data['dayLow'],
+                'volume'         => $data['volume'],
+                'market_cap'     => $data['marketCap'],
+                'last_updated'   => now(),
+            ]);
+
+            return true;
+        }
+    } catch (\Exception $e) {
+        \Log::error("FMP Update Failed for {$stock->symbol}: " . $e->getMessage());
+    }
+
+    return false;
+}
 }

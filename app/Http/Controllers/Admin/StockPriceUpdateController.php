@@ -12,52 +12,56 @@ use Illuminate\Support\Facades\Log;
 class StockPriceUpdateController extends Controller
 {
     /**
-     * Update single stock price with REAL data from Alpha Vantage API
+     * Update single stock price with REAL data from Yahoo Finance
      */
     public function updateStockPrice(Request $request, Stock $stock)
     {
+        // DEBUG: Log the request
+        Log::info('=== UPDATE STOCK PRICE CALLED ===');
+        Log::info('Stock ID: ' . $stock->id);
+        Log::info('Stock Symbol: ' . $stock->symbol);
+        Log::info('Stock Name: ' . $stock->name);
+        
         try {
-            // Fetch REAL stock data from Alpha Vantage
-            $priceData = $this->fetchRealTimeStockData($stock);
+            // Direct call to Yahoo Finance - NO fallbacks, NO complexity
+            $priceData = $this->getYahooStockPrice($stock->symbol);
             
-            // Log what we got for debugging
-            Log::info('Price data for ' . $stock->symbol, ['data' => $priceData]);
-            
-            // If API fails or returns invalid data, use mock as fallback
-            if (!$priceData || !isset($priceData['current_price']) || $priceData['current_price'] <= 0) {
-                throw new \Exception('Invalid data from API, using mock data fallback');
+            if (!$priceData || $priceData['current_price'] <= 0) {
+                throw new \Exception('No valid price data returned');
             }
-
+            
+            Log::info('Got price data: ' . json_encode($priceData));
+            
             // Save to price history
             StockPriceHistory::updateOrCreate(
                 ['stock_id' => $stock->id, 'date' => now()->toDateString()],
                 [
-                    'open_price' => $priceData['opening_price'] ?? $stock->current_price,
-                    'high_price' => $priceData['high_price'] ?? $priceData['current_price'],
-                    'low_price' => $priceData['low_price'] ?? $priceData['current_price'],
+                    'open_price' => $priceData['opening_price'],
+                    'high_price' => $priceData['high_price'],
+                    'low_price' => $priceData['low_price'],
                     'close_price' => $priceData['current_price'],
-                    'volume' => $priceData['volume'] ?? $stock->volume,
+                    'volume' => $priceData['volume'],
                     'adjusted_close' => $priceData['current_price'],
                 ]
             );
-
+            
             $oldPrice = (float) $stock->current_price;
-
+            
             // Update the Stock table
             $stock->update([
                 'current_price' => $priceData['current_price'],
-                'high_price' => $priceData['high_price'] ?? $priceData['current_price'],
-                'low_price' => $priceData['low_price'] ?? $priceData['current_price'],
-                'volume' => $priceData['volume'] ?? $stock->volume,
+                'high_price' => $priceData['high_price'],
+                'low_price' => $priceData['low_price'],
+                'volume' => $priceData['volume'],
                 'last_updated' => now(),
                 'previous_close' => $oldPrice,
-                'closing_price' => $priceData['closing_price'] ?? $priceData['current_price'],
             ]);
-
-            // Calculate change and percentage
+            
             $change = (float) $stock->current_price - $oldPrice;
             $changePercentage = $oldPrice > 0 ? ($change / $oldPrice) * 100 : 0;
-
+            
+            Log::info('Update successful for ' . $stock->symbol);
+            
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -67,209 +71,176 @@ class StockPriceUpdateController extends Controller
                     'change' => round($change, 2),
                     'change_percentage' => round($changePercentage, 2),
                     'last_updated' => now()->toIso8601String(),
-                    'source' => 'API_REAL_DATA' // This confirms real data is being used
+                    'source' => 'YAHOO_LIVE'
                 ]
             ]);
-
-        } catch (\Exception $e) {
-            Log::error("Stock Error ({$stock->symbol}): " . $e->getMessage());
             
-            // FALLBACK: Use mock data when API fails
-            return $this->fallbackToMockData($stock);
+        } catch (\Exception $e) {
+            Log::error('Update failed for ' . $stock->symbol . ': ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            
+            // Return error with details
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating ' . $stock->symbol . ': ' . $e->getMessage(),
+                'debug_info' => [
+                    'symbol' => $stock->symbol,
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine()
+                ]
+            ], 500);
         }
     }
     
     /**
-     * Fetch REAL stock data from Alpha Vantage API
+     * Get stock price from Yahoo Finance - SIMPLE AND DIRECT
      */
-    private function fetchRealTimeStockData($stock)
+    private function getYahooStockPrice($symbol)
     {
-        $apiKey = "JL8NB7AX0PP1OKVF";
-        
         try {
-            $url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={$stock->symbol}&apikey={$apiKey}";
+            // Clean the symbol
+            $symbol = trim(strtoupper($symbol));
             
-            Log::info('Fetching real data for: ' . $stock->symbol);
+            // Yahoo Finance API URL
+            $url = "https://query1.finance.yahoo.com/v8/finance/chart/{$symbol}";
             
-            // IMPORTANT: SSL verification disabled for development
-            // For production, fix your SSL certificate instead of using 'verify' => false
-            $response = Http::timeout(30)->withOptions([
-                'verify' => false,  // Required for your current SSL setup
+            Log::info('Calling Yahoo URL: ' . $url);
+            
+            // Make the request
+            $response = Http::timeout(10)->withHeaders([
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept' => 'application/json',
+            ])->get($url);
+            
+            Log::info('Response status: ' . $response->status());
+            
+            if (!$response->successful()) {
+                throw new \Exception('HTTP ' . $response->status());
+            }
+            
+            $data = $response->json();
+            Log::info('Response data keys: ' . json_encode(array_keys($data)));
+            
+            // Extract the price data
+            if (isset($data['chart']['result'][0]['meta'])) {
+                $meta = $data['chart']['result'][0]['meta'];
+                
+                $currentPrice = $meta['regularMarketPrice'] ?? null;
+                $openPrice = $meta['regularMarketOpen'] ?? null;
+                $highPrice = $meta['regularMarketDayHigh'] ?? null;
+                $lowPrice = $meta['regularMarketDayLow'] ?? null;
+                $volume = $meta['regularMarketVolume'] ?? null;
+                $previousClose = $meta['previousClose'] ?? null;
+                
+                Log::info("Raw data - Price: {$currentPrice}, Open: {$openPrice}, High: {$highPrice}, Low: {$lowPrice}, Volume: {$volume}");
+                
+                if ($currentPrice && $currentPrice > 0) {
+                    return [
+                        'current_price' => (float) $currentPrice,
+                        'opening_price' => (float) ($openPrice ?? $previousClose ?? $currentPrice),
+                        'high_price' => (float) ($highPrice ?? $currentPrice),
+                        'low_price' => (float) ($lowPrice ?? $currentPrice),
+                        'volume' => (int) ($volume ?? 0),
+                    ];
+                }
+            }
+            
+            // Try alternative endpoint if the first one fails
+            return $this->getYahooStockPriceAlt($symbol);
+            
+        } catch (\Exception $e) {
+            Log::error('Yahoo Finance error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+    
+    /**
+     * Alternative Yahoo Finance endpoint
+     */
+    private function getYahooStockPriceAlt($symbol)
+    {
+        try {
+            $url = "https://query2.finance.yahoo.com/v10/finance/quoteSummary/{$symbol}?modules=price";
+            
+            $response = Http::timeout(10)->withHeaders([
+                'User-Agent' => 'Mozilla/5.0',
             ])->get($url);
             
             if ($response->successful()) {
                 $data = $response->json();
                 
-                // Check if we got valid data
-                if (isset($data['Global Quote']) && !empty($data['Global Quote'])) {
-                    $quote = $data['Global Quote'];
+                if (isset($data['quoteSummary']['result'][0]['price'])) {
+                    $priceData = $data['quoteSummary']['result'][0]['price'];
                     
-                    // Extract values from Alpha Vantage response
-                    $currentPrice = isset($quote['05. price']) ? (float) $quote['05. price'] : 0;
-                    $openPrice = isset($quote['02. open']) ? (float) $quote['02. open'] : 0;
-                    $highPrice = isset($quote['03. high']) ? (float) $quote['03. high'] : 0;
-                    $lowPrice = isset($quote['04. low']) ? (float) $quote['04. low'] : 0;
-                    $volume = isset($quote['06. volume']) ? (int) $quote['06. volume'] : 0;
-                    $previousClose = isset($quote['08. previous close']) ? (float) $quote['08. previous close'] : 0;
+                    $currentPrice = $priceData['regularMarketPrice']['raw'] ?? null;
+                    $openPrice = $priceData['regularMarketOpen']['raw'] ?? null;
+                    $highPrice = $priceData['regularMarketDayHigh']['raw'] ?? null;
+                    $lowPrice = $priceData['regularMarketDayLow']['raw'] ?? null;
+                    $volume = $priceData['regularMarketVolume']['raw'] ?? null;
                     
-                    // Validate we got real data
-                    if ($currentPrice > 0) {
-                        Log::info("✅ SUCCESS! Fetched REAL data for {$stock->symbol}: \${$currentPrice}");
-                        
+                    if ($currentPrice && $currentPrice > 0) {
                         return [
-                            'current_price' => $currentPrice,
-                            'opening_price' => $openPrice,
-                            'high_price' => $highPrice,
-                            'low_price' => $lowPrice,
-                            'volume' => $volume,
-                            'closing_price' => $previousClose,
+                            'current_price' => (float) $currentPrice,
+                            'opening_price' => (float) ($openPrice ?? $currentPrice),
+                            'high_price' => (float) ($highPrice ?? $currentPrice),
+                            'low_price' => (float) ($lowPrice ?? $currentPrice),
+                            'volume' => (int) ($volume ?? 0),
                         ];
                     }
                 }
-                
-                // Check for API error messages
-                if (isset($data['Error Message'])) {
-                    Log::error("API Error: " . $data['Error Message']);
-                }
-                
-                // Check for API rate limit message
-                if (isset($data['Note']) && str_contains($data['Note'], 'API rate limit')) {
-                    Log::warning("Rate limit reached for {$stock->symbol}");
-                }
             }
             
-            Log::warning("Failed to fetch real data for {$stock->symbol}, using mock data");
-            return null;
+            throw new \Exception('No data from alternative endpoint');
             
         } catch (\Exception $e) {
-            Log::error("API connection error for {$stock->symbol}: " . $e->getMessage());
-            return null;
+            Log::error('Yahoo Finance Alt error: ' . $e->getMessage());
+            throw $e;
         }
     }
-
+    
     /**
-     * Fallback to mock data when API fails
+     * TEST METHOD - Direct API test
      */
-    private function fallbackToMockData($stock)
+    public function testDirectApi($symbol = 'AAPL')
     {
-        Log::info("🔧 Using MOCK data for {$stock->symbol}");
-        
-        $mockData = $this->generateRealisticPrice($stock);
-        
-        // Save mock data to history
-        StockPriceHistory::updateOrCreate(
-            ['stock_id' => $stock->id, 'date' => now()->toDateString()],
-            [
-                'open_price' => $mockData['opening_price'],
-                'high_price' => $mockData['high_price'],
-                'low_price' => $mockData['low_price'],
-                'close_price' => $mockData['current_price'],
-                'volume' => $mockData['volume'],
-                'adjusted_close' => $mockData['current_price'],
-            ]
-        );
-        
-        $oldPrice = (float) $stock->current_price;
-        
-        $stock->update([
-            'current_price' => $mockData['current_price'],
-            'high_price' => $mockData['high_price'],
-            'low_price' => $mockData['low_price'],
-            'volume' => $mockData['volume'],
-            'last_updated' => now(),
-        ]);
-        
-        $change = (float) $stock->current_price - $oldPrice;
-        $changePercentage = $oldPrice > 0 ? ($change / $oldPrice) * 100 : 0;
-        
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'symbol' => $stock->symbol,
-                'old_price' => $oldPrice,
-                'new_price' => (float) $stock->current_price,
-                'change' => round($change, 2),
-                'change_percentage' => round($changePercentage, 2),
-                'last_updated' => now()->toIso8601String(),
-                'source' => 'MOCK_DATA_FALLBACK'
-            ]
-        ]);
-    }
-
-    /**
-     * Generate realistic price fluctuations (Mock/Fallback data)
-     */
-    private function generateRealisticPrice($stock)
-    {
-        // Start with current price or default
-        $basePrice = $stock->current_price > 0 ? $stock->current_price : 100;
-
-        // Random change between -3% and +3%
-        $changePercent = (mt_rand(-300, 300) / 100);
-        $newPrice = max(0.01, $basePrice * (1 + $changePercent / 100));
-
-        // Calculate day high/low
-        $highPrice = max($basePrice, $newPrice) + abs($changePercent / 2);
-        $lowPrice = min($basePrice, $newPrice) - abs($changePercent / 2);
-
-        // Random volume between 100k and 10M
-        $volume = mt_rand(100000, 10000000);
-
-        return [
-            'current_price' => round($newPrice, 2),
-            'opening_price' => round($basePrice, 2),
-            'high_price' => round($highPrice, 2),
-            'low_price' => round($lowPrice, 2),
-            'volume' => $volume,
-        ];
-    }
-
-    /**
-     * Bulk update all stocks
-     */
-    public function bulkUpdatePrices(Request $request)
-    {
-        $stocks = Stock::where('is_active', true)->get();
-        $results = [];
-        $successCount = 0;
-        $failCount = 0;
-        $realDataCount = 0;
-        $mockDataCount = 0;
-
-        foreach ($stocks as $stock) {
-            $response = $this->updateStockPrice($request, $stock);
-            $resultData = $response->getData();
+        try {
+            $result = $this->getYahooStockPrice($symbol);
             
-            $results[] = $resultData;
-            
-            if ($resultData->success) {
-                $successCount++;
-                if (isset($resultData->data->source)) {
-                    if ($resultData->data->source === 'API_REAL_DATA') {
-                        $realDataCount++;
-                    } else {
-                        $mockDataCount++;
-                    }
-                }
-            } else {
-                $failCount++;
-            }
-            
-            // Sleep to respect Alpha Vantage rate limits (5 calls per minute on free tier)
-            // 60 seconds / 5 calls = 12 seconds between calls
-            sleep(12);
+            return response()->json([
+                'success' => true,
+                'symbol' => $symbol,
+                'data' => $result,
+                'message' => 'API is working!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'symbol' => $symbol,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
         }
-
-        return response()->json([
-            'total' => $stocks->count(),
-            'success' => $successCount,
-            'failed' => $failCount,
-            'real_data_updates' => $realDataCount,
-            'mock_data_updates' => $mockDataCount,
-            'results' => $results
-        ]);
     }
-
+    
+    /**
+     * Sync a specific stock by symbol (for AJAX calls)
+     */
+    public function syncStockBySymbol(Request $request)
+    {
+        $symbol = $request->input('symbol');
+        $stock = Stock::where('symbol', $symbol)->first();
+        
+        if (!$stock) {
+            return response()->json([
+                'success' => false,
+                'message' => "Stock {$symbol} not found"
+            ], 404);
+        }
+        
+        return $this->updateStockPrice($request, $stock);
+    }
+    
     /**
      * Get live data for dashboard
      */
@@ -278,16 +249,41 @@ class StockPriceUpdateController extends Controller
         $stocks = Stock::where('is_active', true)
             ->select('id', 'symbol', 'name', 'current_price', 'high_price', 'low_price', 'volume', 'market_cap', 'sector', 'last_updated')
             ->get();
-
+            
         $stocks->each(function ($stock) {
             $stock->change = $stock->getChangeAttribute();
             $stock->change_percentage = $stock->getChangePercentageAttribute();
         });
-
+        
         return response()->json([
             'stocks' => $stocks,
             'timestamp' => now()->toIso8601String(),
             'update_interval' => 30
         ]);
+    }
+    
+    /**
+     * Bulk update all stocks
+     */
+    public function bulkUpdatePrices(Request $request)
+    {
+        $stocks = Stock::where('is_active', true)->get();
+        $results = [];
+        
+        foreach ($stocks as $stock) {
+            try {
+                $response = $this->updateStockPrice($request, $stock);
+                $results[] = $response->getData();
+            } catch (\Exception $e) {
+                $results[] = [
+                    'success' => false,
+                    'symbol' => $stock->symbol,
+                    'error' => $e->getMessage()
+                ];
+            }
+            sleep(1);
+        }
+        
+        return response()->json($results);
     }
 }

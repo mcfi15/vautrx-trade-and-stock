@@ -111,7 +111,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     //     Route::delete('/{stock}', [StockManagementController::class, 'destroy'])->name('destroy');
     // });
 
-    
+//     Route::get('/stocks/index', [StockController::class, 'index'])->name('stocks.index');
+// Route::post('/stocks/{symbol}/update', [StockController::class, 'update'])->name('stocks.update');
+
+    Route::get('/test-alpha-vantage/{symbol}', [App\Http\Controllers\Admin\StockPriceUpdateController::class, 'testApiConnection']);
 
     
 // Real-time stock routes
@@ -124,18 +127,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('/stocks/live-data', [App\Http\Controllers\Admin\StockPriceUpdateController::class, 'getLiveData'])
         ->name('stocks.live-data');
 
-    // Stock Management
-    // Automatic Stock Import Routes (must be before resource routes)
-    Route::get('stocks/import/auto', [StockController::class, 'autoImport'])->name('stocks.auto-import');
-    Route::post('stocks/import/single', [StockController::class, 'importStock'])->name('stocks.import-single');
-    Route::post('stocks/import/bulk', [StockController::class, 'bulkImport'])->name('stocks.bulk-import');
-    Route::post('stocks/import/demo', [StockController::class, 'addDemoStocks'])->name('stocks.add-demo');
-    Route::post('stocks/update-all', [StockController::class, 'updateAllStocks'])->name('stocks.update-all');
-    Route::post('stocks/{stock}/sync', [StockController::class, 'syncStock'])->name('stocks.sync');
+    // // Stock Management
+    // // Automatic Stock Import Routes (must be before resource routes)
+    // Route::get('stocks/import/auto', [StockController::class, 'autoImport'])->name('stocks.auto-import');
+    // Route::post('stocks/import/single', [StockController::class, 'importStock'])->name('stocks.import-single');
+    // Route::post('stocks/import/bulk', [StockController::class, 'bulkImport'])->name('stocks.bulk-import');
+    // Route::post('stocks/import/demo', [StockController::class, 'addDemoStocks'])->name('stocks.add-demo');
+    // Route::post('stocks/update-all', [StockController::class, 'updateAllStocks'])->name('stocks.update-all');
+    // Route::post('stocks/{stock}/sync', [StockController::class, 'syncStock'])->name('stocks.sync');
 
-    // Standard Stock CRUD Routes
-    Route::resource('stocks', StockController::class);
-    Route::patch('stocks/{stock}/toggle-status', [StockController::class, 'toggleStatus'])->name('stocks.toggle-status');
+    // // Standard Stock CRUD Routes
+    // Route::resource('stocks', StockController::class);
+    // Route::patch('stocks/{stock}/toggle-status', [StockController::class, 'toggleStatus'])->name('stocks.toggle-status');
 
     // Order Management
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');

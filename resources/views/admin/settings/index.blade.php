@@ -140,13 +140,79 @@
                     <label for="contact_email" class="block text-sm font-medium text-gray-700 mb-2">
                         <i class="fas fa-envelope"></i> Contact Email
                     </label>
-                    <input type="email" 
-                           id="contact_email" 
-                           name="contact_email" 
-                           value="{{ old('contact_email', \App\Models\Setting::get('contact_email', '')) }}" 
+                    <input type="email"
+                           id="contact_email"
+                           name="contact_email"
+                           value="{{ old('contact_email', \App\Models\Setting::get('contact_email', '')) }}"
                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 @error('contact_email') border-red-500 @enderror"
                            placeholder="contact@example.com">
                     @error('contact_email')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Support Email -->
+                <div class="mb-6">
+                    <label for="support_email" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-headset"></i> Support Email <span class="text-xs text-gray-400">(shown in footer)</span>
+                    </label>
+                    <input type="email"
+                           id="support_email"
+                           name="support_email"
+                           value="{{ old('support_email', \App\Models\Setting::get('support_email', '')) }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 @error('support_email') border-red-500 @enderror"
+                           placeholder="support@example.com">
+                    @error('support_email')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Info Email -->
+                <div class="mb-6">
+                    <label for="info_email" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-info-circle"></i> Info Email <span class="text-xs text-gray-400">(shown in footer)</span>
+                    </label>
+                    <input type="email"
+                           id="info_email"
+                           name="info_email"
+                           value="{{ old('info_email', \App\Models\Setting::get('info_email', '')) }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 @error('info_email') border-red-500 @enderror"
+                           placeholder="info@example.com">
+                    @error('info_email')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Sender (From) Email -->
+                <div class="mb-6">
+                    <label for="mail_from_address" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-paper-plane"></i> Sender Email (From Address)
+                    </label>
+                    <input type="email"
+                           id="mail_from_address"
+                           name="mail_from_address"
+                           value="{{ old('mail_from_address', \App\Models\Setting::get('mail_from_address', '')) }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 @error('mail_from_address') border-red-500 @enderror"
+                           placeholder="noreply@example.com">
+                    <p class="mt-1 text-xs text-gray-500">Address used as the sender for all outgoing platform emails.</p>
+                    @error('mail_from_address')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Admin Notification Email -->
+                <div class="mb-6">
+                    <label for="admin_email" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user-shield"></i> Admin Notification Email
+                    </label>
+                    <input type="email"
+                           id="admin_email"
+                           name="admin_email"
+                           value="{{ old('admin_email', \App\Models\Setting::get('admin_email', '')) }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 @error('admin_email') border-red-500 @enderror"
+                           placeholder="admin@example.com">
+                    <p class="mt-1 text-xs text-gray-500">Receives administrative notifications from the platform.</p>
+                    @error('admin_email')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

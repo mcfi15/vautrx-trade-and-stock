@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Setting;
 
@@ -21,13 +22,35 @@ class DynamicConfigServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Configure Google OAuth dynamically from database settings
+        // Configure app identity & Google OAuth dynamically from database settings
         try {
-            if (schema()->hasTable('settings')) {
+            if (Schema::hasTable('settings')) {
+                $this->configureAppIdentity();
                 $this->configureGoogleOAuth();
             }
         } catch (\Exception $e) {
             // Silently fail if database is not available yet (during migrations)
+        }
+    }
+
+    /**
+     * Apply site name and emails from database settings
+     */
+    private function configureAppIdentity()
+    {
+        $siteName = Setting::get('site_name');
+
+        if (!empty($siteName)) {
+            config([
+                'app.name' => $siteName,
+                'mail.from.name' => $siteName,
+            ]);
+        }
+
+        $fromAddress = Setting::get('mail_from_address');
+
+        if (!empty($fromAddress)) {
+            config(['mail.from.address' => $fromAddress]);
         }
     }
 

@@ -30,6 +30,10 @@ class SettingsController extends Controller
             'site_address' => 'nullable|string',
             'site_phone' => 'nullable|string',
             'contact_email' => 'nullable|email|max:255',
+            'support_email' => 'nullable|email|max:255',
+            'info_email' => 'nullable|email|max:255',
+            'mail_from_address' => 'nullable|email|max:255',
+            'admin_email' => 'nullable|email|max:255',
             'site_logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:2048',
             'site_favicon' => 'nullable|image|mimes:png,ico,jpg,jpeg|max:1024',
             'maintenance_mode' => 'nullable|boolean',
@@ -42,6 +46,10 @@ class SettingsController extends Controller
             Setting::set('site_address', $request->site_address ?? '');
             Setting::set('site_phone', $request->site_phone ?? '');
             Setting::set('contact_email', $request->contact_email ?? '');
+            Setting::set('support_email', $request->support_email ?? '');
+            Setting::set('info_email', $request->info_email ?? '');
+            Setting::set('mail_from_address', $request->mail_from_address ?? '');
+            Setting::set('admin_email', $request->admin_email ?? '');
             Setting::set('maintenance_mode', $request->has('maintenance_mode') ? '1' : '0', 'boolean');
 
             // Handle logo upload

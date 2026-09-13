@@ -26,7 +26,7 @@ class OAuthSettingsController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'google_oauth_enabled' => 'required|boolean',
+            'google_oauth_enabled' => 'nullable|boolean',
             'google_client_id' => 'required_if:google_oauth_enabled,1|nullable|string',
             'google_client_secret' => 'required_if:google_oauth_enabled,1|nullable|string',
             'google_redirect_uri' => 'required_if:google_oauth_enabled,1|nullable|string|url',
@@ -37,11 +37,18 @@ class OAuthSettingsController extends Controller
         ]);
 
         try {
+            $enabled = $request->boolean('google_oauth_enabled');
+
+            // Keep previously saved credentials when the inputs were disabled (e.g. unchecking "Enable")
+            $clientId = $request->google_client_id ?? Setting::get('google_client_id', '');
+            $clientSecret = $request->google_client_secret ?? Setting::get('google_client_secret', '');
+            $redirectUri = $request->google_redirect_uri ?? Setting::get('google_redirect_uri', url('/auth/google/callback'));
+
             // Update Google OAuth settings
-            Setting::set('google_oauth_enabled', $request->google_oauth_enabled ? '1' : '0', 'boolean');
-            Setting::set('google_client_id', $request->google_client_id ?? '', 'string');
-            Setting::set('google_client_secret', $request->google_client_secret ?? '', 'string');
-            Setting::set('google_redirect_uri', $request->google_redirect_uri ?? '', 'string');
+            Setting::set('google_oauth_enabled', $enabled ? '1' : '0', 'boolean');
+            Setting::set('google_client_id', !empty($clientId) ? $clientId : '', 'string');
+            Setting::set('google_client_secret', !empty($clientSecret) ? $clientSecret : '', 'string');
+            Setting::set('google_redirect_uri', !empty($redirectUri) ? $redirectUri : '', 'string');
 
             // Ensure the four OAuth keys are grouped together
             Setting::whereIn('key', [
@@ -56,10 +63,10 @@ class OAuthSettingsController extends Controller
 
             // Update .env file dynamically (optional but recommended)
             $this->updateEnvFile([
-                'GOOGLE_OAUTH_ENABLED' => $request->google_oauth_enabled ? 'true' : 'false',
-                'GOOGLE_CLIENT_ID' => $request->google_client_id ?? '',
-                'GOOGLE_CLIENT_SECRET' => $request->google_client_secret ?? '',
-                'GOOGLE_REDIRECT_URI' => $request->google_redirect_uri ?? '',
+                'GOOGLE_OAUTH_ENABLED' => $enabled ? 'true' : 'false',
+                'GOOGLE_CLIENT_ID' => $clientId,
+                'GOOGLE_CLIENT_SECRET' => $clientSecret,
+                'GOOGLE_REDIRECT_URI' => $redirectUri,
             ]);
 
             return redirect()->back()->with('success', 'OAuth settings updated successfully!');

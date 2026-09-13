@@ -356,5 +356,7 @@
 <!-- Add this once in your layout (before </body>) -->
 <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
+@yield('scripts')
+
 </body>
 </html>

@@ -232,7 +232,40 @@
 
 @section('scripts')
 <script>
-// Keep your existing JS (works the same)
-toggleGoogleOAuthFields();
+    const oauthRoute = @json(route('admin.settings.oauth.test'));
+
+    function toggleGoogleOAuthFields() {
+        const enabled = document.getElementById('google_oauth_enabled').checked;
+        const fields = document.getElementById('google-oauth-fields');
+        fields.style.display = enabled ? 'block' : 'none';
+        fields.querySelectorAll('input').forEach(el => el.disabled = !enabled);
+    }
+
+    async function testConnection() {
+        const btn = document.getElementById('test-btn');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch(oauthRoute, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await res.json();
+            alert(data.message);
+        } catch (err) {
+            alert('Test failed: ' + err.message);
+        } finally {
+            btn.innerHTML = original;
+            btn.disabled = false;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', toggleGoogleOAuthFields);
 </script>
 @endsection

@@ -5,14 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class OAuthSettingsController extends Controller
 {
     public function index()
     {
-        $oauthSettings = Setting::where('group', 'oauth')->get();
-        
+        $oauthSettings = Setting::whereIn('key', [
+            'google_oauth_enabled',
+            'google_client_id',
+            'google_client_secret',
+            'google_redirect_uri',
+        ])->get();
+
         return view('admin.settings.oauth', compact('oauthSettings'));
     }
 
@@ -36,6 +43,14 @@ class OAuthSettingsController extends Controller
             Setting::set('google_client_secret', $request->google_client_secret ?? '', 'string');
             Setting::set('google_redirect_uri', $request->google_redirect_uri ?? '', 'string');
 
+            // Ensure the four OAuth keys are grouped together
+            Setting::whereIn('key', [
+                'google_oauth_enabled',
+                'google_client_id',
+                'google_client_secret',
+                'google_redirect_uri',
+            ])->update(['group' => 'oauth']);
+
             // Clear settings cache
             Cache::forget('oauth_settings');
 
@@ -58,7 +73,8 @@ class OAuthSettingsController extends Controller
         try {
             $clientId = Setting::get('google_client_id');
             $clientSecret = Setting::get('google_client_secret');
-            
+            $redirectUri = Setting::get('google_redirect_uri', url('/auth/google/callback'));
+
             if (empty($clientId) || empty($clientSecret)) {
                 return response()->json([
                     'success' => false,
@@ -66,10 +82,39 @@ class OAuthSettingsController extends Controller
                 ]);
             }
 
-            // Basic validation - check if credentials are set
+            // Real check: ask Google's authorize endpoint with the saved Client ID + Redirect URI.
+            // Valid client/redirect => Google answers with its sign-in page (HTTP 200).
+            // Bad client or unregistered redirect => HTTP 400/403 with an error marker.
+            $authorizeUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+                'client_id' => $clientId,
+                'redirect_uri' => $redirectUri,
+                'response_type' => 'code',
+                'scope' => 'openid profile email',
+                'access_type' => 'online',
+            ]);
+
+            $response = Http::withoutVerifying()
+                ->timeout(20)
+                ->withOptions(['allow_redirects' => ['max' => 3]])
+                ->get($authorizeUrl);
+
+            $status = $response->status();
+            $body = $response->body();
+
+            $errorMarkers = ['redirect_uri_mismatch', 'invalid_client', 'Error 400', 'Error 403', 'access_denied'];
+
+            if ($status === 200 && !collect($errorMarkers)->contains(fn ($m) => str_contains($body, $m))) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Client ID and Redirect URI are valid — Google accepted the credentials. (The Client Secret is confirmed only when a user completes a login.)',
+                ]);
+            }
+
+            $reason = collect($errorMarkers)->first(fn ($m) => str_contains($body, $m));
+
             return response()->json([
-                'success' => true,
-                'message' => 'Google OAuth credentials are configured. Test login to verify.',
+                'success' => false,
+                'message' => 'Google rejected the credentials' . ($reason ? ": {$reason}" : ' (HTTP ' . $status . ')') . '. Check the Client ID and that the Redirect URI is exactly "' . $redirectUri . '" in the Google Cloud Console.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
